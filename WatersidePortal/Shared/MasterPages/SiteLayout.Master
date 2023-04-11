@@ -1,0 +1,40 @@
+﻿    <%@ Master Language="C#" AutoEventWireup="true" CodeBehind="SiteLayout.master.cs" Inherits="BlackFlib1.Shared.MasterPages.SiteLayout" %>
+<%@ Register Src="~/Shared/Sections/StyleSheet.ascx" TagPrefix="uc1" TagName="StyleSheet" %>
+<%@ Register Src="~/Shared/Sections/JavaScriptTop.ascx" TagPrefix="uc1" TagName="JavaScriptTop" %>
+<%@ Register Src="~/Shared/Sections/Header.ascx" TagPrefix="uc1" TagName="HeaderPartial" %>
+<%@ Register Src="~/Shared/Sections/Footer.ascx" TagPrefix="uc1" TagName="FooterPartial" %>
+<%@ Register Src="~/Shared/Sections/JavaScriptBottom.ascx" TagPrefix="uc1" TagName="JavaScriptBottom" %>
+<%@ Register Src="~/Shared/Sections/Sidebar.ascx" TagPrefix="uc1" TagName="Sidebar" %>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head id="hdHead" runat="server">
+        <title>
+            Waterside Portal
+        </title>
+        <link rel="icon" type="image/x-icon" href="~/favicon.ico?" />
+        <link rel="shortcut icon" type="image/x-icon" href="~/favicon.ico?" />
+        <meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta name="description" content="Waterside Pools" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="keyword" content="Waterside Pools" />
+        <asp:ContentPlaceHolder ID="head" runat="server" />
+        <uc1:StyleSheet runat="server" id="StyleSheet" />
+        <asp:ContentPlaceHolder ID="StyleSheetPage" runat="server" />
+        <uc1:JavaScriptTop runat="server" id="JavaScriptTop" />
+    </head>
+    <body>
+        <form runat="server">
+        <section id="container">
+            <uc1:HeaderPartial runat="server" ID="HeaderPartial" />
+            <uc1:Sidebar runat="server" ID="Sidebar" />
+            <asp:ContentPlaceHolder ID="ContentBody" runat="server" />
+            <uc1:FooterPartial runat="server" id="FooterPartial" />
+        </section>
+        <uc1:JavaScriptBottom runat="server" ID="JavaScriptBottom" />
+        <asp:ContentPlaceHolder ID="JavaScriptPage" runat="server" />
+            </form>
+    </body>
+</html>
