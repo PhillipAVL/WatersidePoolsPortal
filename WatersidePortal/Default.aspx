@@ -38,5 +38,3 @@
     <%--You can add your custom JavaScript for each page on this section.--%>
     <script>$("#home").addClass("active")</script>
 </asp:Content>
-
-<!-- test -->
