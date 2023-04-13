@@ -42,6 +42,7 @@ namespace WatersidePortal
                     string userid = User.Identity.GetUserId();
                     if (!HttpContext.Current.User.Identity.IsAuthenticated)
                     {
+                        // TODO: Uncomment this back in when authentication issue is resolved.
                         //Response.Redirect("\\Account\\Login.aspx");
                     }
                     else
