@@ -90,7 +90,7 @@
                     <i class=" fa fa-bar-chart-o">
                     </i>
                     <span>
-                        Comission Breakdown
+                        Commission Breakdown
                     </span>
                 </a>
             </li>

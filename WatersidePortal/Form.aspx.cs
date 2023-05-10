@@ -10,8 +10,15 @@ using System.Web.UI.WebControls;
 
 namespace WatersidePortal
 {
+
     public partial class Form : System.Web.UI.Page
     {
+        /// <summary>
+        /// Populate the document list on the page with the names and links to the documents in the Documents folder.
+        /// Each link has a corresponding PDF document.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void Page_Load(object sender, EventArgs e)
         {
             foreach (string loc in System.IO.Directory.GetFiles(HttpRuntime.AppDomainAppPath + "Documents"))
@@ -35,4 +42,5 @@ namespace WatersidePortal
             container.Controls.RemoveAt(container.Controls.Count - 1);
         }
     }
+
 }

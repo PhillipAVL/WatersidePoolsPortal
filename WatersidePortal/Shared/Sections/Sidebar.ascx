@@ -1,10 +1,10 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="Sidebar.ascx.cs" Inherits="BlackFlib1.Shared.Sections.Sidebar" %>
+
 <aside>
     <div id="sidebar"  class="nav-collapse ">
         <ul class="sidebar-menu" id="nav-accordion">
-            <li>
-                
-            </li>
+            <li></li>
+>
             <li class="mt">
                 <a id="home" href="/default.aspx">
                     <i class="fa fa-home">
@@ -14,6 +14,7 @@
                     </span>
                 </a>
             </li>
+
             <li class="mt">
                 <a id="forms" href="/Form.aspx">
                     <i class="fa fa-file">
@@ -23,6 +24,7 @@
                     </span>
                 </a>
             </li>
+
             <li class="mt">
                 <a id="customers" href="/Customers.aspx">
                     <i class="fa fa-user">
@@ -32,6 +34,7 @@
                     </span>
                 </a>
             </li>
+
             <li class="mt">
                 <a id="pricebook" href="/PriceBook.aspx">
                     <i class="fa fa-list-alt">
@@ -41,6 +44,7 @@
                     </span>
                 </a>
             </li>
+
             <li class="mt">
                 <a id="backcharge" href="/BackCharge.aspx">
                     <i class="fa fa-list-alt">
@@ -50,8 +54,9 @@
                     </span>
                 </a>
             </li>
+
             <li class="mt">
-                <a id="Archived_Customers" href="/Staff/Commission.aspx" >
+                <a id="Archived_Customers" href="/ArchivedCustomers.aspx" >
                     <i class=" fa fa-bar-chart-o">
                     </i>
                     <span>
@@ -59,6 +64,7 @@
                     </span>
                 </a>
             </li>
+
             <%--<li class="sub-menu">
                 <a id="estimate" href="/PriceBook.aspx">
                     <i class="fa fa-user">
@@ -87,17 +93,19 @@
                     </li>
                 </ul> --%>
             <%--</li> --%>
+
             <li class="mt">
                 <a id="Submit_Commission" href="/Staff/Commission.aspx" >
                     <i class=" fa fa-bar-chart-o">
                     </i>
                     <span>
-                        Comission Breakdown
+                        Commission Breakdown
                     </span>
                 </a>
             </li>
+
             <li class="mt">
-                <a id="Master_Bids" href="/Staff/Commission.aspx" >
+                <a id="Master_Bids" href="/ManageMasters.aspx" >
                     <i class=" fa fa-bar-chart-o">
                     </i>
                     <span>
