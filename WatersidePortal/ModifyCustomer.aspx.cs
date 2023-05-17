@@ -831,6 +831,11 @@ namespace WatersidePortal
             RefreshFields();
         }
 
+        /// <summary>
+        /// Copy the fields from Customer Address to Jobsite Address.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void copy(object sender, EventArgs e)
         {
             TextBox_Job_Address.Text = TextBox_Address.Text;

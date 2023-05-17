@@ -29,7 +29,7 @@
                     <i class="fa fa-user">
                     </i>
                     <span>
-                        Customer Profiles
+                        Customer Management
                     </span>
                 </a>
             </li>

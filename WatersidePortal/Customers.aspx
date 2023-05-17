@@ -19,6 +19,7 @@
             margin-bottom: 2px;
         }
 
+        /* Fomratting form label-textbox layout */
         input[type="textbox"] {
             display: block;
             float: left;
@@ -101,7 +102,7 @@
                                 <asp:RequiredFieldValidator runat="server" ID="rfvZipCode"  ControlToValidate="TextBox_ZipCode"
                                     Display="Dynamic" ErrorMessage="Zip Code is required" ForeColor="Red"  />
                                 <asp:RegularExpressionValidator ID="regexpcontactZipCode" runat="server" ControlToValidate="TextBox_ZipCode"
-                                    ValidationGroup="contactValidation" Display="Dynamic" ForeColor="Red" ErrorMessage="Please enter a 5 (XXXXX) or 10 Digits (XXXXX-XXXX)"
+                                    ValidationGroup="contactValidation" Display="Dynamic" ForeColor="Red" ErrorMessage="Please enter a Zip Code formatted as (XXXXX) or 10 Digit (XXXXX-XXXX)"
                                     ValidationExpression="^\d{5}(?:[-\s]\d{4})?$">
                                 </asp:RegularExpressionValidator>
                             </p>
