@@ -870,15 +870,6 @@ namespace WatersidePortal
         protected global::System.Web.UI.WebControls.DropDownList DropDownList2;
 
         /// <summary>
-        /// Button_CreateCustomer control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Button_CreateCustomer;
-
-        /// <summary>
         /// Button1 control.
         /// </summary>
         /// <remarks>

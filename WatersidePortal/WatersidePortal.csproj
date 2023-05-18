@@ -499,6 +499,7 @@
     <Content Include="Documents\Written Reprimand Form.pdf" />
     <None Include="Properties\PublishProfiles\WatersidePoolsPortal - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\WatersidePoolsPortal - Web Deploy1.pubxml" />
+    <None Include="Properties\PublishProfiles\WatersidePoolsPortalDev - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\WatersidePortal - Web Deploy.pubxml" />
     <Content Include="Account\Login.aspx" />
     <Content Include="Scripts\jquery-ui-1.12.1.js" />

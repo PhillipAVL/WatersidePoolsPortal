@@ -380,7 +380,6 @@
                                                     <asp:Label ID="label14" AssociatedControlID="arb" Text="*ARB / HOA / Subdiv:" runat="server" /></td>
                                                 <td>
                                                     <asp:DropDownList runat="server" ID="arb">
-                                                        <asp:ListItem Value="None">None</asp:ListItem>
                                                         <asp:ListItem Value="Select">Select</asp:ListItem>
                                                         <asp:ListItem Value="Grand">Grand Haven</asp:ListItem>
                                                         <asp:ListItem Value="PalmCoast">Palm Coast Plantation</asp:ListItem>
@@ -458,7 +457,7 @@
                                             <tr style="width: 20px;height: 30px">
                                                 <td>
                                                     <asp:Label runat="server">General Private Notes</asp:Label>
-                                                    <asp:TextBox runat="server" ID="Notes" Width="100%" Height="450px" TextMode="MultiLine"></asp:TextBox>
+                                                    <asp:TextBox runat="server" ID="Notes" Width="500px" Height="450px" TextMode="MultiLine"></asp:TextBox>
                                                 </td>
                                                 <td></td>
                                             </tr>
@@ -482,7 +481,7 @@
 
                                             <%-- Jobsite Distance from HQ --%>
                                             <tr>
-                                                <td>
+                                                <td width="300px">
                                                     <asp:Label runat="server">*Jobsite Distance From HQ (mins): </asp:Label></td>
                                                 <td>
                                                     <asp:DropDownList runat="server" ID="drop_distance">
@@ -777,7 +776,7 @@
                                             <%-- Form Buttons --%>
                                             <tr>
                                                 <td>
-                                                    <asp:Button ID="Button_CreateCustomer" runat="server" Text="Discard Changes" BackColor="#f44336" ForeColor="#FFFFFF" OnClick="Discard" />
+                                                    <%--<asp:Button ID="Button_CreateCustomer" runat="server" Text="Discard Changes" BackColor="#f44336" ForeColor="#FFFFFF" OnClick="Discard" />--%>
                                                     <asp:Button ID="Button1" runat="server" Text="Save Changes" BackColor="#03a9f4" ForeColor="#FFFFFF" OnClick="Save" />
                                                 </td>
                                                 <td></td>
@@ -1501,7 +1500,7 @@
 
                 </div>
                 <div style="float: right; padding: 5px; background-color: #FFFFFF; border: 1px solid #e0e0e0; margin: 0;">
-                    <asp:Button runat="server" Text="Exit" ForeColor="#FFFFFF" BackColor="#E34A3F" Width="160px" Height="40px" OnClick="Exit" />
+                    <asp:Button runat="server" Text="Exit" ForeColor="#FFFFFF" BackColor="#E34A3F" Width="160px" Height="40px" OnClick="Exit" CausesValidation="False" />
                 </div>
             </div>
         </section>
