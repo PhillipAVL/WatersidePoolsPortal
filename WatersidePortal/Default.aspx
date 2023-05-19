@@ -15,7 +15,7 @@
             <br />
             <h2>Welcome
                     <asp:Label ID="Label_Name" runat="server" Text="Label"></asp:Label></h2>
-                    <asp:Label ID="Label1" runat="server" Text="Label" Visible="false"></asp:Label></h2>
+                    <asp:Label ID="Label1" runat="server" Text="Label" Visible="false"></asp:Label>
             <br />
             <h4>Incomplete Sold Jobs:</h4>
             <br />

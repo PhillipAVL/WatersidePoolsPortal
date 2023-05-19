@@ -105,8 +105,11 @@ namespace WatersidePortal
                                         cust.city = String.Format("{0}", reader["JobCity"]);
                                         cust.zip = String.Format("{0}", reader["JobZip"]);
                                         cust.email = String.Format("{0}", reader["Email"]);
-                                        cust.telephone = String.Format("{0}", reader["Telephone"]);
-                                        cust.contractDate = DateTime.Parse(String.Format("{0}", reader["ContractDate"]));
+                                        cust.telephone = reader["Telephone"] != null ? String.Format("{0}", reader["Telephone"]) : string.Empty;
+                                        
+                                        // TODO: PH - This has been set to empty for now. This needs to be put back like below.
+                                        cust.contractDate = DateTime.MinValue; // reader["ContractDate"] != null ? DateTime.Parse(String.Format("{0}", reader["ContractDate"])) : DateTime.MinValue;
+                                        
                                         cust.delinquent = (DateTime.Now - cust.contractDate).Days > DelinquencyLength; 
                                     }
                                 }

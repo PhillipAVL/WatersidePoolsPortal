@@ -23,30 +23,30 @@
                     <div class="form-horizontal">
                         <asp:ValidationSummary runat="server" CssClass="text-danger" />
 
+                        <%-- Email Address --%>
                         <div class="form-group">
                             <asp:Label runat="server" AssociatedControlID="Email" CssClass="col-md-2 control-label">Email</asp:Label>
                             <div class="col-md-10">
-                                <asp:TextBox runat="server" ID="Email" CssClass="form-control control-medium" TextMode="Email" />
+                                <asp:TextBox ID="Email" runat="server" CssClass="form-control control-medium" />
                                 <asp:RequiredFieldValidator runat="server" ControlToValidate="Email"
-                                    CssClass="text-danger" ErrorMessage="The email field is required." />
+                                    Display="Dynamic" CssClass="text-danger" ErrorMessage="The email field is required." />
+                                <asp:RegularExpressionValidator runat="server" ControlToValidate="Email"
+                                    CssClass="text-danger" ErrorMessage="Please enter a valid email address formatted as (name@domain.com)"
+                                    Display="Dynamic" ValidationExpression="^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$" />
                             </div>
                         </div>
 
+                        <%-- Password --%>
                         <div class="form-group">
                             <asp:Label runat="server" AssociatedControlID="Password" CssClass="col-md-2 control-label">Password</asp:Label>
                             <div class="col-md-10">
                                 <asp:TextBox runat="server" ID="Password" TextMode="Password" CssClass="form-control control-medium" />
                                 <asp:RequiredFieldValidator runat="server" ControlToValidate="Password"
                                     CssClass="text-danger" ErrorMessage="The password field is required." />
-
-                                <%--<asp:RegularExpressionValidator ID="regexvEmail" runat="server" ControlToValidate="Password"
-                                    Display="Dynamic" ForeColor="Red" ErrorMessage="Please enter a valid email address formatted as (name@domain.com)"
-                                    ValidationExpression="^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$">
-                                </asp:RegularExpressionValidator>--%>
-
                             </div>
                         </div>
 
+                        <%-- Confirm Password --%>
                         <div class="form-group">
                             <asp:Label runat="server" AssociatedControlID="ConfirmPassword" CssClass="col-md-2 control-label">Confirm password</asp:Label>
                             <div class="col-md-10">
@@ -58,6 +58,7 @@
                             </div>
                         </div>
 
+                        <%--Form Buttons--%>
                         <div class="form-group">
                             <div class="col-md-offset-2 col-md-10">
                                 <asp:Button runat="server" OnClick="CreateUser_Click" Text="Register" CssClass="btn btn-primary" />
@@ -66,11 +67,11 @@
 
                     </div>
                 </div>
-
             </div>
         </section>
     </section>
 </asp:Content>
+
 <asp:Content ID="JavaScriptCurretPage" ContentPlaceHolderID="JavaScriptPage" runat="server">
     <script>$("#User-Management").addClass("active")</script>
 </asp:Content>

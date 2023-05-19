@@ -13,6 +13,13 @@ namespace WatersidePortal.Account
 {
     public partial class Register : Page
     {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            Email.Text = string.Empty;
+            Password.Text = string.Empty;
+            ConfirmPassword.Text = string.Empty;
+        }
+
         protected void CreateUser_Click(object sender, EventArgs e)
         {
             var manager = Context.GetOwinContext().GetUserManager<ApplicationUserManager>();
@@ -42,7 +49,7 @@ namespace WatersidePortal.Account
                 Email.Text = string.Empty;
                 divSuccess.Visible = true;
             }
-            else 
+            else
             {
                 ErrorMessage.Text = result.Errors.FirstOrDefault();
                 Email.Text = string.Empty;
