@@ -15,9 +15,12 @@ namespace WatersidePortal.Account
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            Email.Text = string.Empty;
-            Password.Text = string.Empty;
-            ConfirmPassword.Text = string.Empty;
+            if (!Page.IsPostBack)
+            {
+                Email.Text = string.Empty;
+                Password.Text = string.Empty;
+                ConfirmPassword.Text = string.Empty;
+            }
         }
 
         protected void CreateUser_Click(object sender, EventArgs e)

@@ -43,6 +43,8 @@
                     <h4 class="title">Customer Management</h4>
                 </div>
 
+                <asp:ValidationSummary runat="server" CssClass="text-danger" />
+
                 <div class="panel-body">
                     <ul class="nav nav-tabs">
                         <li id="CreateTab">
@@ -99,11 +101,11 @@
                                 <asp:Label ID="label4" AssociatedControlID="TextBox_ZipCode" Text="Zip Code:" runat="server" />
                                 <asp:TextBox ID="TextBox_ZipCode" runat="server"></asp:TextBox>
 
-                                <asp:RequiredFieldValidator runat="server" ID="rfvZipCode"  ControlToValidate="TextBox_ZipCode"
-                                    Display="Dynamic" ErrorMessage="Zip Code is required" ForeColor="Red"  />
+                                <asp:RequiredFieldValidator runat="server" ID="rfvZipCode" ControlToValidate="TextBox_ZipCode"
+                                    Display="Dynamic" ErrorMessage="Zip Code is required" ForeColor="Red" />
                                 <asp:RegularExpressionValidator ID="regexpcontactZipCode" runat="server" ControlToValidate="TextBox_ZipCode"
-                                    ValidationGroup="contactValidation" Display="Dynamic" ForeColor="Red" ErrorMessage="Please enter a Zip Code formatted as (XXXXX) or 10 Digit (XXXXX-XXXX)"
-                                    ValidationExpression="^\d{5}(?:[-\s]\d{4})?$">
+                                    Display="Dynamic" ForeColor="Red" ErrorMessage="Please enter a Zip Code formatted as (XXXXX) or 10 Digit (XXXXX-XXXX)"
+                                    ValidationExpression="^\d{5}(-\d{4})?$">
                                 </asp:RegularExpressionValidator>
                             </p>
 
@@ -112,10 +114,10 @@
                                 <asp:Label ID="label5" AssociatedControlID="TextBox_Telephone" Text="Primary Phone:" runat="server" />
                                 <asp:TextBox ID="TextBox_Telephone" runat="server"></asp:TextBox>
 
-                                <asp:RequiredFieldValidator runat="server" ID="rfvPhone"  ControlToValidate="TextBox_Telephone"
-                                    Display="Dynamic" ErrorMessage="Primarty Phone is required" ForeColor="Red"  />
+                                <asp:RequiredFieldValidator runat="server" ID="rfvPhone" ControlToValidate="TextBox_Telephone"
+                                    Display="Dynamic" ErrorMessage="Primary Phone is required" ForeColor="Red" />
                                 <asp:RegularExpressionValidator ID="regexpvalPhone" runat="server" ControlToValidate="TextBox_Telephone"
-                                    ValidationGroup="contactValidation" Display="Dynamic" ForeColor="Red" ErrorMessage="Please enter a phone number formatted as (XXX-XXX-XXXX)"
+                                    Display="Dynamic" ForeColor="Red" ErrorMessage="Please enter a phone number formatted as (XXX-XXX-XXXX)"
                                     ValidationExpression="^(1-)?\d{3}-\d{3}-\d{4}$">
                                 </asp:RegularExpressionValidator>
                             </p>
@@ -126,7 +128,7 @@
                                 <asp:TextBox ID="TextBox_Alternate_Telephone" runat="server"></asp:TextBox>
 
                                 <asp:RegularExpressionValidator ID="regexpvalAlternatePhone" runat="server" ControlToValidate="TextBox_Alternate_Telephone"
-                                    ValidationGroup="contactValidation" Display="Dynamic" ForeColor="Red" ErrorMessage="Please enter a phone number formatted as (XXX-XXX-XXXX)"
+                                    Display="Dynamic" ForeColor="Red" ErrorMessage="Please enter a phone number formatted as (XXX-XXX-XXXX)"
                                     ValidationExpression="^(1-)?\d{3}-\d{3}-\d{4}$">
                                 </asp:RegularExpressionValidator>
                             </p>
@@ -139,7 +141,7 @@
                                 <asp:RequiredFieldValidator runat="server" ID="rfvEmail" ControlToValidate="TextBox_Email_Address"
                                     Display="Dynamic" ErrorMessage="Email Address is required" ForeColor="Red" />
                                 <asp:RegularExpressionValidator ID="RegularExpressionValidator2" runat="server" ControlToValidate="TextBox_Email_Address"
-                                    ValidationGroup="contactValidation" Display="Dynamic" ForeColor="Red" ErrorMessage="Please enter a valid email address formatted as (name@domain.com)"
+                                    Display="Dynamic" ForeColor="Red" ErrorMessage="Please enter a valid email address formatted as (name@domain.com)"
                                     ValidationExpression="^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$">
                                 </asp:RegularExpressionValidator>
                             </p>
