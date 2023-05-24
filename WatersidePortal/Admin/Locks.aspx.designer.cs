@@ -11,8 +11,26 @@ namespace WatersidePortal.Admin
 {
 
 
-    /*public partial class RemoveStaff fix
+    public partial class RemoveStaff
     {
+
+        /// <summary>
+        /// divSuccess control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divSuccess;
+
+        /// <summary>
+        /// divSuccessMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divSuccessMessage;
 
         /// <summary>
         /// DropDownList_Users control.
@@ -49,5 +67,5 @@ namespace WatersidePortal.Admin
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button Button_UnlockAccount;
-    }*/
+    }
 }

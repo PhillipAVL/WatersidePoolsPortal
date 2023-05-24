@@ -498,9 +498,8 @@
     <Content Include="Documents\Swimming Pool Safety Act.pdf" />
     <Content Include="Documents\Written Reprimand Form.pdf" />
     <None Include="Properties\PublishProfiles\WatersidePoolsPortal - Web Deploy.pubxml" />
-    <None Include="Properties\PublishProfiles\WatersidePoolsPortal - Web Deploy1.pubxml" />
-    <None Include="Properties\PublishProfiles\WatersidePoolsPortalDev - Web Deploy.pubxml" />
-    <None Include="Properties\PublishProfiles\WatersidePortal - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\WatersidePoolsPortal - Web Deploy1 %28BAD%29.pubxml" />
+    <None Include="Properties\PublishProfiles\WatersidePoolsPortal DEV %28Web Deploy%29.pubxml" />
     <Content Include="Account\Login.aspx" />
     <Content Include="Scripts\jquery-ui-1.12.1.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.min.js" />
@@ -531,6 +530,7 @@
     <Content Include="Scripts\bootstrap.bundle.min.js.map" />
     <Content Include="Scripts\bootstrap.bundle.js.map" />
     <Content Include="Rubicon\Web.config" />
+    <None Include="Properties\PublishProfiles\WatersidePortal PROD %28Web Deploy%29.pubxml" />
     <None Include="Scripts\jquery-3.5.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.5.1.js" />
     <Content Include="Scripts\jquery-3.5.1.min.js" />
