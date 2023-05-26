@@ -28,6 +28,7 @@
                     <br />
                     <p>
                         General Permissions:
+                       
                         <asp:DropDownList ID="DropDownList_Permissions" runat="server">
                             <asp:ListItem Text="None" Value="None" />
                             <asp:ListItem Text="Salesperson" Value="Salesperson" />
@@ -37,7 +38,7 @@
                     <br />
                     <div>
                         <h4>Permissions:</h4>
-                        <div style="margin-left: 30px; ">
+                        <div style="margin-left: 30px;">
                             <asp:CheckBoxList runat="server" ID="CheckList_Permissions">
                                 <asp:ListItem>Customer Payments Tab - Receiving Payments</asp:ListItem>
                                 <asp:ListItem>Manage Customers - Editing / Creating Customer Profile</asp:ListItem>

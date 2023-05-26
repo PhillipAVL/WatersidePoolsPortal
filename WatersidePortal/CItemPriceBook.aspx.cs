@@ -18,6 +18,7 @@ namespace WatersidePortal
         {
             return HttpUtility.UrlDecode(str).Replace("numpound", "#").Replace("andamp", "&").Replace("&#39;", "'").Replace("&quot;", "\"").Replace("%20", " ");
         }
+        
         protected void Page_Load(object sender, EventArgs e)
         {
             if (HttpContext.Current.Request.Url.Query.Length == 0)
@@ -51,13 +52,16 @@ namespace WatersidePortal
         {
 
         }
+        
         protected void GridView_Items_SelectedIndexChanging(object sender, GridViewSelectEventArgs e)
         {
             System.Diagnostics.Debug.WriteLine("testing");
         }
+        
         protected void Selected(object sender, EventArgs e)
         {
         }
+        
         protected void Submit(object sender, EventArgs e)
         {
             if (HttpContext.Current.Request.Url.Query.Length == 0)
@@ -196,6 +200,7 @@ namespace WatersidePortal
 
             Response.Redirect("/CPriceBook.aspx?" + arr[3] + "&Select");
         }
+
         protected void Back(object sender, EventArgs e)
         {
             if (HttpContext.Current.Request.Url.Query.Length == 0)

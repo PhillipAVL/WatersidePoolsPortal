@@ -12,8 +12,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
 
-                    <h4 class="title">Manage User Account Locks
-                            </h4>
+                    <h4 class="title">Manage User Account Locks</h4>
                 </div>
                 <div class="panel-body">
 
@@ -22,7 +21,7 @@
                         <div id="divSuccessMessage" class="panel-heading" runat="server"></div>
                     </div>
 
-                    Select the user account from the dropdown menu below and select your desired function.<br />
+                    <h4>Select the user account from the dropdown menu below and select your desired function.</h4>
                     <br />
                     
                     <%-- User List --%>

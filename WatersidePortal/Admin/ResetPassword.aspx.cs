@@ -12,6 +12,11 @@ namespace WatersidePortal.Account
 {
     public partial class ResetPassword : Page
     {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            divSuccess.Visible = false;
+        }
+
         protected string StatusMessage
         {
             get;
@@ -20,8 +25,6 @@ namespace WatersidePortal.Account
 
         protected async void Reset_Click(object sender, EventArgs e)
         {
-
-
             try
             {
                 ApplicationDbContext context = new ApplicationDbContext();
@@ -32,14 +35,15 @@ namespace WatersidePortal.Account
                 await store.SetPasswordHashAsync(cUser, hashedNewPassword);
                 await store.UpdateAsync(cUser);
 
-                ErrorMessage.Text = "Password set successfully!";
+                divSuccessMessage.InnerText = "Password Reset!";
+                divSuccess.Visible = true;
 
             }
 
             catch
             {
-                ErrorMessage.Text = "An error has occurred";
-
+                divSuccessMessage.InnerText = "Password Reset has failed!";
+                divSuccess.Visible = true;
             }
         }
     }

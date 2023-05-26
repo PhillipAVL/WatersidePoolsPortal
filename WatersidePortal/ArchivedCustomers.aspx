@@ -24,9 +24,13 @@
                     <h4 class="title">Archived Customers
                     </h4>
                 </div>
+
+                <%-- Find Customer --%>
                 <div class="panel-body">
                     <h4>Find Customer</h4>
-                    <asp:TextBox runat="server" TextMode="Search" placeholder="Enter any detail" ID="search" Width="30%"/>
+                    <asp:TextBox runat="server" TextMode="Search" placeholder="Enter any detail" ID="search" Width="30%" />
+
+                    <%-- Customer Grid --%>
                     <p>
                         <asp:GridView OnSelectedIndexChanged="CustomersGridView_SelectedIndexChanged" ID="GridView1" CssClass="Grid" runat="server" AutoGenerateColumns="False" CellPadding="4" DataSourceID="SqlDataSource1" ForeColor="#333333" GridLines="Both" DataKeyNames="CustomerID" Width="100%">
                             <AlternatingRowStyle BackColor="White" />
@@ -53,10 +57,18 @@
                             <SortedDescendingCellStyle BackColor="#E9EBEF" />
                             <SortedDescendingHeaderStyle BackColor="#4870BE" />
                         </asp:GridView>
-                        <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:WatersidePortal_dbConnectionString %>" SelectCommand="SELECT [FirstName], [LastName], [CustomerID], [Address], [City], [State], [Telephone] FROM [Customers]" DeleteCommand="DELETE FROM [Customers] WHERE [CustomerID] = @CustomerID" InsertCommand="INSERT INTO [Customers] ([FirstName], [LastName], [Address], [City], [State], [Telephone], [Alternate], [Email]) VALUES (@FirstName, @LastName, @Address, @City, @State, @Telephone, @Alternate, @Email)" UpdateCommand="UPDATE [Customers] SET [FirstName] = @FirstName, [LastName] = @LastName, [Address] = @Address, [City] = @City, [State] = @State, [Telephone] = @Telephone, [Alternate] = @Alternate, [Email] = @Email WHERE [CustomerID] = @CustomerID">
+
+                        <%-- Datasource SqlDataSource1 --%>
+                        <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:WatersidePortal_dbConnectionString %>"
+                            SelectCommand="SELECT [FirstName], [LastName], [CustomerID], [Address], [City], [State], [Telephone] FROM [Customers]"
+                            DeleteCommand="DELETE FROM [Customers] WHERE [CustomerID] = @CustomerID"
+                            InsertCommand="INSERT INTO [Customers] ([FirstName], [LastName], [Address], [City], [State], [Telephone], [Alternate], [Email]) VALUES (@FirstName, @LastName, @Address, @City, @State, @Telephone, @Alternate, @Email)"
+                            UpdateCommand="UPDATE [Customers] SET [FirstName] = @FirstName, [LastName] = @LastName, [Address] = @Address, [City] = @City, [State] = @State, [Telephone] = @Telephone, [Alternate] = @Alternate, [Email] = @Email WHERE [CustomerID] = @CustomerID">
+                            
                             <DeleteParameters>
                                 <asp:Parameter Name="CustomerID" Type="Int32" />
                             </DeleteParameters>
+                            
                             <InsertParameters>
                                 <asp:Parameter Name="FirstName" Type="String" />
                                 <asp:Parameter Name="LastName" Type="String" />
@@ -67,6 +79,7 @@
                                 <asp:Parameter Name="Alternate" Type="String" />
                                 <asp:Parameter Name="Email" Type="String" />
                             </InsertParameters>
+                            
                             <UpdateParameters>
                                 <asp:Parameter Name="FirstName" Type="String" />
                                 <asp:Parameter Name="LastName" Type="String" />
@@ -78,7 +91,9 @@
                                 <asp:Parameter Name="Alternate" Type="String" />
                                 <asp:Parameter Name="Email" Type="String" />
                             </UpdateParameters>
+
                         </asp:SqlDataSource>
+
                     </p>
                 </div>
             </div>

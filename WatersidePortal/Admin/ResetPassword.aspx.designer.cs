@@ -15,13 +15,22 @@ namespace WatersidePortal.Account
     {
 
         /// <summary>
-        /// ErrorMessage control.
+        /// divSuccess control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal ErrorMessage;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divSuccess;
+
+        /// <summary>
+        /// divSuccessMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divSuccessMessage;
 
         /// <summary>
         /// DropDownList_Users control.
