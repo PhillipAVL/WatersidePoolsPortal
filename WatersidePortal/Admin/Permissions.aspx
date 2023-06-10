@@ -26,9 +26,9 @@
                     </p>
                     <br />
                     <br />
+                    
                     <p>
                         General Permissions:
-                       
                         <asp:DropDownList ID="DropDownList_Permissions" runat="server">
                             <asp:ListItem Text="None" Value="None" />
                             <asp:ListItem Text="Salesperson" Value="Salesperson" />
@@ -36,52 +36,56 @@
                         </asp:DropDownList>
                     </p>
                     <br />
+                    
                     <div>
                         <h4>Permissions:</h4>
                         <div style="margin-left: 30px;">
                             <asp:CheckBoxList runat="server" ID="CheckList_Permissions">
-                                <asp:ListItem>Customer Payments Tab - Receiving Payments</asp:ListItem>
-                                <asp:ListItem>Manage Customers - Editing / Creating Customer Profile</asp:ListItem>
-                                <asp:ListItem>Permitting Management - Approving Permit Documents</asp:ListItem>
-                                <asp:ListItem>Request Item Changes</asp:ListItem>
-                                <asp:ListItem>Surveys Status Management - Being Able to Set the Status / Edit any Survey</asp:ListItem>
-                                <asp:ListItem>View All Projects</asp:ListItem>
-                                <asp:ListItem>View All Employee Commissions</asp:ListItem>
-                                <asp:ListItem>View Customer History</asp:ListItem>
-                                <asp:ListItem>Manage Deposits</asp:ListItem>
-                                <asp:ListItem>Payments Due Tab and Table</asp:ListItem>
-                                <asp:ListItem>View Recently Approved Addendums</asp:ListItem>
-                                <asp:ListItem>Handle Work Orders</asp:ListItem>
-                                <asp:ListItem>Manage Work Orders</asp:ListItem>
-                                <asp:ListItem>Edit Price Books Without Requesting</asp:ListItem>
-                                <asp:ListItem>Technican Overview</asp:ListItem>
+                                <asp:ListItem>&nbsp;Customer Payments Tab - Receiving Payments</asp:ListItem>
+                                <asp:ListItem>&nbsp;Manage Customers - Editing / Creating Customer Profile</asp:ListItem>
+                                <asp:ListItem>&nbsp;Permitting Management - Approving Permit Documents</asp:ListItem>
+                                <asp:ListItem>&nbsp;Request Item Changes</asp:ListItem>
+                                <asp:ListItem>&nbsp;Surveys Status Management - Being Able to Set the Status / Edit any Survey</asp:ListItem>
+                                <asp:ListItem>&nbsp;View All Projects</asp:ListItem>
+                                <asp:ListItem>&nbsp;View All Employee Commissions</asp:ListItem>
+                                <asp:ListItem>&nbsp;View Customer History</asp:ListItem>
+                                <asp:ListItem>&nbsp;Manage Deposits</asp:ListItem>
+                                <asp:ListItem>&nbsp;Payments Due Tab and Table</asp:ListItem>
+                                <asp:ListItem>&nbsp;View Recently Approved Addendums</asp:ListItem>
+                                <asp:ListItem>&nbsp;Handle Work Orders</asp:ListItem>
+                                <asp:ListItem>&nbsp;Manage Work Orders</asp:ListItem>
+                                <asp:ListItem>&nbsp;Edit Price Books Without Requesting</asp:ListItem>
+                                <asp:ListItem>&nbsp;Technican Overview</asp:ListItem>
                             </asp:CheckBoxList>
                         </div>
                     </div>
                     <br />
+                    
                     <div>
                         <h4>Milestones:</h4>
                         <div style="margin-left: 30px">
                             <asp:CheckBoxList runat="server" ID="CheckList_Milestones">
-                                <asp:ListItem>View Construction Milestones</asp:ListItem>
-                                <asp:ListItem>View Sales Milestones</asp:ListItem>
-                                <asp:ListItem>View Permitting Milestones</asp:ListItem>
-                                <asp:ListItem>View Service and Repair History</asp:ListItem>
-                                <asp:ListItem>Set Construction $$$$$ Milestones</asp:ListItem>
+                                <asp:ListItem>&nbsp;View Construction Milestones</asp:ListItem>
+                                <asp:ListItem>&nbsp;View Sales Milestones</asp:ListItem>
+                                <asp:ListItem>&nbsp;View Permitting Milestones</asp:ListItem>
+                                <asp:ListItem>&nbsp;View Service and Repair History</asp:ListItem>
+                                <asp:ListItem>&nbsp;Set Construction $$$$$ Milestones</asp:ListItem>
                             </asp:CheckBoxList>
                         </div>
                     </div>
                     <br />
+                    
                     <div>
                         <h4>Notifications:</h4>
                         <div style="margin-left: 30px">
                             <asp:CheckBoxList runat="server" ID="CheckList_Notifications">
-                                <asp:ListItem>Notification for Deposits</asp:ListItem>
-                                <asp:ListItem>Notification for Screen Enclosure File Has Upload</asp:ListItem>
-                                <asp:ListItem>Notification for Fire Up</asp:ListItem>
+                                <asp:ListItem>&nbsp;Notification for Deposits</asp:ListItem>
+                                <asp:ListItem>&nbsp;Notification for Screen Enclosure File Has Upload</asp:ListItem>
+                                <asp:ListItem>&nbsp;Notification for Fire Up</asp:ListItem>
                             </asp:CheckBoxList>
                         </div>
                     </div>
+
                 </div>
             </div>
         </section>

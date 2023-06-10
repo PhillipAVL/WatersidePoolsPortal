@@ -8,7 +8,6 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
-using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
@@ -31,9 +30,7 @@ namespace WatersidePortal.Admin
                 this.BindGrid();
 
                 Label_Username.Text = User.Identity.Name;
-
                 Label_CurrentEstimateID.Text = System.Guid.NewGuid().ToString();
-
             }
 
 
@@ -41,8 +38,9 @@ namespace WatersidePortal.Admin
 
         protected void BindGrid()
         {
-            GridView_Estimates.DataSource = (DataTable)ViewState["Customers"];
-            GridView_Estimates.DataBind();
+            // Commented out by PH
+            //GridView_Estimates.DataSource = (DataTable)ViewState["Customers"];
+            //GridView_Estimates.DataBind();
         }
 
 
@@ -52,11 +50,8 @@ namespace WatersidePortal.Admin
             double total2 = 0;
             int count = 0;
 
-
-
             if (GridView_Estimates.Rows.Count != 0)
             {
-
                 foreach (GridViewRow row2 in GridView_Estimates.Rows)
                 {
 
@@ -69,7 +64,7 @@ namespace WatersidePortal.Admin
                     {
                         total2 = total2 + Convert.ToDouble(row2.Cells[6].Text);
 
-                        if(count != 2)
+                        if (count != 2)
                         {
                             //row2.Cells[count].Attributes.Add("style", "white-space: nowrap;");
                         }
@@ -120,6 +115,48 @@ namespace WatersidePortal.Admin
         {
             GridView_RecalledEstimate.DataBind();
         }
+
+        protected void GetEstimatesForCustomer(object sender, EventArgs e)
+        {
+            var customerId = DropDownList_Customer2.SelectedValue;
+            DropDownList_Estimates.Items.Clear();
+            //DropDownList_Estimates.DataSource = 
+                LoadEstimates(customerId);
+            //DropDownList_Estimates.Items.Add("text");
+        }
+
+        // <%--<asp:SqlDataSource ID="SqlDataSourceEsitmateIds" runat="server" ConnectionString="<%$ ConnectionStrings:WatersidePortal_dbConnectionString %>" SelectCommand="SELECT [EstimateID], [EstimateItemID] FROM [Estimates] WHERE ([CustomerID] = @CustomerID)"></asp:SqlDataSource>--%>
+
+        private void LoadEstimates(string customerId)
+        {
+            DataTable estimates = new DataTable();
+            using (SqlConnection con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString))
+            {
+
+                try
+                {
+                    var sqlString = "SELECT [EstimateID], [EstimateItemID] FROM [Estimates] WHERE [CustomerID] = " + customerId;
+                    SqlDataAdapter adapter = new SqlDataAdapter(sqlString, con);
+                    adapter.Fill(estimates);
+
+                    DropDownList_Estimates.DataSource = estimates;
+                    DropDownList_Estimates.DataTextField = "EstimateID";
+                    DropDownList_Estimates.DataValueField = "EstimateItemID";
+                    DropDownList_Estimates.DataBind();
+                }
+                catch (Exception ex)
+                {
+                    // Handle the error
+                }
+
+            }
+
+            // Add the initial item - you can add this even if the options from the
+            // db were not successfully loaded
+            //ddlSubject.Items.Insert(0, new ListItem("<Select Subject>", "0"));
+
+        }
+
 
         protected void FinalizeEstimateButton_Click(object sender, EventArgs e)
         {
@@ -459,6 +496,7 @@ namespace WatersidePortal.Admin
             GridView_Estimates.DataBind();
         }
 
+
         protected void RecallEstimateButton_Click(object sender, EventArgs e)
         {
             double total = 0;
@@ -521,6 +559,8 @@ namespace WatersidePortal.Admin
             }
             return bytes;
         }
+
+
         public static byte[] MergePDFs(List<byte[]> pdfFiles)
         {
             if (pdfFiles.Count > 1)

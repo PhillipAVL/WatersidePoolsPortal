@@ -41,6 +41,7 @@ namespace WatersidePortal
 
             if (GridView1.Rows.Count == 0)
                 GridView1.Visible = false;
+            GridView1.Sort("Item", SortDirection.Ascending);
         }
 
         protected void GridView_Items_RowEditing(object sender, GridViewEditEventArgs e)

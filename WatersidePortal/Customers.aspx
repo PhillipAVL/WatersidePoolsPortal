@@ -52,7 +52,7 @@
                                     </a>
                         </li>
                         <li id="ModifyTab">
-                            <a href="#Modify" data-toggle="tab" onclick="tab('Modify');">Modify Customer
+                            <a href="#Modify" data-toggle="tab" onclick="tab('Modify');">Manage Customer
                                     </a>
                         </li>
                     </ul>
@@ -153,7 +153,7 @@
                         </div>
 
 
-                        <%--  Modify Customer--%>
+                        <%--  Manage Customer--%>
                         <div class="tab-pane fade in" id="Modify">
                             <h4>Find Customer</h4>
                             <asp:TextBox runat="server" TextMode="Search" placeholder="Enter any detail" ID="search" Width="30%" />

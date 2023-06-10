@@ -176,8 +176,8 @@ namespace WatersidePortal
                                     gProj.projectName = String.Format("{0}", reader["ProjectName"]);
                                     gProj.projectDescription = String.Format("{0}", reader["ProjectDescription"]);
                                     gProj.projectID = Convert.ToInt32(String.Format("{0}", reader["ProjectID"]));
-                                    Project_Name.Text = gProj.projectName + ":";
-                                    Project_Desc.Text = gProj.projectDescription + ":";
+                                    Project_Name.Text = gProj.projectName;
+                                    Project_Desc.Text = gProj.projectDescription;
                                     string[] len = String.Format("{0}", reader["Length"]).Split('`');
                                     string[] wid = String.Format("{0}", reader["Width"]).Split('`');
                                     if (len.Length == 2)
@@ -218,6 +218,8 @@ namespace WatersidePortal
 
                         }
                     }
+
+                    CustomerFullName.Text = getCustomerFullName(ID);
                 }
                 /*int greatest = -1;
                 Project gProj = null;
@@ -505,9 +507,6 @@ namespace WatersidePortal
                 int selectCount = 1;
                 int optCount = 0;
 
-
-
-
                 GridView1.Rows[0].Cells[2].Text = "Finished";
                 GridView1.Rows[0].Cells[3].Text = "1";
                 GridView1.Rows[0].Cells[4].Text = ezinc.Visible ? "EZ-Flow Pool" : "Genesis Pool";
@@ -517,10 +516,6 @@ namespace WatersidePortal
                 GridView1.Rows[0].Cells[9].Text = "-";
                 GridView1.Rows[0].Cells[10].Text = "-";
                 GridView1.Rows[0].Cells[11].Text = "$" + basePrice;
-
-
-
-
 
                 for (int i = 0; i < items.Count; i++)
                 {
@@ -3410,16 +3405,16 @@ namespace WatersidePortal
 
         void Save()
         {
-            if (Project_Name_Box.Text.Length > 0)
-            {
-                Project_Name.Text = Project_Name_Box.Text + ":";
-                Project_Name_Box.Text = "";
-            }
-            if (Description_Box.Text.Length > 0)
-            {
-                Project_Desc.Text = Description_Box.Text + ":";
-                Description_Box.Text = "";
-            }
+            //if (Project_Name_Box.Text.Length > 0)
+            //{
+            //    Project_Name.Text = Project_Name_Box.Text + ":";
+            //    Project_Name_Box.Text = "";
+            //}
+            //if (Description_Box.Text.Length > 0)
+            //{
+            //    Project_Desc.Text = Description_Box.Text + ":";
+            //    Description_Box.Text = "";
+            //}
 
 
             if (HttpContext.Current.Request.Url.AbsoluteUri.Split('?').Length < 2)
@@ -3744,5 +3739,36 @@ namespace WatersidePortal
             }
             Response.Redirect("/CSubPriceBook.aspx?" + GridView_Items.SelectedRow.Cells[1].Text.Replace("#", "numpound").Replace("&", "andamp") + "&" + ID);
         }
+
+
+
+        #region Support Methods
+
+        private string getCustomerFullName(string customerId)
+        {
+            var cmdString = "Select FullName From [dbo].[Customers] Where CustomerID=@customerId";
+            string connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                using (SqlCommand comm = new SqlCommand(cmdString, conn))
+                {
+                    comm.Parameters.AddWithValue("@CustomerID", customerId);
+                    try
+                    {
+                        conn.Open();
+                        string customerFullName = (string)comm.ExecuteScalar();
+                        return customerFullName;
+                    }
+                    catch (SqlException ex)
+                    {
+                        return string.Empty;
+                    }
+                }
+            }
+        }
+
+
+        #endregion
+
     }
 }

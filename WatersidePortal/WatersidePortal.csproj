@@ -271,6 +271,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Admin\Permissions.aspx" />
+    <Content Include="App_Data\aspnet-WatersidePortal-20200822100822.mdf" />
+    <Content Include="App_Data\aspnet-WatersidePortal-20200822100822_log.ldf">
+      <DependentUpon>aspnet-WatersidePortal-20200822100822.mdf</DependentUpon>
+    </Content>
+    <Content Include="App_Data\DefaultConnection.mdf" />
+    <Content Include="App_Data\DefaultConnection_log.ldf">
+      <DependentUpon>DefaultConnection.mdf</DependentUpon>
+    </Content>
     <Content Include="Content\Images\accept.png" />
     <Content Include="Content\Images\accept2.png" />
     <Content Include="Content\Images\asdf.png" />
@@ -1092,9 +1100,7 @@
       <DependentUpon>WebForm1.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
     <Content Include="Shared\MasterPages\SiteLayout.Master" />
