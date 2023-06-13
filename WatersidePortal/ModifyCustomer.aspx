@@ -73,6 +73,7 @@
         function openInNewTab() {
             window.open('/Documents/Access Permission.pdf', '_blank');
         }
+        string CustomerId = CustomerId.Value;
     </script>
 
     <section id="main-content">
@@ -98,6 +99,10 @@
                             </li>
                             <li id="CreateTab">
                                 <a title="Create_Tab" role="tab" href="#Create" data-toggle="tab" onclick="tab('Create');">Create Bid Proposal
+                                </a>
+                            </li>
+                            <li id="ManageTab">
+                                <a title="Manage_Tab" role="tab" href="#Manage" data-toggle="tab" onclick="tab('Manage');">Manage Bid Proposals
                                 </a>
                             </li>
                             <li id="UploadTab">
@@ -313,7 +318,8 @@
 
                                             <%-- Left: BUTTON - Copy Customer to Job Site Address --%>
                                             <tr>
-                                                <td><asp:Button runat="server" ID="same_above" class="btn btn-primary" OnClick="copy" Font-Size="Small" AutoPostBack="true" Text="Jobsite Info same as Above" CausesValidation="false"/></td>
+                                                <td>
+                                                    <asp:Button runat="server" ID="same_above" class="btn btn-primary" OnClick="copy" Font-Size="Small" AutoPostBack="true" Text="Jobsite Info same as Above" CausesValidation="false" /></td>
                                                 <td></td>
                                             </tr>
 
@@ -454,7 +460,7 @@
                                     <table class="table table-borderless" cellspacing="0" cellpadding="0">
                                         <tbody>
                                             <%-- General Private Notes --%>
-                                            <tr style="width: 20px;height: 30px">
+                                            <tr style="width: 20px; height: 30px">
                                                 <td>
                                                     <asp:Label runat="server">General Private Notes</asp:Label>
                                                     <asp:TextBox runat="server" ID="Notes" Width="500px" Height="450px" TextMode="MultiLine"></asp:TextBox>
@@ -467,8 +473,10 @@
                                             <tr>
                                                 <td>
                                                     <asp:Label runat="server">*Minimum Access Space: </asp:Label>
-                                                    <asp:TextBox ID="Min_Access_F" runat="server" TextMode="Number" Text="0" Width="40"></asp:TextBox> ft.
-                                                    <asp:TextBox ID="Min_Access_I" runat="server" TextMode="Number" Text="0" Width="40"></asp:TextBox> in.
+                                                    <asp:TextBox ID="Min_Access_F" runat="server" TextMode="Number" Text="0" Width="40"></asp:TextBox>
+                                                    ft.
+                                                    <asp:TextBox ID="Min_Access_I" runat="server" TextMode="Number" Text="0" Width="40"></asp:TextBox>
+                                                    in.
                                                 <br />
                                                     <asp:RequiredFieldValidator ID="rfvMinAccessFeet" ControlToValidate="Min_Access_F"
                                                         Display="Static" ErrorMessage="Feet are required" runat="server" ForeColor="Red" />
@@ -814,6 +822,57 @@
                                 </div>
                             </div>
                             <asp:Button Width="40%" runat="server" Text="Continue Project" ID="ContinueButton" ForeColor="#2196f3" BackColor="White" OnClick="Continue" />
+                        </div>
+
+
+                        <%-- Tab: Manage Previous Bid Proposals --%>
+                        <asp:HiddenField ID="CustomerId" runat="server" />
+                        <div class="tab-pane fade in" id="Manage">
+                            <h4>Bid Proposals for <asp:Label runat="server" ID="CustomerName" Font-Size="Large" /></h4>
+                            <p>
+                                <asp:GridView ID="GridView_Items" runat="server" CssClass="table table-striped table-bordered table-hover" AllowSorting="True" AutoGenerateColumns="False" OnRowEditing="GridView_Items_RowEditing" OnSelectedIndexChanged="Selected">
+                                    <Columns>
+                                        <asp:TemplateField HeaderText="Select" ItemStyle-Width="2%" ItemStyle-CssClass="centered">
+                                            <ItemTemplate>
+                                                <asp:CheckBox runat="server" CssClass="centered" />
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                       
+                                        <asp:BoundField ControlStyle-CssClass="form-control" DataField="ProjectID" HeaderText="Id" ItemStyle-Width="12%">
+                                            <ControlStyle CssClass="form-control" />
+                                        </asp:BoundField>
+
+                                        <asp:BoundField ControlStyle-CssClass="form-control" DataField="ProjectType" HeaderText="Bid Proposal Type" ItemStyle-Width="12%">
+                                            <ControlStyle CssClass="form-control" />
+                                        </asp:BoundField>
+                                        <asp:BoundField ControlStyle-CssClass="form-control" DataField="ProjectName" HeaderText="Bid Proposal Name">
+                                            <ControlStyle CssClass="form-control" />
+                                        </asp:BoundField>
+                                        <asp:BoundField ControlStyle-CssClass="form-control" DataField="ProjectDescription" HeaderText="Bid Proposal Description">
+                                            <ControlStyle CssClass="form-control" />
+                                        </asp:BoundField>
+                                        <asp:BoundField ControlStyle-CssClass="form-control" HeaderText="Date Created" ItemStyle-Width="12%">
+                                            <ControlStyle CssClass="form-control" />
+                                        </asp:BoundField>
+                                        <asp:BoundField ControlStyle-CssClass="form-control" HeaderText="Date Last Edited" ItemStyle-Width="12%">
+                                            <ControlStyle CssClass="form-control" />
+                                        </asp:BoundField>
+                                    </Columns>
+                                </asp:GridView>
+                                <%--<asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:WatersidePortal_dbConnectionString %>" SelectCommand="SELECT [ProjectType], [ProjectName], [ProjectDescription] from [Projects] WHERE [CustomerID] = @CustomerId">
+                                    <SelectParameters>
+                                        <asp:ControlParameter Name="CustomerId" PropertyName="CustomerId" ControlID="SqlDataSource1" DbType="String" />
+                                    </SelectParameters>
+                                </asp:SqlDataSource>--%>
+                                <br />
+                                <p>
+                                    <asp:Button runat="server" ID="btnRecall" Text="Recall Bid Proposal" class="btn btn-primary"  OnClick="RecallBid" CausesValidation="False" />
+                                    <asp:Button runat="server" ID="btnDuplicate" Text="Duplicate Bid Proposal Version" class="btn btn-primary"  OnClick="DuplicateBid" CausesValidation="False" />
+                                    <asp:Button runat="server" ID="btnSaveMaster" Text="Save As Custom Master Bid" class="btn btn-primary"  OnClick="SaveMaster" CausesValidation="False" />
+                                </p>
+                                <p>
+                                </p>
+                            </p>
                         </div>
 
 

@@ -7,6 +7,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
+using System.Web.Providers.Entities;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -16,6 +17,12 @@ namespace WatersidePortal
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            CSubPriceBook frm = (CSubPriceBook)sender;
+
+            var pid = HttpContext.Current.Session["CurrentProjectId"];
+            var customerId = HttpContext.Current.Session["CurrentCustomerId"];
+            var customerName = HttpContext.Current.Session["CurrentCustomerName"];
+
             if (HttpContext.Current.Request.Url.Query.Length == 0)
                 return;
             string[] arr = HttpContext.Current.Request.Url.Query.Remove(0, 1).Split('&');

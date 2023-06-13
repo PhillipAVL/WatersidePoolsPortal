@@ -38,34 +38,44 @@
             list-style: circle;
         }
     </style>
+
     <section id="main-content">
         <section class="wrapper site-min-height">
             <br />
             <div class="panel-body">
+                <asp:HiddenField ID="CustomerId" runat="server" />
+                <asp:HiddenField ID="CustomerName" runat="server" />
+                <asp:HiddenField ID="ProjectId" runat="server" />
+
+                <% 
+                    var hCustomerId = CustomerId.Value;
+                    var selectSpecsTabNav = "Select&" + hCustomerId;
+                %>
+
                 <div class="tab-content">
                     <div class="tab-pane fade in active" id="EditDelete">
 
                         <asp:Panel ID="Panel_Items" runat="server" CssClass="panel panel-default">
                             <div class="panel-heading">
-                                <h4 class="title">Price Book
+                                <h4 class="title">Manage Bid Proposal
                                     </h4>
                             </div>
-
+                           
                             <%-- Tabs --%>
                             <div class="panel-body">
                                 <ul class="nav nav-tabs">
                                     <li id="SelectTab">
-                                        <a href="#Select" data-toggle="tab" onclick="tab('Select');">Select Specs
+                                        <a href="#Select" data-toggle="tab"">Select Specs
                                             </a>
                                     </li>
                                     <li id="ShoppingTab">
-                                        <a href="#Shopping" data-toggle="tab" onclick="tab('Shopping');">Shopping Cart
+                                        <a href="#Shopping" data-toggle="tab"">Bid Proposal
                                             </a>
                                     </li>
-                                    <li id="PreviousTab">
+                                    <%--<li id="PreviousTab">
                                         <a href="#Previous" data-toggle="tab" onclick="tab('Previous');">Previous Bid Proposal Versions
                                             </a>
-                                    </li>
+                                    </li>--%>
                                 </ul>
 
                                 <div class="tab-content">
@@ -92,7 +102,7 @@
 
                                     <div class="tab-pane fade in" id="Shopping">
                                         <br />
-                                                    
+
                                         <div>
                                             <%-- Project Name / Description --%>
                                             <div style="width: 50%; float: left">
@@ -490,7 +500,8 @@
                                             <asp:Button Text="To Contract" runat="server" Height="40px" Width="50%" OnClick="GenerateContract" />
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade in" id="Previous">
+
+                                    <%--<div class="tab-pane fade in" id="Previous">
                                         <h4>Recall Bid Proposal</h4>
                                         <asp:Label runat="server" ID="CustomerName" Font-Size="Large" Text="Customer: " />
                                         <p>
@@ -529,7 +540,7 @@
                                             <p>
                                             </p>
                                         </p>
-                                    </div>
+                                    </div>--%>
                                 </div>
                             </div>
                         </asp:Panel>
