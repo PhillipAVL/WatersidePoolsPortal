@@ -83,25 +83,56 @@ namespace WatersidePortal
 
             if (!Page.IsPostBack)
             {
-                if (HttpContext.Current.Request.Url.AbsoluteUri.Split('?').Length < 2)
-                {
-                    return;
-                }
-                string[] arr = HttpContext.Current.Request.Url.AbsoluteUri.Split('?')[1].Split('&');
-                string ID = "1";
-                if (arr.Length > 1)
-                {
-                    ID = arr[0];
-                    CustomerId.Value = ID;
-                    this.Session["CurrentCustomerId"] = ID;
-                }
-                if (arr.Length > 2)
-                {
-                    CustomerName.Value = getCustomerFullName(ID);
-                    this.Session["CurrentCustomerName"] = CustomerName.Value;
-                    ProjectId.Value = arr[2];
-                    this.Session["CurrentProjectId"] = arr[2];
-                }
+                var projectId = HttpContext.Current.Session["CurrentProjectId"].ToString();
+                var customerId = HttpContext.Current.Session["CurrentCustomerId"].ToString();
+                var customerName = HttpContext.Current.Session["CurrentCustomerName"].ToString();
+
+                ProjectId.Value = projectId;
+                CustomerId.Value = customerId;
+                CustomerName.Value = customerName;
+
+                //if (HttpContext.Current.Request.Url.AbsoluteUri.Split('?').Length < 2)
+                //{
+                //    return;
+                //}
+                //string[] arr = HttpContext.Current.Request.Url.AbsoluteUri.Split('?')[1].Split('&');
+                //string ID = "1";
+                //if (arr.Length > 1)
+                //{
+                //    ID = arr[0];
+                //    if (this.Session["CurrentCustomerId"] == null)
+                //    {
+                //        CustomerId.Value = ID;
+                //        this.Session["CurrentCustomerId"] = CustomerId.Value;
+                //    }
+                //    else
+                //    {
+                //        CustomerId.Value = this.Session["CurrentCustomerId"].ToString();
+                //    }
+                //}
+                //if (arr.Length > 2)
+                //{
+                //    if (this.Session["CurrentCustomerName"] == null)
+                //    {
+                //        CustomerName.Value = arr[1];
+                //        this.Session["CurrentCustomerName"] = getCustomerFullName(ID);
+                //    }
+                //    else
+                //    {
+                //        CustomerName.Value = this.Session["CurrentCustomerName"].ToString();
+                //    }
+
+
+                //    if (this.Session["CurrentProjectId"] == null)
+                //    {
+                //        ProjectId.Value = arr[2];
+                //        this.Session["CurrentProjectId"] = ProjectId.Value;
+                //    }
+                //    else
+                //    {
+                //        ProjectId.Value = this.Session["CurrentProjectId"].ToString();
+                //    }
+                //}
 
                 int projID = -1;
                 string cmdString = "Select [CurrentProject] From [dbo].[Customers] Where CustomerID=@ID";
@@ -116,7 +147,7 @@ namespace WatersidePortal
                 {
                     using (SqlCommand comm = new SqlCommand(cmdString, conn))
                     {
-                        comm.Parameters.AddWithValue("@ID", ID);
+                        comm.Parameters.AddWithValue("@ID", CustomerId.Value);
                         comm.Parameters.AddWithValue("@ProjectID", ProjectId.Value);
                         try
                         {
@@ -177,8 +208,8 @@ namespace WatersidePortal
 
                 if (gProj == null || gProj.sItems == null)
                 {
-                    cmdString = "select MAX(ProjectID) as maxID from [dbo].[Projects] where CustomerID = @ID";
-                    connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
+                    //cmdString = "select MAX(ProjectID) as maxID from [dbo].[Projects] where CustomerID = @ID";
+                    //connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
 
                     gProj = new Project();
                     cmdString = "Select * From [dbo].[Projects] Where CustomerID=@ID AND ProjectID=@pID";
@@ -187,7 +218,7 @@ namespace WatersidePortal
                     {
                         using (SqlCommand comm = new SqlCommand(cmdString, conn))
                         {
-                            comm.Parameters.AddWithValue("@ID", ID);
+                            comm.Parameters.AddWithValue("@ID", CustomerId.Value);
                             comm.Parameters.AddWithValue("@pID", ProjectId.Value);
                             try
                             {
