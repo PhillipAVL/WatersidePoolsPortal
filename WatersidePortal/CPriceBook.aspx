@@ -1,4 +1,4 @@
-﻿<%@ Page MaintainScrollPositionOnPostback="true" Title="Pricebook" Language="C#" MasterPageFile="~/Shared/MasterPages/SiteLayoutAdmin.Master" AutoEventWireup="true" CodeBehind="CPriceBook.aspx.cs" Inherits="WatersidePortal.CPriceBook" %>
+﻿<%@ Page MaintainScrollPositionOnPostback="true" Title="Pricebook" Language="C#" MasterPageFile="~/Shared/MasterPages/SiteLayoutAdmin.Master" AutoEventWireup="true" CodeBehind="CPriceBook.aspx.cs" Inherits="WatersidePortal.CPriceBook" Debug="true" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server"></asp:Content>
 
@@ -352,6 +352,8 @@
                                             </div>
                                             <br />
                                             <br />
+
+                                            <%-- Project Items Grid --%>
                                             <h4>Selected Items
                                                 </h4>
                                             <div class="table-responsive">

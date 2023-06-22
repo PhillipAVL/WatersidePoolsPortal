@@ -17,6 +17,8 @@ namespace WatersidePortal
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            Session.Clear();
+            
             GridView1.SelectedIndexChanged += CustomersGridView_SelectedIndexChanged;
             GridView1.SelectedIndexChanging += CustomersGridView_SelectedIndexChanged2;
 

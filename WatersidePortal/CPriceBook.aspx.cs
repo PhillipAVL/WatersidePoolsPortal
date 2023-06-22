@@ -77,72 +77,69 @@ namespace WatersidePortal
                     ProjectId.Value = arr[2];
                     this.Session["CurrentProjectId"] = ProjectId.Value;
                 }
-
-
             }
 
             if (!Page.IsPostBack)
             {
-                var projectId = HttpContext.Current.Session["CurrentProjectId"].ToString();
-                var customerId = HttpContext.Current.Session["CurrentCustomerId"].ToString();
-                var customerName = HttpContext.Current.Session["CurrentCustomerName"].ToString();
+                if (Session.Keys.Count > 0)
+                {
+                    // Get page vars from the session
+                    ProjectId.Value = HttpContext.Current.Session["CurrentProjectId"].ToString();
+                    CustomerId.Value = HttpContext.Current.Session["CurrentCustomerId"].ToString();
+                    CustomerName.Value = HttpContext.Current.Session["CurrentCustomerName"].ToString();
+                }
+                else
+                {
+                    // Get page vars from the query string.
+                    if (HttpContext.Current.Request.Url.AbsoluteUri.Split('?').Length < 2)
+                    {
+                        return;
+                    }
+                    string[] arr = HttpContext.Current.Request.Url.AbsoluteUri.Split('?')[1].Split('&');
+                    string ID = "1";
+                    if (arr.Length > 1)
+                    {
+                        ID = arr[0];
+                        if (this.Session["CurrentCustomerId"] == null)
+                        {
+                            CustomerId.Value = ID;
+                            this.Session["CurrentCustomerId"] = CustomerId.Value;
+                        }
+                        else
+                        {
+                            CustomerId.Value = this.Session["CurrentCustomerId"].ToString();
+                        }
+                    }
+                    if (arr.Length > 2)
+                    {
+                        if (this.Session["CurrentCustomerName"] == null)
+                        {
+                            CustomerName.Value = arr[1];
+                            this.Session["CurrentCustomerName"] = getCustomerFullName(ID);
+                        }
+                        else
+                        {
+                            CustomerName.Value = this.Session["CurrentCustomerName"].ToString();
+                        }
 
-                ProjectId.Value = projectId;
-                CustomerId.Value = customerId;
-                CustomerName.Value = customerName;
 
-                //if (HttpContext.Current.Request.Url.AbsoluteUri.Split('?').Length < 2)
-                //{
-                //    return;
-                //}
-                //string[] arr = HttpContext.Current.Request.Url.AbsoluteUri.Split('?')[1].Split('&');
-                //string ID = "1";
-                //if (arr.Length > 1)
-                //{
-                //    ID = arr[0];
-                //    if (this.Session["CurrentCustomerId"] == null)
-                //    {
-                //        CustomerId.Value = ID;
-                //        this.Session["CurrentCustomerId"] = CustomerId.Value;
-                //    }
-                //    else
-                //    {
-                //        CustomerId.Value = this.Session["CurrentCustomerId"].ToString();
-                //    }
-                //}
-                //if (arr.Length > 2)
-                //{
-                //    if (this.Session["CurrentCustomerName"] == null)
-                //    {
-                //        CustomerName.Value = arr[1];
-                //        this.Session["CurrentCustomerName"] = getCustomerFullName(ID);
-                //    }
-                //    else
-                //    {
-                //        CustomerName.Value = this.Session["CurrentCustomerName"].ToString();
-                //    }
-
-
-                //    if (this.Session["CurrentProjectId"] == null)
-                //    {
-                //        ProjectId.Value = arr[2];
-                //        this.Session["CurrentProjectId"] = ProjectId.Value;
-                //    }
-                //    else
-                //    {
-                //        ProjectId.Value = this.Session["CurrentProjectId"].ToString();
-                //    }
-                //}
-
-                int projID = -1;
-                string cmdString = "Select [CurrentProject] From [dbo].[Customers] Where CustomerID=@ID";
-                string connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
+                        if (this.Session["CurrentProjectId"] == null)
+                        {
+                            ProjectId.Value = arr[2];
+                            this.Session["CurrentProjectId"] = ProjectId.Value;
+                        }
+                        else
+                        {
+                            ProjectId.Value = this.Session["CurrentProjectId"].ToString();
+                        }
+                    }
+                }
 
                 // Get project detail.
                 Project gProj = new Project();
                 int basePrice = 54500;
-                cmdString = "Select * From [dbo].[Projects] Where CustomerID=@ID AND ProjectID=@ProjectId";
-                connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
+                string cmdString = "Select * From [dbo].[Projects] Where CustomerID=@ID AND ProjectID=@ProjectId";
+                string connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
                 using (SqlConnection conn = new SqlConnection(connString))
                 {
                     using (SqlCommand comm = new SqlCommand(cmdString, conn))
@@ -206,77 +203,6 @@ namespace WatersidePortal
                     CustomerFullName.Text = getCustomerFullName(ID);
                 }
 
-                if (gProj == null || gProj.sItems == null)
-                {
-                    //cmdString = "select MAX(ProjectID) as maxID from [dbo].[Projects] where CustomerID = @ID";
-                    //connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
-
-                    gProj = new Project();
-                    cmdString = "Select * From [dbo].[Projects] Where CustomerID=@ID AND ProjectID=@pID";
-                    connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
-                    using (SqlConnection conn = new SqlConnection(connString))
-                    {
-                        using (SqlCommand comm = new SqlCommand(cmdString, conn))
-                        {
-                            comm.Parameters.AddWithValue("@ID", CustomerId.Value);
-                            comm.Parameters.AddWithValue("@pID", ProjectId.Value);
-                            try
-                            {
-                                conn.Open();
-                                using (SqlDataReader reader = comm.ExecuteReader())
-                                {
-                                    while (reader.Read())
-                                    {
-                                        gProj.sItems = String.Format("{0}", reader["Items"]);
-                                        gProj.projectName = String.Format("{0}", reader["ProjectName"]);
-                                        gProj.projectDescription = String.Format("{0}", reader["ProjectDescription"]);
-                                        gProj.projectID = Convert.ToInt32(String.Format("{0}", reader["ProjectID"]));
-                                        Project_Name.Text = gProj.projectName + ":";
-                                        Project_Desc.Text = gProj.projectDescription + ":";
-                                        string[] len = String.Format("{0}", reader["Length"]).Split('`');
-                                        string[] wid = String.Format("{0}", reader["Width"]).Split('`');
-                                        if (len.Length == 2)
-                                        {
-                                            LF.Text = len[0];
-                                            LI.Text = len[1];
-                                        }
-                                        if (wid.Length == 2)
-                                        {
-                                            WF.Text = wid[0];
-                                            WI.Text = wid[1];
-                                        }
-                                        if (LF.Text.Length == 0)
-                                            LF.Text = "0";
-                                        if (LI.Text.Length == 0)
-                                            LI.Text = "0";
-                                        if (WF.Text.Length == 0)
-                                            WF.Text = "0";
-                                        if (WI.Text.Length == 0)
-                                            WI.Text = "0";
-                                        if (String.Format("{0}", reader["ProjectType"]) == "Genesis")
-                                        {
-                                            basePrice = 51000;
-                                            geninc.Visible = true;
-                                            ezinc.Visible = false;
-                                        }
-                                        else if (String.Format("{0}", reader["ProjectType"]) == "EZ-Flow")
-                                        {
-                                            geninc.Visible = false;
-                                            ezinc.Visible = true;
-                                            basePrice = 54500;
-                                        }
-                                    }
-                                }
-                            }
-                            catch (SqlException err)
-                            {
-
-                            }
-                        }
-                    }
-
-
-                }
 
                 // Get the Project items.
                 List<Item> items = new List<Item>();
@@ -334,9 +260,10 @@ namespace WatersidePortal
 
                     items.Add(item);
                 }
-
                 GridView_Items.Sort("Category", SortDirection.Ascending);
 
+
+                // Build the Project Items Detail grid.
                 DataTable dt = GridView1.DataSource as DataTable;
                 DataTable dt2 = GridView2.DataSource as DataTable;
                 if (dt == null)
@@ -638,6 +565,7 @@ namespace WatersidePortal
             //    }
             //}
         }
+
 
         protected void SaveMaster(object sender, EventArgs e)
         {

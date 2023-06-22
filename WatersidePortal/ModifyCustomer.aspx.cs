@@ -66,7 +66,7 @@ namespace WatersidePortal
             }
 
             // Customers Tab
-            string cmdString = "SELECT [FirstName], [LastName], [CustomerID], [Address], [City], [State], [Telephone], [Alternate], [Email] FROM [Customers] WHERE [CustomerID] = @ID";
+            string cmdString = "SELECT [FirstName], [LastName], [CustomerID], [Address], [City], [State], [Telephone], [Alternate], [Email] FROM [Customers] WHERE [CustomerID] = @ID ORDER BY [ID]";
             string connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
             using (SqlConnection conn = new SqlConnection(connString))
             {
@@ -206,7 +206,7 @@ namespace WatersidePortal
             {
                 // Get Projects for the selected Customer
                 Project gProj = new Project();
-                cmdString = "Select * From [dbo].[Projects] Where CustomerID=@ID"; // AND ProjectID=@pID";
+                cmdString = "Select * From [dbo].[Projects] Where CustomerID=@ID ORDER BY [ProjectID]"; // AND ProjectID=@pID";
                 connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
                 using (SqlConnection conn = new SqlConnection(connString))
                 {

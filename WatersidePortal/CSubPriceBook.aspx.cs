@@ -50,76 +50,24 @@ namespace WatersidePortal
             GridView_Items.Sort("Subcategory", SortDirection.Ascending);
         }
 
-        protected void GridView_Items_RowEditing(object sender, GridViewEditEventArgs e)
-        {
-
-        }
-        protected void GridView_Items_SelectedIndexChanging(object sender, GridViewSelectEventArgs e)
-        {
-            System.Diagnostics.Debug.WriteLine("testing");
-        }
-        protected void Selected(object sender, EventArgs e)
-        {
-            string[] arr = HttpContext.Current.Request.Url.Query.Remove(0, 1).Split('&');
-            string filter = "1";
-            string ID = "1";
-            if (arr.Length > 1)
-            {
-                filter = arr[0];
-                ID = arr[1];
-            }
-            else
-            {
-                return;
-            }
-            Response.Redirect("/CSubsubPriceBook.aspx?" + filter + "&" + GridView_Items.SelectedRow.Cells[1].Text.Replace("#", "numpound").Replace("&", "andamp") + "&" + ID);
-        }
-        protected void Back(object sender, EventArgs e)
-        {
-            if (HttpContext.Current.Request.Url.Query.Length == 0)
-                return;
-            string[] arr = HttpContext.Current.Request.Url.Query.Remove(0, 1).Split('&');
-            if (arr.Length < 2)
-                return;
-            Response.Redirect("/CPriceBook.aspx?" + arr[1] + "&Select");
-        }
+        // Save the changes from the Pricebook
         protected void Submit(object sender, EventArgs e)
         {
+            // Get session vars.
+            ProjectId.Value = HttpContext.Current.Session["CurrentProjectId"].ToString();
+            CustomerId.Value = HttpContext.Current.Session["CurrentCustomerId"].ToString();
+            CustomerName.Value = HttpContext.Current.Session["CurrentCustomerName"].ToString();
+
             if (HttpContext.Current.Request.Url.Query.Length == 0)
                 return;
             string[] arr = HttpContext.Current.Request.Url.Query.Remove(0, 1).Split('&');
             if (arr.Length < 2)
                 return;
             int proj = -1;
-            string cmdString = "SELECT [CurrentProject] FROM [Customers] WHERE [CustomerID] = @ID";
-            string connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
-            using (SqlConnection conn = new SqlConnection(connString))
-            {
-                using (SqlCommand comm = new SqlCommand(cmdString, conn))
-                {
-                    comm.Parameters.AddWithValue("@ID", arr[1]);
-                    try
-                    {
-                        conn.Open();
-                        using (SqlDataReader reader = comm.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                string pr = String.Format("{0}", reader["CurrentProject"]);
-                                if (pr.Length < 1)
-                                {
-                                    pr = "-1";
-                                }
-                                proj = Convert.ToInt32(pr);
-                            }
-                        }
-                    }
-                    catch (SqlException err)
-                    {
 
-                    }
-                }
-            }
+            string cmdString = string.Empty;
+            string connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
+
             string built = "";
             for (int i = 0; i < GridView1.Rows.Count; i++)
             {
@@ -143,10 +91,11 @@ namespace WatersidePortal
             }
             built = built.Remove(built.Length - 1, 1).Replace("&nbsp;", "");
 
-            if (proj == -1)
+            // Determin if a default custoer project exists.
+            // If so, add the project and itmes.
+            if (doesProjectExist(CustomerId.Value) == false)
             {
                 cmdString = "INSERT INTO Projects ([Items],[CustomerID]) VALUES (@items, @id)";
-                connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
                 using (SqlConnection conn = new SqlConnection(connString))
                 {
                     using (SqlCommand comm = new SqlCommand())
@@ -154,7 +103,7 @@ namespace WatersidePortal
                         comm.Connection = conn;
                         comm.CommandText = cmdString;
                         comm.Parameters.AddWithValue("@items", built);
-                        comm.Parameters.AddWithValue("@id", arr[1]);
+                        comm.Parameters.AddWithValue("@id", CustomerId.Value);
 
                         try
                         {
@@ -170,13 +119,16 @@ namespace WatersidePortal
             }
             else
             {
+                // Build the list of bid proposal items when items exist.
                 cmdString = "SELECT [Items] FROM Projects WHERE [ProjectID] = @ID";
                 connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
                 using (SqlConnection conn = new SqlConnection(connString))
                 {
                     using (SqlCommand comm = new SqlCommand(cmdString, conn))
                     {
-                        comm.Parameters.AddWithValue("@ID", proj);
+                        comm.Connection = conn;
+                        comm.CommandText = cmdString;
+                        comm.Parameters.AddWithValue("@ID", ProjectId.Value);
                         try
                         {
                             conn.Open();
@@ -195,7 +147,7 @@ namespace WatersidePortal
                     }
                 }
 
-
+                // Update the project items field with the new items.
                 cmdString = "UPDATE Projects SET [Items] = @items WHERE ProjectID = @id";
                 connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
                 using (SqlConnection conn = new SqlConnection(connString))
@@ -205,7 +157,7 @@ namespace WatersidePortal
                         comm.Connection = conn;
                         comm.CommandText = cmdString;
                         comm.Parameters.AddWithValue("@items", built);
-                        comm.Parameters.AddWithValue("@id", proj);
+                        comm.Parameters.AddWithValue("@id", ProjectId.Value);
 
                         try
                         {
@@ -222,5 +174,94 @@ namespace WatersidePortal
 
             Response.Redirect("/CPriceBook.aspx?" + arr[1] + "&Select");
         }
+
+
+        #region Private Methods
+
+        private bool doesProjectExist(string customerId)
+        {
+            string cmdString = "SELECT [CurrentProject] FROM [Customers] WHERE [CustomerID] = @ID";
+            string connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                using (SqlCommand comm = new SqlCommand(cmdString, conn))
+                {
+                    comm.Parameters.AddWithValue("@ID", customerId);
+                    try
+                    {
+                        conn.Open();
+                        using (SqlDataReader reader = comm.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                string pr = String.Format("{0}", reader["CurrentProject"]);
+                                if (pr.Length < 1)
+                                {
+                                    pr = "-1";
+                                    return false;
+                                }
+                                int projectId = Convert.ToInt32(pr);
+                                return true;
+                            }
+                        }
+                    }
+                    catch (SqlException err)
+                    {
+                        return false;
+                    }
+                    return false;
+                }
+            }
+        }
+        #endregion
+
+
+        #region Grid Events
+
+        protected void GridView_Items_RowEditing(object sender, GridViewEditEventArgs e)
+        {
+
+        }
+
+        protected void GridView_Items_SelectedIndexChanging(object sender, GridViewSelectEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("testing");
+        }
+
+        protected void Selected(object sender, EventArgs e)
+        {
+            string[] arr = HttpContext.Current.Request.Url.Query.Remove(0, 1).Split('&');
+            string filter = "1";
+            string ID = "1";
+            if (arr.Length > 1)
+            {
+                filter = arr[0];
+                ID = arr[1];
+            }
+            else
+            {
+                return;
+            }
+            Response.Redirect("/CSubsubPriceBook.aspx?" + filter + "&" + GridView_Items.SelectedRow.Cells[1].Text.Replace("#", "numpound").Replace("&", "andamp") + "&" + ID);
+        }
+
+        #endregion
+
+
+        #region Page Events
+
+        protected void Back(object sender, EventArgs e)
+        {
+            if (HttpContext.Current.Request.Url.Query.Length == 0)
+                return;
+            string[] arr = HttpContext.Current.Request.Url.Query.Remove(0, 1).Split('&');
+            if (arr.Length < 2)
+                return;
+            Response.Redirect("/CPriceBook.aspx?" + arr[1] + "&Select");
+        }
+
+        #endregion
+
+
     }
 }
