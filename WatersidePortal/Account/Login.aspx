@@ -35,7 +35,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <section id="loginForm">
-                            <h2 class="form-login-heading">Login.</h2>
+                            <h2 class="form-login-heading">Login</h2>
                                 <div class="login-wrap">
 
 

@@ -1,16 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30413.136
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WatersidePortal", "WatersidePortal\WatersidePortal.csproj", "{36CAE402-E0AA-4601-8240-AA37D3A3107E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Azure DEV|Any CPU = Azure DEV|Any CPU
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{36CAE402-E0AA-4601-8240-AA37D3A3107E}.Azure DEV|Any CPU.ActiveCfg = Azure DEV|Any CPU
+		{36CAE402-E0AA-4601-8240-AA37D3A3107E}.Azure DEV|Any CPU.Build.0 = Azure DEV|Any CPU
 		{36CAE402-E0AA-4601-8240-AA37D3A3107E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{36CAE402-E0AA-4601-8240-AA37D3A3107E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36CAE402-E0AA-4601-8240-AA37D3A3107E}.Release|Any CPU.ActiveCfg = Release|Any CPU

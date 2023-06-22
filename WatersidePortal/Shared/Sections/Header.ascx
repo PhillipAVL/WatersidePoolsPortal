@@ -15,9 +15,7 @@
     <div class="top-menu">
         <ul class="nav pull-right top-menu">
             <li>
-                <a class="logout" href="/Account/Login.aspx">
-                    Logout
-                </a>
+                <asp:LinkButton ID="LinkButtonLogout" runat="server" CausesValidation="false" Class="logout" OnClick="LinkButtonLogout_Click">Logout</asp:LinkButton>
             </li>
         </ul>
     </div>
