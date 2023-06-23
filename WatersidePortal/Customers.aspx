@@ -162,8 +162,8 @@
                                     <AlternatingRowStyle BackColor="White" />
                                     <Columns>
                                         <asp:CommandField ShowSelectButton="True" ItemStyle-ForeColor="#428BCA" HeaderText="Edit/Pool Info" />
-                                        <asp:BoundField DataField="FirstName" HeaderText="FirstName" SortExpression="FirstName" />
                                         <asp:BoundField DataField="LastName" HeaderText="LastName" SortExpression="LastName" />
+                                        <asp:BoundField DataField="FirstName" HeaderText="FirstName" SortExpression="FirstName" />
                                         <asp:BoundField DataField="Address" HeaderText="Address" SortExpression="Address" />
                                         <asp:BoundField DataField="City" HeaderText="City" SortExpression="City" />
                                         <asp:BoundField DataField="State" HeaderText="State" SortExpression="State" />
@@ -183,7 +183,7 @@
                                     <SortedDescendingCellStyle BackColor="#E9EBEF" />
                                     <SortedDescendingHeaderStyle BackColor="#4870BE" />
                                 </asp:GridView>
-                                <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:WatersidePortal_dbConnectionString %>" SelectCommand="SELECT [FirstName], [LastName], [CustomerID], [Address], [City], [State], [Telephone], [Alternate], [Email] FROM [Customers]" DeleteCommand="DELETE FROM [Customers] WHERE [CustomerID] = @CustomerID" InsertCommand="INSERT INTO [Customers] ([FirstName], [LastName], [Address], [City], [State], [Telephone], [Alternate], [Email]) VALUES (@FirstName, @LastName, @Address, @City, @State, @Telephone, @Alternate, @Email)" UpdateCommand="UPDATE [Customers] SET [FirstName] = @FirstName, [LastName] = @LastName, [Address] = @Address, [City] = @City, [State] = @State, [Telephone] = @Telephone, [Alternate] = @Alternate, [Email] = @Email WHERE [CustomerID] = @CustomerID">
+                                <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:WatersidePortal_dbConnectionString %>" SelectCommand="SELECT [FirstName], [LastName], [CustomerID], [Address], [City], [State], [Telephone], [Alternate], [Email] FROM [Customers] Order By [LastName], [FirstName]" DeleteCommand="DELETE FROM [Customers] WHERE [CustomerID] = @CustomerID" InsertCommand="INSERT INTO [Customers] ([FirstName], [LastName], [Address], [City], [State], [Telephone], [Alternate], [Email]) VALUES (@FirstName, @LastName, @Address, @City, @State, @Telephone, @Alternate, @Email)" UpdateCommand="UPDATE [Customers] SET [FirstName] = @FirstName, [LastName] = @LastName, [Address] = @Address, [City] = @City, [State] = @State, [Telephone] = @Telephone, [Alternate] = @Alternate, [Email] = @Email WHERE [CustomerID] = @CustomerID">
                                     <DeleteParameters>
                                         <asp:Parameter Name="CustomerID" Type="Int32" />
                                     </DeleteParameters>
