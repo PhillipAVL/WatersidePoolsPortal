@@ -18,6 +18,9 @@ namespace WatersidePortal
 {
     public partial class ModifyCustomer : System.Web.UI.Page
     {
+        
+
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (HttpContext.Current.Request.Url.Query.Length == 0)
@@ -31,8 +34,9 @@ namespace WatersidePortal
             if (arr.Length > 0 && arr[0].Split('?').Length > 2)
             {
                 CustomerId.Value = ID;
-                CustomerName.Text = getCustomerFullName(ID);
             }
+            CustomerName.Text = getCustomerFullName(ID);
+            
 
             // Customers Tab
             string cmdString = "SELECT [FirstName], [LastName], [CustomerID], [Address], [City], [State], [Telephone], [Alternate], [Email] FROM [Customers] WHERE [CustomerID] = @ID ORDER BY [ID]";

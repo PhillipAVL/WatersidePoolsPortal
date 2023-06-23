@@ -289,6 +289,7 @@
     <Content Include="Content\Images\warning.png" />
     <Content Include="ArchivedCustomers.aspx" />
     <Content Include="CItemPriceBook.aspx" />
+    <Content Include="Content\Images\waterside_pools_logo.png" />
     <Content Include="ManageMasters.aspx" />
     <Content Include="FinalizedShopping.aspx" />
     <Content Include="ItemPriceBook.aspx" />

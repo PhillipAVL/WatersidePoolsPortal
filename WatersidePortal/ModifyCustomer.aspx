@@ -81,14 +81,11 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <br />
-                    <h4 class="title">Customer Management
-                    </h4>
+                    <h4 class="title">Customer Management: <asp:Label runat="server" ID="CustomerName" Font-Size="Large" /></h4>
                 </div>
 
                 <div class="panel-body">
                     <asp:Label runat="server" ID="name" Font-Bold="true" Font-Size="Large"></asp:Label>
-                    <br />
-                    <br />
 
                     <%-- Tabs --%>
                     <div id="Tabs" role="tabpanel">
@@ -825,10 +822,10 @@
                         </div>
 
 
-                        <%-- Tab: Manage Previous Bid Proposals --%>
+                        <%-- Tab: Manage Bid Proposals --%>
                         <asp:HiddenField ID="CustomerId" runat="server" />
                         <div class="tab-pane fade in" id="Manage">
-                            <h4>Bid Proposals for <asp:Label runat="server" ID="CustomerName" Font-Size="Large" /></h4>
+                            <h4>Bid Proposals</h4>
                             <p>
                                 <asp:GridView ID="GridView_Items" runat="server" CssClass="table table-striped table-bordered table-hover" AllowSorting="True" AutoGenerateColumns="False" OnRowEditing="GridView_Items_RowEditing" OnSelectedIndexChanged="Selected">
                                     <Columns>

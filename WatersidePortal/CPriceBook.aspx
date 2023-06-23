@@ -49,7 +49,7 @@
 
                 <% 
                     var hCustomerId = CustomerId.Value;
-                    var selectSpecsTabNav = "Select&" + hCustomerId;
+                   // var selectSpecsTabNav = "Select&" + hCustomerId;
                 %>
 
                 <div class="tab-content">
@@ -57,8 +57,7 @@
 
                         <asp:Panel ID="Panel_Items" runat="server" CssClass="panel panel-default">
                             <div class="panel-heading">
-                                <h4 class="title">Manage Bid Proposal
-                                    </h4>
+                                <h4 class="title">Manage Bid Proposal: <asp:Label runat="server" ID="CustomerFullName" Value=""/></h4>
                             </div>
                            
                             <%-- Tabs --%>
@@ -105,10 +104,10 @@
                                         <div>
                                             <%-- Project Name / Description --%>
                                             <div style="width: 50%; float: left">
-                                                <p>
+                                                <%--<p>
                                                     <asp:Label ID="label2" AssociatedControlID="CustomerFullName" Text="Customer Name: " runat="server" CssClass="labeldisplay" />
                                                     <asp:TextBox ID="CustomerFullName" runat="server" CssClass="textboxdisplay" ReadOnly="true"></asp:TextBox>
-                                                </p>
+                                                </p>--%>
 
                                                 <p>
                                                     <asp:Label ID="label" AssociatedControlID="Project_Name" Text="Project Name: " runat="server" CssClass="labeldisplay" />

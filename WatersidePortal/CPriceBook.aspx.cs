@@ -47,6 +47,7 @@ namespace WatersidePortal
                     ProjectId.Value = arr[2];
                     this.Session["CurrentProjectId"] = ProjectId.Value;
                 }
+                CustomerFullName.Text = getCustomerFullName(ID);
             }
 
             if (!Page.IsPostBack)
@@ -57,6 +58,7 @@ namespace WatersidePortal
                     ProjectId.Value = HttpContext.Current.Session["CurrentProjectId"].ToString();
                     CustomerId.Value = HttpContext.Current.Session["CurrentCustomerId"].ToString();
                     CustomerName.Value = HttpContext.Current.Session["CurrentCustomerName"].ToString();
+                    CustomerFullName.Text = CustomerName.Value;
                 }
                 else
                 {
@@ -102,6 +104,8 @@ namespace WatersidePortal
                         {
                             ProjectId.Value = this.Session["CurrentProjectId"].ToString();
                         }
+
+                        CustomerFullName.Text = getCustomerFullName(ID);
                     }
                 }
 
@@ -169,8 +173,6 @@ namespace WatersidePortal
 
                         }
                     }
-
-                    CustomerFullName.Text = getCustomerFullName(ID);
                 }
 
 

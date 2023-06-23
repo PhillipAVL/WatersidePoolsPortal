@@ -8,7 +8,7 @@
     <style type="text/css">
         .Grid, .Grid th, .Grid td {
             border: 1px solid #e0e0e0;
-            text-align: center;
+            text-align: left;
         }
 
         .custId {
@@ -153,7 +153,7 @@
                         </div>
 
 
-                        <%--  Manage Customer--%>
+                        <%-- Manage Customers Grid --%>
                         <div class="tab-pane fade in" id="Modify">
                             <h4>Find Customer</h4>
                             <asp:TextBox runat="server" TextMode="Search" placeholder="Enter any detail" ID="search" Width="30%" />
@@ -161,7 +161,7 @@
                                 <asp:GridView OnSelectedIndexChanged="CustomersGridView_SelectedIndexChanged" ID="GridView1" CssClass="Grid" runat="server" AutoGenerateColumns="False" CellPadding="4" DataSourceID="SqlDataSource1" ForeColor="#333333" GridLines="Both" DataKeyNames="CustomerID" Width="100%">
                                     <AlternatingRowStyle BackColor="White" />
                                     <Columns>
-                                        <asp:CommandField ShowSelectButton="True" ItemStyle-ForeColor="#428BCA" HeaderText="Edit/Pool Info" />
+                                        <asp:CommandField ShowSelectButton="True" ItemStyle-ForeColor="#428BCA" HeaderText="" />
                                         <asp:BoundField DataField="LastName" HeaderText="LastName" SortExpression="LastName" />
                                         <asp:BoundField DataField="FirstName" HeaderText="FirstName" SortExpression="FirstName" />
                                         <asp:BoundField DataField="Address" HeaderText="Address" SortExpression="Address" />
@@ -175,7 +175,7 @@
                                     <EditRowStyle BackColor="#2461BF" />
                                     <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
                                     <HeaderStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
-                                    <PagerStyle BackColor="#2461BF" ForeColor="White" HorizontalAlign="Center" />
+                                    <PagerStyle BackColor="#2461BF" ForeColor="White" />
                                     <RowStyle BackColor="#EFF3FB" />
                                     <SelectedRowStyle BackColor="#D1DDF1" Font-Bold="True" ForeColor="#333333" />
                                     <SortedAscendingCellStyle BackColor="#F5F7FB" />
