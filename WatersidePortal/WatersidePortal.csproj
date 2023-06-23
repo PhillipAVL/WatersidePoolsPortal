@@ -712,6 +712,8 @@
     <Compile Include="CSubsubPriceBook.aspx.designer.cs">
       <DependentUpon>CSubsubPriceBook.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Models\Item.cs" />
+    <Compile Include="Models\Project.cs" />
     <Compile Include="SubsubPriceBook.aspx.cs">
       <DependentUpon>SubsubPriceBook.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

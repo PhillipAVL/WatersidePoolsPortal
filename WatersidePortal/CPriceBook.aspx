@@ -72,10 +72,6 @@
                                         <a href="#Shopping" data-toggle="tab"">Bid Proposal
                                             </a>
                                     </li>
-                                    <%--<li id="PreviousTab">
-                                        <a href="#Previous" data-toggle="tab" onclick="tab('Previous');">Previous Bid Proposal Versions
-                                            </a>
-                                    </li>--%>
                                 </ul>
 
                                 <div class="tab-content">
@@ -96,10 +92,13 @@
                                                     </asp:BoundField>
                                                 </Columns>
                                             </asp:GridView>
-                                            <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:WatersidePortal_dbConnectionString %>" SelectCommand="SELECT [Category], STRING_AGG(nullif([Subcategory],''), ', ') WITHIN GROUP (ORDER BY [Subcategory]) AS Subcategories FROM (select distinct [Subcategory], [Category] FROM [PriceBook]) x GROUP BY [Category]"></asp:SqlDataSource>
+                                            <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
+                                                ConnectionString="<%$ ConnectionStrings:WatersidePortal_dbConnectionString %>" 
+                                                SelectCommand="SELECT [Category], STRING_AGG(nullif([Subcategory],''), ', ') WITHIN GROUP (ORDER BY [Subcategory]) AS Subcategories FROM (select distinct [Subcategory], [Category] FROM [PriceBook]) x GROUP BY [Category]"></asp:SqlDataSource>
                                         </div>
                                     </div>
 
+                                    <%-- Shopping Tab Content --%>
                                     <div class="tab-pane fade in" id="Shopping">
                                         <br />
 
@@ -404,6 +403,8 @@
                                                     </Columns>
                                                 </asp:GridView>
                                             </div>
+                                            
+                                            <%-- Grid Totals Section --%>
                                             <div style="text-align: right; margin: 0px; border: 0px; padding: 0px;">
                                                 <p style="text-align: right; margin: 0px; border: 0px; padding: 0px;">
                                                     <asp:Label runat="server" Font-Size="Large">Subtotal Overage/Underage: </asp:Label>
@@ -431,6 +432,8 @@
                                                 </p>
                                             </div>
                                         </div>
+
+                                        <%-- Pool Dimensions --%>
                                         <div>
                                             <p>
                                                 <asp:Label runat="server" Font-Size="Large">Pool Length (ft.-in.):</asp:Label>
@@ -449,6 +452,8 @@
                                         </div>
                                         <br />
                                         <br />
+
+                                        <%-- Homeowner Responsibilities --%>
                                         <asp:Label Font-Bold="true" runat="server" Font-Size="Large">Homeowner Responsibilities</asp:Label>
                                         <div style="flex-direction: row; display: flex;">
                                             <div style="flex-direction: column; width: 50%;">
@@ -495,6 +500,8 @@
                                         <br />
                                         <br />
                                         <br />
+
+                                        <%-- Form Action Buttons --%>
                                         <div style="width: 100%; text-align: center">
                                             <asp:Button Text="Lock In This Bid Proposal and Print" runat="server" Height="40px" Width="33%" OnClick="GenerateBid" />
                                             <br />
@@ -503,46 +510,6 @@
                                         </div>
                                     </div>
 
-                                    <%--<div class="tab-pane fade in" id="Previous">
-                                        <h4>Recall Bid Proposal</h4>
-                                        <asp:Label runat="server" ID="CustomerName" Font-Size="Large" Text="Customer: " />
-                                        <p>
-                                            <asp:Label runat="server" Font-Size="Large" Text="Bid Proposal Version:" />
-                                            <asp:GridView ID="GridView3" runat="server" CssClass="table table-striped table-bordered table-hover" AllowSorting="True" AutoGenerateColumns="False" DataSourceID="SqlDataSource2" OnRowEditing="GridView_Items_RowEditing" OnSelectedIndexChanged="Selected">
-                                                <Columns>
-                                                    <asp:TemplateField HeaderText="Select" ItemStyle-Width="2%" ItemStyle-CssClass="centered">
-                                                        <ItemTemplate>
-                                                            <asp:CheckBox runat="server" CssClass="centered" />
-                                                        </ItemTemplate>
-                                                    </asp:TemplateField>
-                                                    <asp:BoundField ControlStyle-CssClass="form-control" DataField="ProjectType" HeaderText="Bid Proposal Type" ItemStyle-Width="12%">
-                                                        <ControlStyle CssClass="form-control" />
-                                                    </asp:BoundField>
-                                                    <asp:BoundField ControlStyle-CssClass="form-control" DataField="ProjectName" HeaderText="Bid Proposal Name">
-                                                        <ControlStyle CssClass="form-control" />
-                                                    </asp:BoundField>
-                                                    <asp:BoundField ControlStyle-CssClass="form-control" DataField="ProjectDescription" HeaderText="Bid Proposal Description">
-                                                        <ControlStyle CssClass="form-control" />
-                                                    </asp:BoundField>
-                                                    <asp:BoundField ControlStyle-CssClass="form-control" HeaderText="Date Created" ItemStyle-Width="12%">
-                                                        <ControlStyle CssClass="form-control" />
-                                                    </asp:BoundField>
-                                                    <asp:BoundField ControlStyle-CssClass="form-control" HeaderText="Date Last Edited" ItemStyle-Width="12%">
-                                                        <ControlStyle CssClass="form-control" />
-                                                    </asp:BoundField>
-                                                </Columns>
-                                            </asp:GridView>
-                                            <asp:SqlDataSource ID="SqlDataSource2" runat="server" ConnectionString="<%$ ConnectionStrings:WatersidePortal_dbConnectionString %>" SelectCommand="SELECT [ProjectType], [ProjectName], [ProjectDescription] from [Projects]"></asp:SqlDataSource>
-                                            <br />
-                                            <p>
-                                                <asp:Button runat="server" Text="Recall Bid Proposal Version" OnClick="RecallBid" />
-                                                <asp:Button runat="server" Text="Duplicate Bid Proposal Version" OnClick="DuplicateBid" />
-                                                <asp:Button runat="server" Text="Save As Custom Master Bid" OnClick="SaveMaster" />
-                                            </p>
-                                            <p>
-                                            </p>
-                                        </p>
-                                    </div>--%>
                                 </div>
                             </div>
                         </asp:Panel>

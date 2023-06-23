@@ -12,43 +12,12 @@ using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using WatersidePortal.Models;
 
 namespace WatersidePortal
 {
     public partial class ModifyCustomer : System.Web.UI.Page
     {
-
-        private class Project
-        {
-            public string sItems;
-            public int projectID;
-            public int lengthF;
-            public int lengthI;
-            public int widthF;
-            public int widthI;
-            public string projectName;
-            public string projectDescription;
-            public Item items;
-        }
-
-        private class Item
-        {
-            public bool optional;
-            public string item;
-            public string unit;
-            public string status;
-            public int quantity;
-            public int itemID;
-            public string description;
-            public float price;
-            public float overage;
-            public DateTime lockedTime;
-            public float currPrice;
-            public string category;
-            public string subcategory;
-            public string subsubcategory;
-        }
-
         protected void Page_Load(object sender, EventArgs e)
         {
             if (HttpContext.Current.Request.Url.Query.Length == 0)
