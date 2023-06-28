@@ -18,8 +18,7 @@ namespace WatersidePortal
 {
     public partial class ModifyCustomer : System.Web.UI.Page
     {
-        
-
+        public int historyCounter = 0;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -255,30 +254,8 @@ namespace WatersidePortal
             SearchFiles();
         }
 
-        protected void GridView_Items_RowEditing(object sender, GridViewEditEventArgs e)
-        {
 
-        }
-
-        protected void GridView_Items_SelectedIndexChanging(object sender, GridViewSelectEventArgs e)
-        {
-            System.Diagnostics.Debug.WriteLine("testing");
-        }
-
-        protected void Selected(object sender, EventArgs e)
-        {
-            string[] arr = HttpContext.Current.Request.Url.AbsoluteUri.Split('?')[1].Split('&');
-            string ID = "1";
-            if (arr.Length > 1)
-            {
-                ID = arr[0];
-            }
-            else
-            {
-                return;
-            }
-            Response.Redirect("/CSubPriceBook.aspx?" + GridView_Items.SelectedRow.Cells[1].Text.Replace("#", "numpound").Replace("&", "andamp") + "&" + ID);
-        }
+        #region Page Events
 
         protected void RecallBid(object sender, EventArgs e)
         {
@@ -521,702 +498,6 @@ namespace WatersidePortal
             }
         }
 
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-        protected void onChanged(object sender, EventArgs e)
-        {
-            if (New_Home.SelectedValue == "Yes")
-                Home_Div.Visible = true;
-            else
-                Home_Div.Visible = false;
-
-            if (Referral.SelectedValue == "Yes")
-                Referral_Div.Visible = true;
-            else
-            {
-                Referral_Amount.Text = "";
-                Referral_Div.Visible = false;
-            }
-
-            if (Builder_Referral.SelectedValue == "Yes")
-                Builder_Panel.Visible = true;
-            else
-                Builder_Panel.Visible = false;
-
-            if (Permission_Letter.SelectedValue == "Yes")
-                Letter_Button.Visible = true;
-            else
-                Letter_Button.Visible = false;
-
-            if (Homeowner_Furnish.SelectedValue == "Yes")
-                Survey_Panel.Visible = true;
-            else
-                Survey_Panel.Visible = false;
-
-            if (Septic_Tank.SelectedValue == "Yes")
-                Septic_Panel.Visible = true;
-            else
-                Septic_Panel.Visible = false;
-
-            if (New_Home_Builder.SelectedValue == "Other")
-                Other_New_Panel.Visible = true;
-            else
-                Other_New_Panel.Visible = false;
-
-            if (Builder_Names.SelectedValue == "Other")
-                Other_Builder_Panel.Visible = true;
-            else
-                Other_Builder_Panel.Visible = false;
-        }
-
-        protected void popup(object sender, EventArgs e)
-        {
-            Upload_Pop.Visible = !Upload_Pop.Visible;
-        }
-
-        protected void Upload(object sender, EventArgs e)
-        {
-            if (FileUpLoad1.FileBytes.Length > 0)
-            {
-                string[] arr = HttpContext.Current.Request.Url.Query.Split('&');
-                string ID = "1";
-                if (arr.Length > 0 && arr[0].Split('?').Length > 1)
-                {
-                    ID = arr[0].Split('?')[1];
-                }
-                else
-                {
-                    return;
-                }
-                if (FileUpLoad1.FileName == null || FileUpLoad1.FileName.Length == 0 || Selected_File.SelectedValue == "Select" || Input_Date.Text == null || Input_Date.Text.Length == 0)
-                {
-                    return;
-                }
-                foreach (string loc in System.IO.Directory.GetFiles(HttpRuntime.AppDomainAppPath + "UserData\\" + ID + "\\"))
-                {
-                    if (loc.Split('`').Length < 2)
-                    {
-                        continue;
-                    }
-
-                    if (loc.Split('`')[1] == Selected_File.SelectedValue)
-                    {
-                        int largest = 0;
-                        foreach (string loc2 in System.IO.Directory.GetFiles(HttpRuntime.AppDomainAppPath + "UserData\\" + ID + "\\"))
-                        {
-                            if (loc2.Split('`').Length < 2)
-                            {
-                                continue;
-                            }
-
-                            if (loc2.Split('`')[1].StartsWith(Selected_File.SelectedValue + "V"))
-                            {
-                                string ver = loc2.Split('`')[1].Remove(0, Selected_File.SelectedValue.Length + 1).Split('`')[0];
-                                int version = Convert.ToInt32(ver);
-                                if (version > largest)
-                                {
-                                    largest = version;
-                                }
-                            }
-                        }
-                        largest += 1;
-                        File.Move(loc, loc.Substring(0, loc.LastIndexOf('.') - 1) + "V" + largest + "`." + loc.Split('.')[1]);
-                    }
-                }
-                AddToHistory("Signed " + Selected_File + " Uploaded.");
-                File.WriteAllBytes(HttpRuntime.AppDomainAppPath + "UserData\\" + ID + "\\" + FileUpLoad1.FileName.Split('.')[0].Replace("`", "") + "`" + Selected_File.SelectedValue + "`." + FileUpLoad1.FileName.Split('.')[1], FileUpLoad1.FileBytes);
-                File.SetCreationTime(HttpRuntime.AppDomainAppPath + "UserData\\" + ID + "\\" + FileUpLoad1.FileName.Split('.')[0].Replace("`", "") + "`" + Selected_File.SelectedValue + "`." + FileUpLoad1.FileName.Split('.')[1], Convert.ToDateTime(Input_Date.Text));
-            }
-            Selected_File.SelectedValue = "Select";
-            Upload_Pop.Visible = !Upload_Pop.Visible;
-            SearchFiles();
-        }
-        protected void Continue(object sender, EventArgs e)
-        {
-            string[] arr = HttpContext.Current.Request.Url.Query.Split('&');
-            string ID = "1";
-            if (arr.Length > 0 && arr[0].Split('?').Length > 1)
-            {
-                ID = arr[0].Split('?')[1];
-            }
-            else
-            {
-                return;
-            }
-
-            Response.Redirect("/CPriceBook?" + ID + "&Select");
-        }
-
-        protected void GenerateGenesis(object sender, EventArgs e)
-        {
-            string[] arr = HttpContext.Current.Request.Url.Query.Split('&');
-            string ID = "1";
-            if (arr.Length > 0 && arr[0].Split('?').Length > 1)
-            {
-                ID = arr[0].Split('?')[1];
-            }
-            else
-            {
-                return;
-            }
-            AddToHistory("Genesis Bid Proposal Created.");
-
-            string built = "";
-            //built += "0`Unfinished`1`1`374``0`" + DateTime.Now.ToString() + "~"; // no surveys
-            if (Surveys_Selection.SelectedValue == "Both") // No Surveys
-            {
-                built += "0`Finished`1`374``-400`0`" + DateTime.Now.ToString() + "~";
-            }
-
-            // Municipality Charges
-            switch (Permit.SelectedValue)
-            {
-                case "CityAugustine":
-                    built += "0`Finished`1`379``800`0`" + DateTime.Now.ToString() + "~";
-                    break;
-                case "Ormond":
-                    built += "0`Finished`1`382``600`0`" + DateTime.Now.ToString() + "~";
-                    break;
-                case "FlaglerCounty":
-                    built += "0`Finished`1`375``500`0`" + DateTime.Now.ToString() + "~";
-                    break;
-                case "FlaglerBeach":
-                    built += "0`Finished`1`376``500`0`" + DateTime.Now.ToString() + "~";
-                    break;
-                case "StAugustine":
-                    // check if under review or not
-                    break;
-                case "John":
-                    built += "0`Finished`1`380``1000`0`" + DateTime.Now.ToString() + "~";
-                    break;
-                case "Volusia":
-                    built += "0`Finished`1`381``700`0`" + DateTime.Now.ToString() + "~";
-                    break;
-            }
-
-            // New Home Construction
-            if (New_Home.SelectedValue == "Yes")
-            {
-                built += "0`Finished`1`383``1500`0`" + DateTime.Now.ToString() + "~";
-            }
-
-            //ARB
-            switch (arb.SelectedValue)
-            {
-                case "Other":
-                    built += "0`Finished`1`384``500`0`" + DateTime.Now.ToString() + "~";
-                    break;
-                case "Grand":
-                    built += "0`Finished`1`385``500`0`" + DateTime.Now.ToString() + "~";
-                    break;
-                case "PalmCoast":
-                    built += "0`Finished`1`388``800`0`" + DateTime.Now.ToString() + "~";
-                    break;
-                case "Plantation":
-                    built += "0`Finished`1`394``700`0`" + DateTime.Now.ToString() + "~";
-                    break;
-                case "Ocean":
-                    built += "0`Finished`1`393``900`0`" + DateTime.Now.ToString() + "~";
-                    break;
-                case "Dunes":
-                    built += "0`Finished`1`391``900`0`" + DateTime.Now.ToString() + "~";
-                    break;
-                case "Shores":
-                    built += "0`Finished`1`395``500`0`" + DateTime.Now.ToString() + "~";
-                    break;
-                case "Hidden":
-                    built += "0`Finished`1`386``500`0`" + DateTime.Now.ToString() + "~";
-                    break;
-                case "Polo":
-                    built += "0`Finished`1`389``500`0`" + DateTime.Now.ToString() + "~";
-                    break;
-                case "Island":
-                    built += "0`Finished`1`392``2500`0`" + DateTime.Now.ToString() + "~";
-                    break;
-                case "Tuscana":
-                    built += "0`Finished`1`390``500`0`" + DateTime.Now.ToString() + "~";
-                    break;
-                case "North":
-                    built += "0`Finished`1`387``900`0`" + DateTime.Now.ToString() + "~";
-                    break;
-            }
-
-            if (drop_distance.SelectedValue == "45")
-            {
-                built += "0`Finished`1`397``2500`0`" + DateTime.Now.ToString() + "~";
-            }
-            else if (drop_distance.SelectedValue == "60")
-            {
-                built += "0`Finished`1`398``3500`0`" + DateTime.Now.ToString() + "~";
-            }
-
-            built = built.Substring(0, built.Length - 1);
-
-            int projectCount = 0;
-            string cmdString = "select count(*) as amt from [dbo].[Projects] where [CustomerID] = @ID";
-            string connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
-            using (SqlConnection conn = new SqlConnection(connString))
-            {
-                using (SqlCommand comm = new SqlCommand(cmdString, conn))
-                {
-                    comm.Parameters.AddWithValue("@ID", ID);
-                    try
-                    {
-                        conn.Open();
-                        using (SqlDataReader reader = comm.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                projectCount = Convert.ToInt32(reader["amt"]);
-                            }
-                        }
-                    }
-                    catch (SqlException err)
-                    {
-
-                    }
-                }
-            }
-            projectCount += 1;
-            cmdString = "INSERT INTO Projects ([Items],[CustomerID],[ProjectType],[ProjectName],[ProjectDescription]) VALUES (@items, @id, @type, @name, @desc)";
-            connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
-            using (SqlConnection conn = new SqlConnection(connString))
-            {
-                using (SqlCommand comm = new SqlCommand())
-                {
-                    comm.Connection = conn;
-                    comm.CommandText = cmdString;
-                    comm.Parameters.AddWithValue("@items", built);
-                    comm.Parameters.AddWithValue("@id", ID);
-                    comm.Parameters.AddWithValue("@type", "Genesis");
-                    comm.Parameters.AddWithValue("@name", "Bid Proposal, Version #" + projectCount);
-                    comm.Parameters.AddWithValue("@desc", bid_prop_desc.Text);
-
-                    try
-                    {
-                        conn.Open();
-                        comm.ExecuteNonQuery();
-                    }
-                    catch (SqlException f)
-                    {
-                        System.Diagnostics.Debug.WriteLine(f.Message);
-                    }
-                }
-            }
-            int projID = 0;
-            cmdString = "select Max([ProjectID]) as maxID from [dbo].[Projects] where [CustomerID] = @ID";
-            connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
-            using (SqlConnection conn = new SqlConnection(connString))
-            {
-                using (SqlCommand comm = new SqlCommand(cmdString, conn))
-                {
-                    comm.Parameters.AddWithValue("@ID", ID);
-                    try
-                    {
-                        conn.Open();
-                        using (SqlDataReader reader = comm.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                projID = Convert.ToInt32(reader["maxID"]);
-                            }
-                        }
-                    }
-                    catch (SqlException err)
-                    {
-
-                    }
-                }
-            }
-            cmdString = "UPDATE [dbo].[Customers] SET [CurrentProject] = @pID where CustomerID = @ID";
-            connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
-            using (SqlConnection conn = new SqlConnection(connString))
-            {
-                using (SqlCommand comm = new SqlCommand())
-                {
-                    comm.Connection = conn;
-                    comm.CommandText = cmdString;
-                    comm.Parameters.AddWithValue("@pID", projID);
-                    comm.Parameters.AddWithValue("@ID", ID);
-
-                    try
-                    {
-                        conn.Open();
-                        comm.ExecuteNonQuery();
-                    }
-                    catch (SqlException f)
-                    {
-                        System.Diagnostics.Debug.WriteLine(f.Message);
-                    }
-                }
-            }
-            Response.Redirect("/CPriceBook?" + ID + "&Select");
-        }
-        protected void GenerateRenovation(object sender, EventArgs e)
-        {
-            string[] arr = HttpContext.Current.Request.Url.Query.Split('&');
-            string ID = "1";
-            if (arr.Length > 0 && arr[0].Split('?').Length > 1)
-            {
-                ID = arr[0].Split('?')[1];
-            }
-            string built = "";
-            //built += "0`Unfinished`1`1`374``0`" + DateTime.Now.ToString() + "~"; // no surveys
-
-            AddToHistory("Renovation Bid Proposal Created.");
-            string cmdString = "INSERT INTO Projects ([Items],[CustomerID]) VALUES (@items, @id)";
-            string connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
-            using (SqlConnection conn = new SqlConnection(connString))
-            {
-                using (SqlCommand comm = new SqlCommand())
-                {
-                    comm.Connection = conn;
-                    comm.CommandText = cmdString;
-                    comm.Parameters.AddWithValue("@items", built);
-                    comm.Parameters.AddWithValue("@id", arr[3]);
-
-                    try
-                    {
-                        conn.Open();
-                        comm.ExecuteNonQuery();
-                    }
-                    catch (SqlException f)
-                    {
-                        System.Diagnostics.Debug.WriteLine(f.Message);
-                    }
-                }
-            }
-            int projID = 0;
-            cmdString = "select Max([ProjectID]) as maxID from [dbo].[Projects] where [CustomerID] = @ID";
-            connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
-            using (SqlConnection conn = new SqlConnection(connString))
-            {
-                using (SqlCommand comm = new SqlCommand(cmdString, conn))
-                {
-                    comm.Parameters.AddWithValue("@ID", ID);
-                    try
-                    {
-                        conn.Open();
-                        using (SqlDataReader reader = comm.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                projID = Convert.ToInt32(reader["maxID"]);
-                            }
-                        }
-                    }
-                    catch (SqlException err)
-                    {
-
-                    }
-                }
-            }
-            cmdString = "UPDATE [dbo].[Customers] SET [CurrentProject] = @pID where ID = @CustomerID";
-            connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
-            using (SqlConnection conn = new SqlConnection(connString))
-            {
-                using (SqlCommand comm = new SqlCommand())
-                {
-                    comm.Connection = conn;
-                    comm.CommandText = cmdString;
-                    comm.Parameters.AddWithValue("@pID", projID);
-
-                    try
-                    {
-                        conn.Open();
-                        comm.ExecuteNonQuery();
-                    }
-                    catch (SqlException f)
-                    {
-                        System.Diagnostics.Debug.WriteLine(f.Message);
-                    }
-                }
-            }
-            Response.Redirect("/CPriceBook?" + ID + "&Select");
-        }
-
-        protected void GenerateEZ(object sender, EventArgs e)
-        {
-            string[] arr = HttpContext.Current.Request.Url.Query.Split('&');
-            string ID = "1";
-            if (arr.Length > 0 && arr[0].Split('?').Length > 1)
-            {
-                ID = arr[0].Split('?')[1];
-            }
-            else
-            {
-                return;
-            }
-
-            string built = "";
-            //built += "0`Unfinished`1`1`374``0`" + DateTime.Now.ToString() + "~"; // no surveys
-            if (Surveys_Selection.SelectedValue == "Both") // No Surveys
-            {
-                built += "0`Finished`1`374``-400`0`" + DateTime.Now.ToString() + "~";
-            }
-
-            AddToHistory("EZ-Flow Bid Proposal Created.");
-            // Municipality Charges
-            switch (Permit.SelectedValue)
-            {
-                case "CityAugustine":
-                    built += "0`Finished`1`379``800`0`" + DateTime.Now.ToString() + "~";
-                    break;
-                case "Ormond":
-                    built += "0`Finished`1`382``600`0`" + DateTime.Now.ToString() + "~";
-                    break;
-                case "FlaglerCounty":
-                    built += "0`Finished`1`375``500`0`" + DateTime.Now.ToString() + "~";
-                    break;
-                case "FlaglerBeach":
-                    built += "0`Finished`1`376``500`0`" + DateTime.Now.ToString() + "~";
-                    break;
-                case "StAugustine":
-                    // check if under review or not
-                    break;
-                case "John":
-                    built += "0`Finished`1`380``1000`0`" + DateTime.Now.ToString() + "~";
-                    break;
-                case "Volusia":
-                    built += "0`Finished`1`381``700`0`" + DateTime.Now.ToString() + "~";
-                    break;
-            }
-
-            // New Home Construction
-            if (New_Home.SelectedValue == "Yes")
-            {
-                built += "0`Finished`1`383``1500`0`" + DateTime.Now.ToString() + "~";
-            }
-
-            //ARB
-            switch (arb.SelectedValue)
-            {
-                case "Other":
-                    built += "0`Finished`1`384``500`0`" + DateTime.Now.ToString() + "~";
-                    break;
-                case "Grand":
-                    built += "0`Finished`1`385``500`0`" + DateTime.Now.ToString() + "~";
-                    break;
-                case "PalmCoast":
-                    built += "0`Finished`1`388``800`0`" + DateTime.Now.ToString() + "~";
-                    break;
-                case "Plantation":
-                    built += "0`Finished`1`394``700`0`" + DateTime.Now.ToString() + "~";
-                    break;
-                case "Ocean":
-                    built += "0`Finished`1`393``900`0`" + DateTime.Now.ToString() + "~";
-                    break;
-                case "Dunes":
-                    built += "0`Finished`1`391``900`0`" + DateTime.Now.ToString() + "~";
-                    break;
-                case "Shores":
-                    built += "0`Finished`1`395``500`0`" + DateTime.Now.ToString() + "~";
-                    break;
-                case "Hidden":
-                    built += "0`Finished`1`386``500`0`" + DateTime.Now.ToString() + "~";
-                    break;
-                case "Polo":
-                    built += "0`Finished`1`389``500`0`" + DateTime.Now.ToString() + "~";
-                    break;
-                case "Island":
-                    built += "0`Finished`1`392``2500`0`" + DateTime.Now.ToString() + "~";
-                    break;
-                case "Tuscana":
-                    built += "0`Finished`1`390``500`0`" + DateTime.Now.ToString() + "~";
-                    break;
-                case "North":
-                    built += "0`Finished`1`387``900`0`" + DateTime.Now.ToString() + "~";
-                    break;
-            }
-
-            if (drop_distance.SelectedValue == "45")
-            {
-                built += "0`Finished`1`397``2500`0`" + DateTime.Now.ToString() + "~";
-            }
-            else if (drop_distance.SelectedValue == "60")
-            {
-                built += "0`Finished`1`398``3500`0`" + DateTime.Now.ToString() + "~";
-            }
-            built = built.Substring(0, built.Length - 1);
-
-            int projectCount = 0;
-            string cmdString = "select count(*) as amt from [dbo].[Projects] where [CustomerID] = @ID";
-            string connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
-            using (SqlConnection conn = new SqlConnection(connString))
-            {
-                using (SqlCommand comm = new SqlCommand(cmdString, conn))
-                {
-                    comm.Parameters.AddWithValue("@ID", ID);
-                    try
-                    {
-                        conn.Open();
-                        using (SqlDataReader reader = comm.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                projectCount = Convert.ToInt32(reader["amt"]);
-                            }
-                        }
-                    }
-                    catch (SqlException err)
-                    {
-
-                    }
-                }
-            }
-            projectCount += 1;
-            cmdString = "INSERT INTO Projects ([Items],[CustomerID],[ProjectType],[ProjectName],[ProjectDescription]) VALUES (@items, @id, @type, @name, @desc)";
-            connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
-            using (SqlConnection conn = new SqlConnection(connString))
-            {
-                using (SqlCommand comm = new SqlCommand())
-                {
-                    comm.Connection = conn;
-                    comm.CommandText = cmdString;
-                    comm.Parameters.AddWithValue("@items", built);
-                    comm.Parameters.AddWithValue("@id", ID);
-                    comm.Parameters.AddWithValue("@type", "EZ-Flow");
-                    comm.Parameters.AddWithValue("@name", "Bid Proposal, Version #" + projectCount);
-                    comm.Parameters.AddWithValue("@desc", bid_prop_desc.Text);
-
-                    try
-                    {
-                        conn.Open();
-                        comm.ExecuteNonQuery();
-                    }
-                    catch (SqlException f)
-                    {
-                        System.Diagnostics.Debug.WriteLine(f.Message);
-                    }
-                }
-            }
-            int projID = 0;
-            cmdString = "select Max([ProjectID]) as maxID from [dbo].[Projects] where [CustomerID] = @ID";
-            connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
-            using (SqlConnection conn = new SqlConnection(connString))
-            {
-                using (SqlCommand comm = new SqlCommand(cmdString, conn))
-                {
-                    comm.Parameters.AddWithValue("@ID", ID);
-                    try
-                    {
-                        conn.Open();
-                        using (SqlDataReader reader = comm.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                projID = Convert.ToInt32(reader["maxID"]);
-                            }
-                        }
-                    }
-                    catch (SqlException err)
-                    {
-
-                    }
-                }
-            }
-            cmdString = "UPDATE [dbo].[Customers] SET [CurrentProject] = @pID where CustomerID = @ID";
-            connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
-            using (SqlConnection conn = new SqlConnection(connString))
-            {
-                using (SqlCommand comm = new SqlCommand())
-                {
-                    comm.Connection = conn;
-                    comm.CommandText = cmdString;
-                    comm.Parameters.AddWithValue("@pID", projID);
-                    comm.Parameters.AddWithValue("@ID", ID);
-
-                    try
-                    {
-                        conn.Open();
-                        comm.ExecuteNonQuery();
-                    }
-                    catch (SqlException f)
-                    {
-                        System.Diagnostics.Debug.WriteLine(f.Message);
-                    }
-                }
-            }
-            Response.Redirect("/CPriceBook?" + ID + "&Select");
-        }
-
-        protected void Save(object sender, EventArgs e)
-        {
-            string[] arr = HttpContext.Current.Request.Url.Query.Split('&');
-            string ID = "1";
-            if (arr.Length > 0 && arr[0].Split('?').Length > 1)
-            {
-                ID = arr[0].Split('?')[1];
-            }
-            else
-            {
-                return;
-            }
-
-            string connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
-            using (SqlConnection conn = new SqlConnection(connString))
-            {
-                string cmdString = "UPDATE Customers SET SurveySelection = @SurveyS, SepticSurvey = @SepticSurvey, ExistingSeptic = @ES, ExistingFence = @EF, HTFS = @htfs, APLR = @aplr, BuilderFee = @BF, NHSelection = @NHS, BuilderSelection = @BS, NHBuilder = @NHB, NHOther = @NHO, Builder = @build, BuilderOther = @bo, MinAccessF = @MAF, MinAccessI = @MAI, Referral = @ref, Distance = @dist, FirstName = @first, LastName = @last, Address = @add, City = @city, State = @state, ZipCode = @zip, Telephone = @tele, Alternate = @alt, Email = @email, AlternateEmail = @altemail, JobAddress = @JAdd, JobCity = @JCity, JobPermit = @JPermit, JobARB = @JARB, JobZip = @JZip, JobLot = @JLot, JobBlock = @JBlock, JobSection = @JSection, JobPlat = @JPlat, JobPage = @JPage, Notes = @Notes WHERE CustomerID = @ID";
-                using (SqlCommand comm = new SqlCommand(cmdString, conn))
-                {
-                    comm.Parameters.AddWithValue("@first", TextBox_FirstName.Text);
-                    comm.Parameters.AddWithValue("@last", TextBox_LastName.Text);
-                    comm.Parameters.AddWithValue("@add", TextBox_Address.Text);
-                    comm.Parameters.AddWithValue("@city", TextBox_City.Text);
-                    comm.Parameters.AddWithValue("@state", DropDownListState.SelectedValue);
-                    comm.Parameters.AddWithValue("@zip", TextBox_Zip.Text);
-                    comm.Parameters.AddWithValue("@tele", TextBox_Telephone.Text);
-                    comm.Parameters.AddWithValue("@alt", TextBox_Alternate_Telephone.Text);
-                    comm.Parameters.AddWithValue("@email", TextBox_Email_Address.Text);
-                    comm.Parameters.AddWithValue("@altemail", TextBox_Alternate_Email.Text);
-                    comm.Parameters.AddWithValue("@JAdd", TextBox_Job_Address.Text);
-                    comm.Parameters.AddWithValue("@JCity", TextBox_Job_City.Text);
-                    comm.Parameters.AddWithValue("@JPermit", Permit.SelectedValue);
-                    comm.Parameters.AddWithValue("@JARB", arb.SelectedValue);
-                    comm.Parameters.AddWithValue("@JZip", TextBox_Job_Zip.Text);
-                    comm.Parameters.AddWithValue("@JLot", TextBox_Lot.Text);
-                    comm.Parameters.AddWithValue("@JBlock", TextBox_Block.Text);
-                    comm.Parameters.AddWithValue("@JSection", TextBox_Section.Text);
-                    comm.Parameters.AddWithValue("@JPlat", TextBox_Plat.Text);
-                    comm.Parameters.AddWithValue("@JPage", TextBox_Pages.Text);
-                    comm.Parameters.AddWithValue("@Notes", Notes.Text);
-                    comm.Parameters.AddWithValue("@ID", ID);
-                    comm.Parameters.AddWithValue("@MAF", Convert.ToInt32(Min_Access_F.Text));
-                    comm.Parameters.AddWithValue("@MAI", Convert.ToInt32(Min_Access_I.Text));
-                    comm.Parameters.AddWithValue("@dist", drop_distance.SelectedValue);
-                    comm.Parameters.AddWithValue("@ref", Referral_Amount.Text.Replace("`", "") + "`" + Referral_Full.Text.Replace("`", "") + "`" + Referral_Address.Text.Replace("`", "") + "`" + Referral_City.Text.Replace("`", "") + "`" + Referral_State.SelectedValue + "`" + Referral_Zip.Text.Replace("`", ""));
-                    comm.Parameters.AddWithValue("@NHB", New_Home_Builder.SelectedValue);
-                    comm.Parameters.AddWithValue("@build", Builder_Names.SelectedValue);
-                    comm.Parameters.AddWithValue("@NHO", Other_New_Builder.Text);
-                    comm.Parameters.AddWithValue("@bo", Other_Builder.Text);
-                    comm.Parameters.AddWithValue("@NHS", New_Home.SelectedValue);
-                    comm.Parameters.AddWithValue("@BS", Builder_Referral.SelectedValue);
-                    comm.Parameters.AddWithValue("@BF", Builder_Amount.Text);
-                    comm.Parameters.AddWithValue("@aplr", Permission_Letter.SelectedValue);
-                    comm.Parameters.AddWithValue("@htfs", Homeowner_Furnish.SelectedValue);
-                    comm.Parameters.AddWithValue("@SurveyS", Surveys_Selection.SelectedValue);
-                    comm.Parameters.AddWithValue("@EF", Existing_Fence.SelectedValue);
-                    comm.Parameters.AddWithValue("@ES", Septic_Tank.SelectedValue);
-                    comm.Parameters.AddWithValue("@SepticSurvey", Septic_Buttons.SelectedValue);
-                    try
-                    {
-                        conn.Open();
-                        System.Diagnostics.Debug.WriteLine(comm.ExecuteNonQuery());
-                    }
-                    catch (SqlException ex)
-                    {
-                        System.Diagnostics.Debug.WriteLine(ex.Message);
-                    }
-                }
-            }
-        }
-
-        protected void Discard(object sender, EventArgs e)
-        {
-            RefreshFields();
-        }
-
         /// <summary>
         /// Copy the fields from Customer Address to Jobsite Address.
         /// </summary>
@@ -1398,6 +679,7 @@ namespace WatersidePortal
             AddToHistory(historyNote.Text);
             Response.Redirect(Request.RawUrl);
         }
+
         protected void addMessageSelf(string message)
         {
             DateTime date = DateTime.Now;
@@ -1416,68 +698,6 @@ namespace WatersidePortal
             newdivs.Controls.Add(newmsg);
             customer_history.Controls.Add(newdivs);
         }
-
-        public int historyCounter = 0;
-
-        protected void addMessage(string message, DateTime date, string emp)
-        {
-            System.Web.UI.HtmlControls.HtmlGenericControl newdivs = new System.Web.UI.HtmlControls.HtmlGenericControl("DIV");
-            newdivs.Attributes.Add("class", "maindivs");
-            newdivs.Attributes.Add("style", "border-style: solid; margin: 20px; min-height: 100px;");
-            System.Web.UI.HtmlControls.HtmlGenericControl newlabel = new System.Web.UI.HtmlControls.HtmlGenericControl("label");
-            newlabel.InnerText = emp + " - " + date.ToString("d", CultureInfo.GetCultureInfo("en-US"));
-            newdivs.Controls.Add(newlabel);
-            System.Web.UI.HtmlControls.HtmlGenericControl br = new System.Web.UI.HtmlControls.HtmlGenericControl("br");
-            newdivs.Controls.Add(br);
-            System.Web.UI.HtmlControls.HtmlGenericControl newmsg = new System.Web.UI.HtmlControls.HtmlGenericControl("label");
-            newmsg.InnerText = message;
-            newmsg.Style.Add(HtmlTextWriterStyle.FontSize, "18px");
-            newdivs.Controls.Add(newmsg);
-            customer_history.Controls.Add(newdivs);
-        }
-
-        protected void AddToHistory(string message)
-        {
-
-            string[] arr = HttpContext.Current.Request.Url.Query.Split('&');
-            string ID = "1";
-            if (arr.Length > 0 && arr[0].Split('?').Length > 1)
-            {
-                ID = arr[0].Split('?')[1];
-            }
-            else
-            {
-                return;
-            }
-            SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString);
-            //Replaced Parameters with Value
-            string query = "INSERT INTO CustomerHistory (CustomerId, MessageText, Date, EmpModifying) VALUES(@CustomerId, @MessageText, @Date, @EmpModifying)";
-            SqlCommand cmd = new SqlCommand(query, con);
-
-            //Pass values to Parameters
-            string emp = HttpContext.Current.User.Identity.Name != null && HttpContext.Current.User.Identity.Name.Length > 0 ? HttpContext.Current.User.Identity.Name : "Unknown";
-            cmd.Parameters.AddWithValue("@CustomerId", ID);
-            cmd.Parameters.AddWithValue("@MessageText", message);
-            cmd.Parameters.AddWithValue("@Date", DateTime.Now);
-            cmd.Parameters.AddWithValue("@EmpModifying", emp);
-
-            try
-            {
-                con.Open();
-                cmd.ExecuteNonQuery();
-                Console.WriteLine("Records Inserted Successfully");
-            }
-            catch (SqlException e)
-            {
-                Console.WriteLine("Error Generated. Details: " + e.ToString());
-            }
-            finally
-            {
-                con.Close();
-            }
-
-        }
-
 
         protected void SearchFiles()
         {
@@ -1818,7 +1038,6 @@ namespace WatersidePortal
             }
         }
 
-
         protected void AddWarranty(object sender, EventArgs e)
         {
             string[] arr = HttpContext.Current.Request.Url.Query.Split('&');
@@ -1949,6 +1168,772 @@ namespace WatersidePortal
             }
         }
 
+        protected void onChanged(object sender, EventArgs e)
+        {
+            if (New_Home.SelectedValue == "Yes")
+                Home_Div.Visible = true;
+            else
+                Home_Div.Visible = false;
+
+            if (Referral.SelectedValue == "Yes")
+                Referral_Div.Visible = true;
+            else
+            {
+                Referral_Amount.Text = "";
+                Referral_Div.Visible = false;
+            }
+
+            if (Builder_Referral.SelectedValue == "Yes")
+                Builder_Panel.Visible = true;
+            else
+                Builder_Panel.Visible = false;
+
+            if (Permission_Letter.SelectedValue == "Yes")
+                Letter_Button.Visible = true;
+            else
+                Letter_Button.Visible = false;
+
+            if (Homeowner_Furnish.SelectedValue == "Yes")
+                Survey_Panel.Visible = true;
+            else
+                Survey_Panel.Visible = false;
+
+            if (Septic_Tank.SelectedValue == "Yes")
+                Septic_Panel.Visible = true;
+            else
+                Septic_Panel.Visible = false;
+
+            if (New_Home_Builder.SelectedValue == "Other")
+                Other_New_Panel.Visible = true;
+            else
+                Other_New_Panel.Visible = false;
+
+            if (Builder_Names.SelectedValue == "Other")
+                Other_Builder_Panel.Visible = true;
+            else
+                Other_Builder_Panel.Visible = false;
+        }
+
+        protected void popup(object sender, EventArgs e)
+        {
+            Upload_Pop.Visible = !Upload_Pop.Visible;
+        }
+
+        protected void Upload(object sender, EventArgs e)
+        {
+            if (FileUpLoad1.FileBytes.Length > 0)
+            {
+                string[] arr = HttpContext.Current.Request.Url.Query.Split('&');
+                string ID = "1";
+                if (arr.Length > 0 && arr[0].Split('?').Length > 1)
+                {
+                    ID = arr[0].Split('?')[1];
+                }
+                else
+                {
+                    return;
+                }
+                if (FileUpLoad1.FileName == null || FileUpLoad1.FileName.Length == 0 || Selected_File.SelectedValue == "Select" || Input_Date.Text == null || Input_Date.Text.Length == 0)
+                {
+                    return;
+                }
+                foreach (string loc in System.IO.Directory.GetFiles(HttpRuntime.AppDomainAppPath + "UserData\\" + ID + "\\"))
+                {
+                    if (loc.Split('`').Length < 2)
+                    {
+                        continue;
+                    }
+
+                    if (loc.Split('`')[1] == Selected_File.SelectedValue)
+                    {
+                        int largest = 0;
+                        foreach (string loc2 in System.IO.Directory.GetFiles(HttpRuntime.AppDomainAppPath + "UserData\\" + ID + "\\"))
+                        {
+                            if (loc2.Split('`').Length < 2)
+                            {
+                                continue;
+                            }
+
+                            if (loc2.Split('`')[1].StartsWith(Selected_File.SelectedValue + "V"))
+                            {
+                                string ver = loc2.Split('`')[1].Remove(0, Selected_File.SelectedValue.Length + 1).Split('`')[0];
+                                int version = Convert.ToInt32(ver);
+                                if (version > largest)
+                                {
+                                    largest = version;
+                                }
+                            }
+                        }
+                        largest += 1;
+                        File.Move(loc, loc.Substring(0, loc.LastIndexOf('.') - 1) + "V" + largest + "`." + loc.Split('.')[1]);
+                    }
+                }
+                AddToHistory("Signed " + Selected_File + " Uploaded.");
+                File.WriteAllBytes(HttpRuntime.AppDomainAppPath + "UserData\\" + ID + "\\" + FileUpLoad1.FileName.Split('.')[0].Replace("`", "") + "`" + Selected_File.SelectedValue + "`." + FileUpLoad1.FileName.Split('.')[1], FileUpLoad1.FileBytes);
+                File.SetCreationTime(HttpRuntime.AppDomainAppPath + "UserData\\" + ID + "\\" + FileUpLoad1.FileName.Split('.')[0].Replace("`", "") + "`" + Selected_File.SelectedValue + "`." + FileUpLoad1.FileName.Split('.')[1], Convert.ToDateTime(Input_Date.Text));
+            }
+            Selected_File.SelectedValue = "Select";
+            Upload_Pop.Visible = !Upload_Pop.Visible;
+            SearchFiles();
+        }
+
+        protected void Continue(object sender, EventArgs e)
+        {
+            string[] arr = HttpContext.Current.Request.Url.Query.Split('&');
+            string ID = "1";
+            if (arr.Length > 0 && arr[0].Split('?').Length > 1)
+            {
+                ID = arr[0].Split('?')[1];
+            }
+            else
+            {
+                return;
+            }
+
+            Response.Redirect("/CPriceBook?" + ID + "&Select");
+        }
+
+        protected void Save(object sender, EventArgs e)
+        {
+            string[] arr = HttpContext.Current.Request.Url.Query.Split('&');
+            string ID = "1";
+            if (arr.Length > 0 && arr[0].Split('?').Length > 1)
+            {
+                ID = arr[0].Split('?')[1];
+            }
+            else
+            {
+                return;
+            }
+
+            string connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                string cmdString = "UPDATE Customers SET SurveySelection = @SurveyS, SepticSurvey = @SepticSurvey, ExistingSeptic = @ES, ExistingFence = @EF, HTFS = @htfs, APLR = @aplr, BuilderFee = @BF, NHSelection = @NHS, BuilderSelection = @BS, NHBuilder = @NHB, NHOther = @NHO, Builder = @build, BuilderOther = @bo, MinAccessF = @MAF, MinAccessI = @MAI, Referral = @ref, Distance = @dist, FirstName = @first, LastName = @last, Address = @add, City = @city, State = @state, ZipCode = @zip, Telephone = @tele, Alternate = @alt, Email = @email, AlternateEmail = @altemail, JobAddress = @JAdd, JobCity = @JCity, JobPermit = @JPermit, JobARB = @JARB, JobZip = @JZip, JobLot = @JLot, JobBlock = @JBlock, JobSection = @JSection, JobPlat = @JPlat, JobPage = @JPage, Notes = @Notes WHERE CustomerID = @ID";
+                using (SqlCommand comm = new SqlCommand(cmdString, conn))
+                {
+                    comm.Parameters.AddWithValue("@first", TextBox_FirstName.Text);
+                    comm.Parameters.AddWithValue("@last", TextBox_LastName.Text);
+                    comm.Parameters.AddWithValue("@add", TextBox_Address.Text);
+                    comm.Parameters.AddWithValue("@city", TextBox_City.Text);
+                    comm.Parameters.AddWithValue("@state", DropDownListState.SelectedValue);
+                    comm.Parameters.AddWithValue("@zip", TextBox_Zip.Text);
+                    comm.Parameters.AddWithValue("@tele", TextBox_Telephone.Text);
+                    comm.Parameters.AddWithValue("@alt", TextBox_Alternate_Telephone.Text);
+                    comm.Parameters.AddWithValue("@email", TextBox_Email_Address.Text);
+                    comm.Parameters.AddWithValue("@altemail", TextBox_Alternate_Email.Text);
+                    comm.Parameters.AddWithValue("@JAdd", TextBox_Job_Address.Text);
+                    comm.Parameters.AddWithValue("@JCity", TextBox_Job_City.Text);
+                    comm.Parameters.AddWithValue("@JPermit", Permit.SelectedValue);
+                    comm.Parameters.AddWithValue("@JARB", arb.SelectedValue);
+                    comm.Parameters.AddWithValue("@JZip", TextBox_Job_Zip.Text);
+                    comm.Parameters.AddWithValue("@JLot", TextBox_Lot.Text);
+                    comm.Parameters.AddWithValue("@JBlock", TextBox_Block.Text);
+                    comm.Parameters.AddWithValue("@JSection", TextBox_Section.Text);
+                    comm.Parameters.AddWithValue("@JPlat", TextBox_Plat.Text);
+                    comm.Parameters.AddWithValue("@JPage", TextBox_Pages.Text);
+                    comm.Parameters.AddWithValue("@Notes", Notes.Text);
+                    comm.Parameters.AddWithValue("@ID", ID);
+                    comm.Parameters.AddWithValue("@MAF", Convert.ToInt32(Min_Access_F.Text));
+                    comm.Parameters.AddWithValue("@MAI", Convert.ToInt32(Min_Access_I.Text));
+                    comm.Parameters.AddWithValue("@dist", drop_distance.SelectedValue);
+                    comm.Parameters.AddWithValue("@ref", Referral_Amount.Text.Replace("`", "") + "`" + Referral_Full.Text.Replace("`", "") + "`" + Referral_Address.Text.Replace("`", "") + "`" + Referral_City.Text.Replace("`", "") + "`" + Referral_State.SelectedValue + "`" + Referral_Zip.Text.Replace("`", ""));
+                    comm.Parameters.AddWithValue("@NHB", New_Home_Builder.SelectedValue);
+                    comm.Parameters.AddWithValue("@build", Builder_Names.SelectedValue);
+                    comm.Parameters.AddWithValue("@NHO", Other_New_Builder.Text);
+                    comm.Parameters.AddWithValue("@bo", Other_Builder.Text);
+                    comm.Parameters.AddWithValue("@NHS", New_Home.SelectedValue);
+                    comm.Parameters.AddWithValue("@BS", Builder_Referral.SelectedValue);
+                    comm.Parameters.AddWithValue("@BF", Builder_Amount.Text);
+                    comm.Parameters.AddWithValue("@aplr", Permission_Letter.SelectedValue);
+                    comm.Parameters.AddWithValue("@htfs", Homeowner_Furnish.SelectedValue);
+                    comm.Parameters.AddWithValue("@SurveyS", Surveys_Selection.SelectedValue);
+                    comm.Parameters.AddWithValue("@EF", Existing_Fence.SelectedValue);
+                    comm.Parameters.AddWithValue("@ES", Septic_Tank.SelectedValue);
+                    comm.Parameters.AddWithValue("@SepticSurvey", Septic_Buttons.SelectedValue);
+                    try
+                    {
+                        conn.Open();
+                        System.Diagnostics.Debug.WriteLine(comm.ExecuteNonQuery());
+                    }
+                    catch (SqlException ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine(ex.Message);
+                    }
+                }
+            }
+        }
+
+        protected void Discard(object sender, EventArgs e)
+        {
+            RefreshFields();
+        }
+
+        #endregion
+
+
+        #region Grid Events
+
+        protected void GridView_Items_RowEditing(object sender, GridViewEditEventArgs e)
+        {
+
+        }
+
+        protected void GridView_Items_SelectedIndexChanging(object sender, GridViewSelectEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("testing");
+        }
+
+        protected void Selected(object sender, EventArgs e)
+        {
+            string[] arr = HttpContext.Current.Request.Url.AbsoluteUri.Split('?')[1].Split('&');
+            string ID = "1";
+            if (arr.Length > 1)
+            {
+                ID = arr[0];
+            }
+            else
+            {
+                return;
+            }
+            Response.Redirect("/CSubPriceBook.aspx?" + GridView_Items.SelectedRow.Cells[1].Text.Replace("#", "numpound").Replace("&", "andamp") + "&" + ID);
+        }
+
+
+        #endregion
+
+
+        #region Generate Pool Types
+
+        /// <summary>
+        /// Generate a Bid Proposal (Project) for a Genesis Pool.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void GenerateGenesis(object sender, EventArgs e)
+        {
+            string[] arr = HttpContext.Current.Request.Url.Query.Split('&');
+            string ID = "1";
+            if (arr.Length > 0 && arr[0].Split('?').Length > 1)
+            {
+                ID = arr[0].Split('?')[1];
+            }
+            else
+            {
+                return;
+            }
+            AddToHistory("Genesis Bid Proposal Created.");
+
+            string built = "";
+            //built += "0`Unfinished`1`1`374``0`" + DateTime.Now.ToString() + "~"; // no surveys
+            if (Surveys_Selection.SelectedValue == "Both") // No Surveys
+            {
+                built += "0`Finished`1`374``-400`0`" + DateTime.Now.ToString() + "~";
+            }
+
+            // Municipality Charges
+            switch (Permit.SelectedValue)
+            {
+                case "CityAugustine":
+                    built += "0`Finished`1`379``800`0`" + DateTime.Now.ToString() + "~";
+                    break;
+                case "Ormond":
+                    built += "0`Finished`1`382``600`0`" + DateTime.Now.ToString() + "~";
+                    break;
+                case "FlaglerCounty":
+                    built += "0`Finished`1`375``500`0`" + DateTime.Now.ToString() + "~";
+                    break;
+                case "FlaglerBeach":
+                    built += "0`Finished`1`376``500`0`" + DateTime.Now.ToString() + "~";
+                    break;
+                case "StAugustine":
+                    // check if under review or not
+                    break;
+                case "John":
+                    built += "0`Finished`1`380``1000`0`" + DateTime.Now.ToString() + "~";
+                    break;
+                case "Volusia":
+                    built += "0`Finished`1`381``700`0`" + DateTime.Now.ToString() + "~";
+                    break;
+            }
+
+            // New Home Construction
+            if (New_Home.SelectedValue == "Yes")
+            {
+                built += "0`Finished`1`383``1500`0`" + DateTime.Now.ToString() + "~";
+            }
+
+            //ARB
+            // Set inital item based on Pool Type.
+            switch (arb.SelectedValue)
+            {
+                case "Other":
+                    built += "0`Finished`1`384``500`0`" + DateTime.Now.ToString() + "~";
+                    break;
+                case "Grand":
+                    built += "0`Finished`1`385``500`0`" + DateTime.Now.ToString() + "~";
+                    break;
+                case "PalmCoast":
+                    built += "0`Finished`1`388``800`0`" + DateTime.Now.ToString() + "~";
+                    break;
+                case "Plantation":
+                    built += "0`Finished`1`394``700`0`" + DateTime.Now.ToString() + "~";
+                    break;
+                case "Ocean":
+                    built += "0`Finished`1`393``900`0`" + DateTime.Now.ToString() + "~";
+                    break;
+                case "Dunes":
+                    built += "0`Finished`1`391``900`0`" + DateTime.Now.ToString() + "~";
+                    break;
+                case "Shores":
+                    built += "0`Finished`1`395``500`0`" + DateTime.Now.ToString() + "~";
+                    break;
+                case "Hidden":
+                    built += "0`Finished`1`386``500`0`" + DateTime.Now.ToString() + "~";
+                    break;
+                case "Polo":
+                    built += "0`Finished`1`389``500`0`" + DateTime.Now.ToString() + "~";
+                    break;
+                case "Island":
+                    built += "0`Finished`1`392``2500`0`" + DateTime.Now.ToString() + "~";
+                    break;
+                case "Tuscana":
+                    built += "0`Finished`1`390``500`0`" + DateTime.Now.ToString() + "~";
+                    break;
+                case "North":
+                    built += "0`Finished`1`387``900`0`" + DateTime.Now.ToString() + "~";
+                    break;
+            }
+
+            if (drop_distance.SelectedValue == "45")
+            {
+                built += "0`Finished`1`397``2500`0`" + DateTime.Now.ToString() + "~";
+            }
+            else if (drop_distance.SelectedValue == "60")
+            {
+                built += "0`Finished`1`398``3500`0`" + DateTime.Now.ToString() + "~";
+            }
+
+            built = built.Substring(0, built.Length - 1);
+
+            // Get the Project Id.
+            int projectCount = 0;
+            string cmdString = "select count(*) as amt from [dbo].[Projects] where [CustomerID] = @ID";
+            string connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                using (SqlCommand comm = new SqlCommand(cmdString, conn))
+                {
+                    comm.Parameters.AddWithValue("@ID", ID);
+                    try
+                    {
+                        conn.Open();
+                        using (SqlDataReader reader = comm.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                projectCount = Convert.ToInt32(reader["amt"]);
+                            }
+                        }
+                    }
+                    catch (SqlException err)
+                    {
+
+                    }
+                }
+            }
+
+            // Insert a new Project.
+            projectCount += 1;
+            cmdString = "INSERT INTO Projects ([Items],[CustomerID],[ProjectType],[ProjectName],[ProjectDescription]) VALUES (@items, @id, @type, @name, @desc)";
+            connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                using (SqlCommand comm = new SqlCommand())
+                {
+                    comm.Connection = conn;
+                    comm.CommandText = cmdString;
+                    comm.Parameters.AddWithValue("@items", built);
+                    comm.Parameters.AddWithValue("@id", ID);
+                    comm.Parameters.AddWithValue("@type", "Genesis");
+                    comm.Parameters.AddWithValue("@name", "Bid Proposal, Version #" + projectCount);
+                    comm.Parameters.AddWithValue("@desc", bid_prop_desc.Text);
+
+                    try
+                    {
+                        conn.Open();
+                        comm.ExecuteNonQuery();
+                    }
+                    catch (SqlException f)
+                    {
+                        System.Diagnostics.Debug.WriteLine(f.Message);
+                    }
+                }
+            }
+
+            // Get the max Project Id.
+            // TODO: PH: Is this the samne as what we just inserted above??
+            int projID = 0;
+            cmdString = "select Max([ProjectID]) as maxID from [dbo].[Projects] where [CustomerID] = @ID";
+            connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                using (SqlCommand comm = new SqlCommand(cmdString, conn))
+                {
+                    comm.Parameters.AddWithValue("@ID", ID);
+                    try
+                    {
+                        conn.Open();
+                        using (SqlDataReader reader = comm.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                projID = Convert.ToInt32(reader["maxID"]);
+                            }
+                        }
+                    }
+                    catch (SqlException err)
+                    {
+
+                    }
+                }
+            }
+
+            // Update the Current Project Id.
+            cmdString = "UPDATE [dbo].[Customers] SET [CurrentProject] = @pID where CustomerID = @ID";
+            connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                using (SqlCommand comm = new SqlCommand())
+                {
+                    comm.Connection = conn;
+                    comm.CommandText = cmdString;
+                    comm.Parameters.AddWithValue("@pID", projID);
+                    comm.Parameters.AddWithValue("@ID", ID);
+
+                    try
+                    {
+                        conn.Open();
+                        comm.ExecuteNonQuery();
+                    }
+                    catch (SqlException f)
+                    {
+                        System.Diagnostics.Debug.WriteLine(f.Message);
+                    }
+                }
+            }
+            Response.Redirect("/CPriceBook?" + ID + "&Select&" + projID);
+        }
+
+        /// <summary>
+        /// Generate a Bid Proposal (Project) for a EZ Flow Pool.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void GenerateEZ(object sender, EventArgs e)
+        {
+            string[] arr = HttpContext.Current.Request.Url.Query.Split('&');
+            string ID = "1";
+            if (arr.Length > 0 && arr[0].Split('?').Length > 1)
+            {
+                ID = arr[0].Split('?')[1];
+            }
+            else
+            {
+                return;
+            }
+            AddToHistory("EZ-Flow Bid Proposal Created.");
+
+            string built = "";
+            //built += "0`Unfinished`1`1`374``0`" + DateTime.Now.ToString() + "~"; // no surveys
+            if (Surveys_Selection.SelectedValue == "Both") // No Surveys
+            {
+                built += "0`Finished`1`374``-400`0`" + DateTime.Now.ToString() + "~";
+            }
+
+            // Municipality Charges
+            switch (Permit.SelectedValue)
+            {
+                case "CityAugustine":
+                    built += "0`Finished`1`379``800`0`" + DateTime.Now.ToString() + "~";
+                    break;
+                case "Ormond":
+                    built += "0`Finished`1`382``600`0`" + DateTime.Now.ToString() + "~";
+                    break;
+                case "FlaglerCounty":
+                    built += "0`Finished`1`375``500`0`" + DateTime.Now.ToString() + "~";
+                    break;
+                case "FlaglerBeach":
+                    built += "0`Finished`1`376``500`0`" + DateTime.Now.ToString() + "~";
+                    break;
+                case "StAugustine":
+                    // check if under review or not
+                    break;
+                case "John":
+                    built += "0`Finished`1`380``1000`0`" + DateTime.Now.ToString() + "~";
+                    break;
+                case "Volusia":
+                    built += "0`Finished`1`381``700`0`" + DateTime.Now.ToString() + "~";
+                    break;
+            }
+
+            // New Home Construction
+            if (New_Home.SelectedValue == "Yes")
+            {
+                built += "0`Finished`1`383``1500`0`" + DateTime.Now.ToString() + "~";
+            }
+
+            //ARB
+            // Set inital item based on Pool Type.
+            switch (arb.SelectedValue)
+            {
+                case "Other":
+                    built += "0`Finished`1`384``500`0`" + DateTime.Now.ToString() + "~";
+                    break;
+                case "Grand":
+                    built += "0`Finished`1`385``500`0`" + DateTime.Now.ToString() + "~";
+                    break;
+                case "PalmCoast":
+                    built += "0`Finished`1`388``800`0`" + DateTime.Now.ToString() + "~";
+                    break;
+                case "Plantation":
+                    built += "0`Finished`1`394``700`0`" + DateTime.Now.ToString() + "~";
+                    break;
+                case "Ocean":
+                    built += "0`Finished`1`393``900`0`" + DateTime.Now.ToString() + "~";
+                    break;
+                case "Dunes":
+                    built += "0`Finished`1`391``900`0`" + DateTime.Now.ToString() + "~";
+                    break;
+                case "Shores":
+                    built += "0`Finished`1`395``500`0`" + DateTime.Now.ToString() + "~";
+                    break;
+                case "Hidden":
+                    built += "0`Finished`1`386``500`0`" + DateTime.Now.ToString() + "~";
+                    break;
+                case "Polo":
+                    built += "0`Finished`1`389``500`0`" + DateTime.Now.ToString() + "~";
+                    break;
+                case "Island":
+                    built += "0`Finished`1`392``2500`0`" + DateTime.Now.ToString() + "~";
+                    break;
+                case "Tuscana":
+                    built += "0`Finished`1`390``500`0`" + DateTime.Now.ToString() + "~";
+                    break;
+                case "North":
+                    built += "0`Finished`1`387``900`0`" + DateTime.Now.ToString() + "~";
+                    break;
+            }
+
+            if (drop_distance.SelectedValue == "45")
+            {
+                built += "0`Finished`1`397``2500`0`" + DateTime.Now.ToString() + "~";
+            }
+            else if (drop_distance.SelectedValue == "60")
+            {
+                built += "0`Finished`1`398``3500`0`" + DateTime.Now.ToString() + "~";
+            }
+            built = built.Substring(0, built.Length - 1);
+
+            // Get the Project Id.
+            int projectCount = 0;
+            string cmdString = "select count(*) as amt from [dbo].[Projects] where [CustomerID] = @ID";
+            string connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                using (SqlCommand comm = new SqlCommand(cmdString, conn))
+                {
+                    comm.Parameters.AddWithValue("@ID", ID);
+                    try
+                    {
+                        conn.Open();
+                        using (SqlDataReader reader = comm.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                projectCount = Convert.ToInt32(reader["amt"]);
+                            }
+                        }
+                    }
+                    catch (SqlException err)
+                    {
+
+                    }
+                }
+            }
+
+            // Insert a new Project.
+            projectCount += 1;
+            cmdString = "INSERT INTO Projects ([Items],[CustomerID],[ProjectType],[ProjectName],[ProjectDescription]) VALUES (@items, @id, @type, @name, @desc)";
+            connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                using (SqlCommand comm = new SqlCommand())
+                {
+                    comm.Connection = conn;
+                    comm.CommandText = cmdString;
+                    comm.Parameters.AddWithValue("@items", built);
+                    comm.Parameters.AddWithValue("@id", ID);
+                    comm.Parameters.AddWithValue("@type", "EZ-Flow");
+                    comm.Parameters.AddWithValue("@name", "Bid Proposal, Version #" + projectCount);
+                    comm.Parameters.AddWithValue("@desc", bid_prop_desc.Text);
+
+                    try
+                    {
+                        conn.Open();
+                        comm.ExecuteNonQuery();
+                    }
+                    catch (SqlException f)
+                    {
+                        System.Diagnostics.Debug.WriteLine(f.Message);
+                    }
+                }
+            }
+
+            // Get the max Project Id.
+            int projID = 0;
+            cmdString = "select Max([ProjectID]) as maxID from [dbo].[Projects] where [CustomerID] = @ID";
+            connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                using (SqlCommand comm = new SqlCommand(cmdString, conn))
+                {
+                    comm.Parameters.AddWithValue("@ID", ID);
+                    try
+                    {
+                        conn.Open();
+                        using (SqlDataReader reader = comm.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                projID = Convert.ToInt32(reader["maxID"]);
+                            }
+                        }
+                    }
+                    catch (SqlException err)
+                    {
+
+                    }
+                }
+            }
+
+            // Update the Customers table with the ProjectID.
+            cmdString = "UPDATE [dbo].[Customers] SET [CurrentProject] = @pID where CustomerID = @ID";
+            connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                using (SqlCommand comm = new SqlCommand())
+                {
+                    comm.Connection = conn;
+                    comm.CommandText = cmdString;
+                    comm.Parameters.AddWithValue("@pID", projID);
+                    comm.Parameters.AddWithValue("@ID", ID);
+
+                    try
+                    {
+                        conn.Open();
+                        comm.ExecuteNonQuery();
+                    }
+                    catch (SqlException f)
+                    {
+                        System.Diagnostics.Debug.WriteLine(f.Message);
+                    }
+                }
+            }
+            Response.Redirect("/CPriceBook?" + ID + "&Select&" + projID);
+        }
+
+        /// <summary>
+        /// Generate Pool Renovation
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void GenerateRenovation(object sender, EventArgs e)
+        {
+            string[] arr = HttpContext.Current.Request.Url.Query.Split('&');
+            string ID = "1";
+            if (arr.Length > 0 && arr[0].Split('?').Length > 1)
+            {
+                ID = arr[0].Split('?')[1];
+            }
+            string built = "";
+            //built += "0`Unfinished`1`1`374``0`" + DateTime.Now.ToString() + "~"; // no surveys
+
+            AddToHistory("Renovation Bid Proposal Created.");
+            string cmdString = "INSERT INTO Projects ([Items],[CustomerID]) VALUES (@items, @id)";
+            string connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                using (SqlCommand comm = new SqlCommand())
+                {
+                    comm.Connection = conn;
+                    comm.CommandText = cmdString;
+                    comm.Parameters.AddWithValue("@items", built);
+                    comm.Parameters.AddWithValue("@id", arr[3]);
+
+                    try
+                    {
+                        conn.Open();
+                        comm.ExecuteNonQuery();
+                    }
+                    catch (SqlException f)
+                    {
+                        System.Diagnostics.Debug.WriteLine(f.Message);
+                    }
+                }
+            }
+            int projID = 0;
+            cmdString = "select Max([ProjectID]) as maxID from [dbo].[Projects] where [CustomerID] = @ID";
+            connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                using (SqlCommand comm = new SqlCommand(cmdString, conn))
+                {
+                    comm.Parameters.AddWithValue("@ID", ID);
+                    try
+                    {
+                        conn.Open();
+                        using (SqlDataReader reader = comm.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                projID = Convert.ToInt32(reader["maxID"]);
+                            }
+                        }
+                    }
+                    catch (SqlException err)
+                    {
+
+                    }
+                }
+            }
+            cmdString = "UPDATE [dbo].[Customers] SET [CurrentProject] = @pID where ID = @CustomerID";
+            connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                using (SqlCommand comm = new SqlCommand())
+                {
+                    comm.Connection = conn;
+                    comm.CommandText = cmdString;
+                    comm.Parameters.AddWithValue("@pID", projID);
+
+                    try
+                    {
+                        conn.Open();
+                        comm.ExecuteNonQuery();
+                    }
+                    catch (SqlException f)
+                    {
+                        System.Diagnostics.Debug.WriteLine(f.Message);
+                    }
+                }
+            }
+            Response.Redirect("/CPriceBook?" + ID + "&Select");
+        }
+
+        #endregion
+
+
         #region Support Methods
 
         private string getCustomerFullName(string customerId)
@@ -1972,6 +1957,65 @@ namespace WatersidePortal
                     }
                 }
             }
+        }
+
+        protected void addMessage(string message, DateTime date, string emp)
+        {
+            System.Web.UI.HtmlControls.HtmlGenericControl newdivs = new System.Web.UI.HtmlControls.HtmlGenericControl("DIV");
+            newdivs.Attributes.Add("class", "maindivs");
+            newdivs.Attributes.Add("style", "border-style: solid; margin: 20px; min-height: 100px;");
+            System.Web.UI.HtmlControls.HtmlGenericControl newlabel = new System.Web.UI.HtmlControls.HtmlGenericControl("label");
+            newlabel.InnerText = emp + " - " + date.ToString("d", CultureInfo.GetCultureInfo("en-US"));
+            newdivs.Controls.Add(newlabel);
+            System.Web.UI.HtmlControls.HtmlGenericControl br = new System.Web.UI.HtmlControls.HtmlGenericControl("br");
+            newdivs.Controls.Add(br);
+            System.Web.UI.HtmlControls.HtmlGenericControl newmsg = new System.Web.UI.HtmlControls.HtmlGenericControl("label");
+            newmsg.InnerText = message;
+            newmsg.Style.Add(HtmlTextWriterStyle.FontSize, "18px");
+            newdivs.Controls.Add(newmsg);
+            customer_history.Controls.Add(newdivs);
+        }
+
+        protected void AddToHistory(string message)
+        {
+
+            string[] arr = HttpContext.Current.Request.Url.Query.Split('&');
+            string ID = "1";
+            if (arr.Length > 0 && arr[0].Split('?').Length > 1)
+            {
+                ID = arr[0].Split('?')[1];
+            }
+            else
+            {
+                return;
+            }
+            SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString);
+            //Replaced Parameters with Value
+            string query = "INSERT INTO CustomerHistory (CustomerId, MessageText, Date, EmpModifying) VALUES(@CustomerId, @MessageText, @Date, @EmpModifying)";
+            SqlCommand cmd = new SqlCommand(query, con);
+
+            //Pass values to Parameters
+            string emp = HttpContext.Current.User.Identity.Name != null && HttpContext.Current.User.Identity.Name.Length > 0 ? HttpContext.Current.User.Identity.Name : "Unknown";
+            cmd.Parameters.AddWithValue("@CustomerId", ID);
+            cmd.Parameters.AddWithValue("@MessageText", message);
+            cmd.Parameters.AddWithValue("@Date", DateTime.Now);
+            cmd.Parameters.AddWithValue("@EmpModifying", emp);
+
+            try
+            {
+                con.Open();
+                cmd.ExecuteNonQuery();
+                Console.WriteLine("Records Inserted Successfully");
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine("Error Generated. Details: " + e.ToString());
+            }
+            finally
+            {
+                con.Close();
+            }
+
         }
 
 

@@ -81,7 +81,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <br />
-                    <h4 class="title">Customer Management: <asp:Label runat="server" ID="CustomerName" Font-Size="Large" /></h4>
+                    <h4 class="title">Customer Management for <asp:Label runat="server" ID="CustomerName" Font-Size="Large" /></h4>
                 </div>
 
                 <div class="panel-body">

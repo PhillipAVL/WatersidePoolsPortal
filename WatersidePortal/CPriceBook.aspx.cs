@@ -19,6 +19,7 @@ using Paragraph = Xceed.Document.NET.Paragraph;
 using iText.Layout.Element;
 using DevExpress.Utils.About;
 using WatersidePortal.Models;
+using Microsoft.Ajax.Utilities;
 
 namespace WatersidePortal
 {
@@ -175,62 +176,64 @@ namespace WatersidePortal
                     }
                 }
 
-
                 // Get the Project items.
                 List<Item> items = new List<Item>();
-                foreach (string str in gProj.sItems.Split('~'))
+                if (gProj.sItems != null && gProj?.sItems.Count() > 0)
                 {
-                    string[] sArr = str.Split('`');
-                    if (sArr.Length < 5)
+                    foreach (string str in gProj.sItems.Split('~'))
                     {
-                        break;
-                    }
-                    Item item = new Item();
-                    item.itemID = Convert.ToInt32(sArr[3]);
-                    item.optional = sArr[0] == "0" ? false : true;
-                    item.status = sArr[1];
-                    item.quantity = Convert.ToInt32(sArr[2]);
-                    item.description = sArr[4];
-                    item.price = (float)Convert.ToDouble(sArr[5]);
-                    item.overage = (float)Convert.ToDouble(sArr[6]);
-                    item.lockedTime = DateTime.Parse(sArr[7]);
-
-                    cmdString = "Select [Category], [Item], [Unit], [Description], [CustomerPrice] From PriceBook where ItemID=@ID";
-                    connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
-                    using (SqlConnection conn = new SqlConnection(connString))
-                    {
-                        using (SqlCommand comm = new SqlCommand(cmdString, conn))
+                        string[] sArr = str.Split('`');
+                        if (sArr.Length < 5)
                         {
-                            comm.Parameters.AddWithValue("@ID", Convert.ToInt32(sArr[3]));
-                            try
+                            break;
+                        }
+                        Item item = new Item();
+                        item.itemID = Convert.ToInt32(sArr[3]);
+                        item.optional = sArr[0] == "0" ? false : true;
+                        item.status = sArr[1];
+                        item.quantity = Convert.ToInt32(sArr[2]);
+                        item.description = sArr[4];
+                        item.price = (float)Convert.ToDouble(sArr[5]);
+                        item.overage = (float)Convert.ToDouble(sArr[6]);
+                        item.lockedTime = DateTime.Parse(sArr[7]);
+
+                        cmdString = "Select [Category], [Item], [Unit], [Description], [CustomerPrice] From PriceBook where ItemID=@ID";
+                        connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
+                        using (SqlConnection conn = new SqlConnection(connString))
+                        {
+                            using (SqlCommand comm = new SqlCommand(cmdString, conn))
                             {
-                                conn.Open();
-                                using (SqlDataReader reader = comm.ExecuteReader())
+                                comm.Parameters.AddWithValue("@ID", Convert.ToInt32(sArr[3]));
+                                try
                                 {
-                                    while (reader.Read())
+                                    conn.Open();
+                                    using (SqlDataReader reader = comm.ExecuteReader())
                                     {
-                                        item.item = String.Format("{0}", reader["Item"]);
-                                        item.unit = String.Format("{0}", reader["Unit"]);
-                                        string pric = String.Format("{0}", reader["CustomerPrice"]);
-                                        item.currPrice = (float)Convert.ToDouble(pric);
-                                        item.category = String.Format("{0}", reader["Category"]);
+                                        while (reader.Read())
+                                        {
+                                            item.item = String.Format("{0}", reader["Item"]);
+                                            item.unit = String.Format("{0}", reader["Unit"]);
+                                            string pric = String.Format("{0}", reader["CustomerPrice"]);
+                                            item.currPrice = (float)Convert.ToDouble(pric);
+                                            item.category = String.Format("{0}", reader["Category"]);
+                                        }
                                     }
                                 }
-                            }
-                            catch (SqlException err)
-                            {
+                                catch (SqlException err)
+                                {
 
+                                }
                             }
                         }
-                    }
 
-                    if (item.category.Equals("SPAS"))
-                    {
-                        SOP.Visible = true;
-                        SOPLabel.Visible = true;
-                    }
+                        if (item.category.Equals("SPAS"))
+                        {
+                            SOP.Visible = true;
+                            SOPLabel.Visible = true;
+                        }
 
-                    items.Add(item);
+                        items.Add(item);
+                    }
                 }
                 GridView_Items.Sort("Category", SortDirection.Ascending);
 
@@ -643,56 +646,32 @@ namespace WatersidePortal
         /// <param name="e"></param>
         protected void Deleted(object sender, GridViewDeleteEventArgs e)
         {
-            string[] arr = HttpContext.Current.Request.Url.AbsoluteUri.Split('?')[1].Split('&');
-            string ID = "1";
-            if (arr.Length > 1)
-            {
-                ID = arr[0];
-            }
-            else
-            {
-                return;
-            }
+            //string[] arr = HttpContext.Current.Request.Url.AbsoluteUri.Split('?')[1].Split('&');
+            //if (arr.Length > 1)
+            //{
+            //    customerId = arr[0];
+            //    //customerId = arr[1];
+            //    projectId = arr[2];
+            //}
+            //else
+            //{
+            //    return;
+            //}
 
-            int projID = -1;
-            string cmdString = "Select [CurrentProject] From [dbo].[Customers] Where CustomerID=@ID";
+            string customerId = HttpContext.Current.Session["CurrentCustomerId"].ToString();
+            string projectId = HttpContext.Current.Session["CurrentProjectId"].ToString();
+            CustomerName.Value = HttpContext.Current.Session["CurrentCustomerName"].ToString();
+
+            // Get the current Project Items.
+            string items = "";
+            string cmdString = "Select * From [dbo].[Projects] Where CustomerID=@ID AND ProjectID=@pID";
             string connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
             using (SqlConnection conn = new SqlConnection(connString))
             {
                 using (SqlCommand comm = new SqlCommand(cmdString, conn))
                 {
-                    comm.Parameters.AddWithValue("@ID", ID);
-                    try
-                    {
-                        conn.Open();
-                        using (SqlDataReader reader = comm.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                string pr = String.Format("{0}", reader["CurrentProject"]);
-                                if (pr.Length < 1)
-                                {
-                                    pr = "-1";
-                                }
-                                projID = Convert.ToInt32(pr);
-                            }
-                        }
-                    }
-                    catch (SqlException err)
-                    {
-
-                    }
-                }
-            }
-            string items = "";
-            cmdString = "Select * From [dbo].[Projects] Where CustomerID=@ID AND ProjectID=@pID";
-            connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
-            using (SqlConnection conn = new SqlConnection(connString))
-            {
-                using (SqlCommand comm = new SqlCommand(cmdString, conn))
-                {
-                    comm.Parameters.AddWithValue("@ID", ID);
-                    comm.Parameters.AddWithValue("@pID", projID);
+                    comm.Parameters.AddWithValue("@ID", customerId);
+                    comm.Parameters.AddWithValue("@pID", projectId);
                     try
                     {
                         conn.Open();
@@ -711,15 +690,18 @@ namespace WatersidePortal
                 }
             }
 
+            // Remove the selected item to be deleted from the Items string.
+            int itemToBeDeletedId = (int)(e.RowIndex) - 1;
             string[] itemsSplit = items.Split('~');
             string rebuilt = "";
             for (int i = 0; i < itemsSplit.Length; i++)
             {
-                if (e.RowIndex == i)
+                if (i == itemToBeDeletedId)
                     continue;
                 rebuilt += itemsSplit[i] + "~";
             }
-            rebuilt = rebuilt.Substring(0, rebuilt.Length - 1);
+
+            // Update the Items field string.
             cmdString = "Update [dbo].[Projects] Set Items=@items Where ProjectID = @ID";
             connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
             using (SqlConnection conn = new SqlConnection(connString))
@@ -727,7 +709,7 @@ namespace WatersidePortal
                 using (SqlCommand comm = new SqlCommand(cmdString, conn))
                 {
                     comm.Parameters.AddWithValue("@Items", rebuilt);
-                    comm.Parameters.AddWithValue("@ID", projID);
+                    comm.Parameters.AddWithValue("@ID", projectId);
                     try
                     {
                         conn.Open();
