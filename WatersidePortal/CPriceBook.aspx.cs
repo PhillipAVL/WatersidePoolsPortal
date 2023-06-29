@@ -1,6 +1,4 @@
-﻿using Microsoft.Graph;
-using Microsoft.VisualBasic.FileIO;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -10,105 +8,56 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Xceed.Words.NET;
-using Xceed.Document.NET;
-using System.Drawing;
-using System.Net;
-using System.Collections.Specialized;
-using System.IO;
 using Paragraph = Xceed.Document.NET.Paragraph;
-using iText.Layout.Element;
-using DevExpress.Utils.About;
 using WatersidePortal.Models;
-using Microsoft.Ajax.Utilities;
+using WatersidePortal.Base;
 
 namespace WatersidePortal
 {
-    public partial class CPriceBook : System.Web.UI.Page
+    public partial class CPriceBook : WebFormBase
     {
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Page.IsPostBack)
             {
+                string ID = "1";
                 if (HttpContext.Current.Request.Url.AbsoluteUri.Split('?').Length < 2)
                 {
                     return;
                 }
                 string[] arr = HttpContext.Current.Request.Url.AbsoluteUri.Split('?')[1].Split('&');
-                string ID = "1";
                 if (arr.Length > 1)
                 {
                     ID = arr[0];
                     CustomerId.Value = ID;
-                    this.Session["CurrentCustomerId"] = ID;
                 }
                 if (arr.Length > 2)
                 {
-                    CustomerName.Value = getCustomerFullName(ID);
+                    CustomerName.Value = GetCustomerFullName(ID);
                     this.Session["CurrentCustomerName"] = CustomerName.Value;
                     ProjectId.Value = arr[2];
                     this.Session["CurrentProjectId"] = ProjectId.Value;
                 }
-                CustomerFullName.Text = getCustomerFullName(ID);
+                CustomerFullName.Text = GetCustomerFullName(ID);
             }
 
             if (!Page.IsPostBack)
             {
-                if (Session.Keys.Count > 0)
-                {
-                    // Get page vars from the session
-                    ProjectId.Value = HttpContext.Current.Session["CurrentProjectId"].ToString();
-                    CustomerId.Value = HttpContext.Current.Session["CurrentCustomerId"].ToString();
-                    CustomerName.Value = HttpContext.Current.Session["CurrentCustomerName"].ToString();
-                    CustomerFullName.Text = CustomerName.Value;
-                }
-                else
-                {
-                    // Get page vars from the query string.
-                    if (HttpContext.Current.Request.Url.AbsoluteUri.Split('?').Length < 2)
-                    {
-                        return;
-                    }
-                    string[] arr = HttpContext.Current.Request.Url.AbsoluteUri.Split('?')[1].Split('&');
-                    string ID = "1";
-                    if (arr.Length > 1)
-                    {
-                        ID = arr[0];
-                        if (this.Session["CurrentCustomerId"] == null)
-                        {
-                            CustomerId.Value = ID;
-                            this.Session["CurrentCustomerId"] = CustomerId.Value;
-                        }
-                        else
-                        {
-                            CustomerId.Value = this.Session["CurrentCustomerId"].ToString();
-                        }
-                    }
-                    if (arr.Length > 2)
-                    {
-                        if (this.Session["CurrentCustomerName"] == null)
-                        {
-                            CustomerName.Value = arr[1];
-                            this.Session["CurrentCustomerName"] = getCustomerFullName(ID);
-                        }
-                        else
-                        {
-                            CustomerName.Value = this.Session["CurrentCustomerName"].ToString();
-                        }
+                // Get page vars from the query string.
+                if (HttpContext.Current.Request.Url.AbsoluteUri.Split('?').Length < 2)
+                    return;
 
+                string[] queryParms = HttpContext.Current.Request.Url.AbsoluteUri.Split('?')[1].Split('&');
+                CustomerId.Value = queryParms[0];
+                this.Session["CurrentCustomerId"] = CustomerId.Value;
 
-                        if (this.Session["CurrentProjectId"] == null)
-                        {
-                            ProjectId.Value = arr[2];
-                            this.Session["CurrentProjectId"] = ProjectId.Value;
-                        }
-                        else
-                        {
-                            ProjectId.Value = this.Session["CurrentProjectId"].ToString();
-                        }
+                ProjectId.Value = queryParms[2];
+                this.Session["CurrentProjectId"] = ProjectId.Value;
 
-                        CustomerFullName.Text = getCustomerFullName(ID);
-                    }
-                }
+                CustomerName.Value = GetCustomerFullName(CustomerId.Value);
+                CustomerFullName.Text = CustomerName.Value;
+                this.Session["CurrentCustomerName"] = CustomerName.Value;
+
 
                 // Get project detail.
                 Models.Project gProj = new Models.Project();
@@ -3410,29 +3359,6 @@ namespace WatersidePortal
 
 
         #region Page Methods
-
-        private string getCustomerFullName(string customerId)
-        {
-            var cmdString = "Select FullName From [dbo].[Customers] Where CustomerID=@customerId";
-            string connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
-            using (SqlConnection conn = new SqlConnection(connString))
-            {
-                using (SqlCommand comm = new SqlCommand(cmdString, conn))
-                {
-                    comm.Parameters.AddWithValue("@CustomerID", customerId);
-                    try
-                    {
-                        conn.Open();
-                        string customerFullName = (string)comm.ExecuteScalar();
-                        return customerFullName;
-                    }
-                    catch (SqlException ex)
-                    {
-                        return string.Empty;
-                    }
-                }
-            }
-        }
 
         private string underscored(string str, int num)
         {

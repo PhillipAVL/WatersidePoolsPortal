@@ -1,24 +1,19 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
 using System.Web.UI.WebControls;
+using WatersidePortal.Base;
 using WatersidePortal.Models;
 
 namespace WatersidePortal
 {
-    public partial class CreateCustomer : System.Web.UI.Page
+    public partial class CreateCustomer : WebFormBase
     {
         protected void Page_Load(object sender, EventArgs e)
         {
             Session.Clear();
-            
+
             GridView1.SelectedIndexChanged += CustomersGridView_SelectedIndexChanged;
             GridView1.SelectedIndexChanging += CustomersGridView_SelectedIndexChanged2;
 
@@ -54,6 +49,10 @@ namespace WatersidePortal
                     row.Visible = false;
             }
         }
+
+
+        #region Page Events
+
         protected void AddUser(Object sender, EventArgs e)
         {
             ApplicationDbContext context = new ApplicationDbContext();
@@ -89,29 +88,19 @@ namespace WatersidePortal
                         conn.Open();
                         comm.ExecuteNonQuery();
                     }
-                    catch(SqlException ex)
+                    catch (SqlException ex)
                     {
 
                     }
                 }
             }
             Response.Redirect("/Customers.aspx?Modify");
-            /*
-            using (SqlConnection connection = new SqlConnection(SqlDataSource1.ConnectionString))
-            {
-                connection.Open();
-                using (SqlCommand command = new SqlCommand("alter table [Customers] add [Alternate] varchar(255)"))
-                {
-                    command.Connection = connection;
-                    command.ExecuteNonQuery();
-                }
-                using (SqlCommand command = new SqlCommand("alter table [Customers] add [Email] varchar(255)"))
-                {
-                    command.Connection = connection;
-                    command.ExecuteNonQuery();
-                }
-            }*/
         }
+
+        #endregion
+
+
+        #region Grid Events
 
         protected void CustomersGridView_SelectedIndexChanged2(Object sender, EventArgs e)
         {
@@ -123,5 +112,9 @@ namespace WatersidePortal
             //selectedID = Int32.Parse(ind);
             Response.Redirect("/ModifyCustomer.aspx?" + ind + "&Info");
         }
+
+
+        #endregion
+
     }
 }

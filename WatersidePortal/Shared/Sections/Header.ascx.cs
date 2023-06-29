@@ -12,7 +12,14 @@ namespace BlackFlib1.Shared.Sections
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            if (System.Web.HttpContext.Current != null && System.Web.HttpContext.Current.User.Identity.IsAuthenticated)
+            {
+                CustomerDisplayName.Text = System.Web.HttpContext.Current.User.Identity.Name;
+            }
+            else
+            {
+                CustomerDisplayName.Text = "User Not Found";
+            }
         }
 
         /// <summary>

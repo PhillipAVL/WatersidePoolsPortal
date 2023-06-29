@@ -897,15 +897,6 @@ namespace WatersidePortal
         protected global::System.Web.UI.WebControls.TextBox bid_prop_desc;
 
         /// <summary>
-        /// ContinueButton control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button ContinueButton;
-
-        /// <summary>
         /// CustomerId control.
         /// </summary>
         /// <remarks>

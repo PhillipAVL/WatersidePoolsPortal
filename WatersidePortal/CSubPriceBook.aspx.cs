@@ -10,10 +10,11 @@ using System.Web;
 using System.Web.Providers.Entities;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using WatersidePortal.Base;
 
 namespace WatersidePortal
 {
-    public partial class CSubPriceBook : System.Web.UI.Page
+    public partial class CSubPriceBook : WebFormBase
     {
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -49,6 +50,9 @@ namespace WatersidePortal
             GridView1.Sort("Item", SortDirection.Ascending);
             GridView_Items.Sort("Subcategory", SortDirection.Ascending);
         }
+
+        
+        #region Page Events
 
         // Save the changes from the Pricebook
         protected void Submit(object sender, EventArgs e)
@@ -91,9 +95,9 @@ namespace WatersidePortal
             }
             built = built.Remove(built.Length - 1, 1).Replace("&nbsp;", "");
 
-            // Determin if a default custoer project exists.
+            // Determine if a default custoer project exists.
             // If so, add the project and itmes.
-            if (doesProjectExist(CustomerId.Value) == false)
+            if (DoesProjectExist(CustomerId.Value) == false)
             {
                 cmdString = "INSERT INTO Projects ([Items],[CustomerID]) VALUES (@items, @id)";
                 using (SqlConnection conn = new SqlConnection(connString))
@@ -175,44 +179,22 @@ namespace WatersidePortal
             Response.Redirect("/CPriceBook.aspx?" + arr[1] + "&Select");
         }
 
-
-        #region Private Methods
-
-        private bool doesProjectExist(string customerId)
+        protected void Back(object sender, EventArgs e)
         {
-            string cmdString = "SELECT [CurrentProject] FROM [Customers] WHERE [CustomerID] = @ID";
-            string connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
-            using (SqlConnection conn = new SqlConnection(connString))
-            {
-                using (SqlCommand comm = new SqlCommand(cmdString, conn))
-                {
-                    comm.Parameters.AddWithValue("@ID", customerId);
-                    try
-                    {
-                        conn.Open();
-                        using (SqlDataReader reader = comm.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                string pr = String.Format("{0}", reader["CurrentProject"]);
-                                if (pr.Length < 1)
-                                {
-                                    pr = "-1";
-                                    return false;
-                                }
-                                int projectId = Convert.ToInt32(pr);
-                                return true;
-                            }
-                        }
-                    }
-                    catch (SqlException err)
-                    {
-                        return false;
-                    }
-                    return false;
-                }
-            }
+            if (HttpContext.Current.Request.Url.Query.Length == 0)
+                return;
+            string[] arr = HttpContext.Current.Request.Url.Query.Remove(0, 1).Split('&');
+            if (arr.Length < 2)
+                return;
+            Response.Redirect("/CPriceBook.aspx?" + arr[1] + "&Select");
         }
+
+        #endregion
+
+
+        #region Page Methods
+
+        
         #endregion
 
 
@@ -246,22 +228,6 @@ namespace WatersidePortal
         }
 
         #endregion
-
-
-        #region Page Events
-
-        protected void Back(object sender, EventArgs e)
-        {
-            if (HttpContext.Current.Request.Url.Query.Length == 0)
-                return;
-            string[] arr = HttpContext.Current.Request.Url.Query.Remove(0, 1).Split('&');
-            if (arr.Length < 2)
-                return;
-            Response.Redirect("/CPriceBook.aspx?" + arr[1] + "&Select");
-        }
-
-        #endregion
-
 
     }
 }

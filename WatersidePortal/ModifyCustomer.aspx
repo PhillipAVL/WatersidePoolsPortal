@@ -73,7 +73,6 @@
         function openInNewTab() {
             window.open('/Documents/Access Permission.pdf', '_blank');
         }
-        string CustomerId = CustomerId.Value;
     </script>
 
     <section id="main-content">
@@ -798,15 +797,14 @@
                         <%-- Tab: Create Bid Proposal --%>
                         <div class="tab-pane fade in" id="Create">
                             <p>
-                                Bid Proposal Version Description: 
-                               
+                                Bid Proposal Description: 
                                 <asp:TextBox runat="server" ID="bid_prop_desc" Width="50%"></asp:TextBox>
                             </p>
+                            <br />
 
                             <div class="panel panel-primary" style="max-width: 40%;">
                                 <div class="panel-heading">
-                                    Create Bid Proposal Version #1
-                               
+                                    Select the Pool Type below to create a new Bid Proposal
                                 </div>
                                 <div class="panel-body">
                                     <div style="display: grid; grid-template-columns: 1fr 1fr; column-gap: 5px;">
@@ -818,7 +816,7 @@
                                     <asp:Button runat="server" Text="Select Custom Master Bid" Width="100%" Height="130%"></asp:Button>
                                 </div>
                             </div>
-                            <asp:Button Width="40%" runat="server" Text="Continue Project" ID="ContinueButton" ForeColor="#2196f3" BackColor="White" OnClick="Continue" />
+                            <%--<asp:Button Width="40%" runat="server" Text="Continue Project" ID="ContinueButton" ForeColor="#2196f3" BackColor="White" OnClick="Continue" />--%>
                         </div>
 
 
@@ -835,7 +833,7 @@
                                             </ItemTemplate>
                                         </asp:TemplateField>
                                        
-                                        <asp:BoundField ControlStyle-CssClass="form-control" DataField="ProjectID" HeaderText="Id" ItemStyle-Width="12%">
+                                        <asp:BoundField ControlStyle-CssClass="form-control" DataField="ProjectID" HeaderText="Id (Dev Only)" ItemStyle-Width="12%">
                                             <ControlStyle CssClass="form-control" />
                                         </asp:BoundField>
 
@@ -1556,7 +1554,7 @@
 
                 </div>
                 <div style="float: right; padding: 5px; background-color: #FFFFFF; border: 1px solid #e0e0e0; margin: 0;">
-                    <asp:Button runat="server" Text="Exit" ForeColor="#FFFFFF" BackColor="#E34A3F" Width="160px" Height="40px" OnClick="Exit" CausesValidation="False" />
+                    <asp:Button runat="server" Text="Exit" class="btn btn-primary" Width="160px" Height="40px" OnClick="Exit" CausesValidation="False" />
                 </div>
             </div>
         </section>

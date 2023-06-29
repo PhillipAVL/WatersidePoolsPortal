@@ -12,11 +12,12 @@ using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using WatersidePortal.Models;
+using WatersidePortal.Models; 
+using WatersidePortal.Base;
 
 namespace WatersidePortal
 {
-    public partial class ModifyCustomer : System.Web.UI.Page
+    public partial class ModifyCustomer : WebFormBase
     {
         public int historyCounter = 0;
 
@@ -24,18 +25,17 @@ namespace WatersidePortal
         {
             if (HttpContext.Current.Request.Url.Query.Length == 0)
                 return;
+
+            string customerId = string.Empty;
             string[] arr = HttpContext.Current.Request.Url.Query.Split('&');
-            string ID = "1";
             if (arr.Length > 0 && arr[0].Split('?').Length > 1)
             {
-                ID = arr[0].Split('?')[1];
+                customerId = arr[0].Split('?')[1];
+                HttpContext.Current.Session["CurrentCustomerId"] = customerId;
             }
-            if (arr.Length > 0 && arr[0].Split('?').Length > 2)
-            {
-                CustomerId.Value = ID;
-            }
-            CustomerName.Text = getCustomerFullName(ID);
-            
+            CustomerName.Text = GetCustomerFullName(customerId);
+            HttpContext.Current.Session["CurrentCustomerName"] = CustomerName.Text;
+
 
             // Customers Tab
             string cmdString = "SELECT [FirstName], [LastName], [CustomerID], [Address], [City], [State], [Telephone], [Alternate], [Email] FROM [Customers] WHERE [CustomerID] = @ID ORDER BY [ID]";
@@ -44,7 +44,7 @@ namespace WatersidePortal
             {
                 using (SqlCommand comm = new SqlCommand(cmdString, conn))
                 {
-                    comm.Parameters.AddWithValue("@ID", ID);
+                    comm.Parameters.AddWithValue("@ID", customerId);
                     try
                     {
                         conn.Open();
@@ -69,7 +69,7 @@ namespace WatersidePortal
             {
                 using (SqlCommand comm = new SqlCommand(cmdString, conn))
                 {
-                    comm.Parameters.AddWithValue("@ID", ID);
+                    comm.Parameters.AddWithValue("@ID", customerId);
                     try
                     {
                         conn.Open();
@@ -88,7 +88,7 @@ namespace WatersidePortal
                 }
             }
 
-            // WORKING HERE
+            // Select current project.
             int projID = -1;
             cmdString = "Select [CurrentProject] From [dbo].[Customers] Where [CustomerID] = @ID";
             connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
@@ -98,7 +98,7 @@ namespace WatersidePortal
             {
                 using (SqlCommand comm = new SqlCommand(cmdString, conn))
                 {
-                    comm.Parameters.AddWithValue("@ID", ID);
+                    comm.Parameters.AddWithValue("@ID", customerId);
                     try
                     {
                         conn.Open();
@@ -121,8 +121,6 @@ namespace WatersidePortal
                     }
                 }
             }
-
-
             histories.Sort();
             histories.Reverse();
 
@@ -138,41 +136,8 @@ namespace WatersidePortal
             }
 
             SqlDataSource2.SelectCommand = "SELECT * from [Warranties] where [CustomerID] = @ID ORDER BY [WarrantyID] ASC";
-            SqlDataSource2.SelectParameters.Add("ID", ID);
+            SqlDataSource2.SelectParameters.Add("ID", customerId);
             SqlDataSource2.DataBind();
-
-            ContinueButton.Visible = false;
-            cmdString = "select Count(ProjectID) as projCount from [dbo].[Projects] where CustomerID = @ID";
-            connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
-            using (SqlConnection conn = new SqlConnection(connString))
-            {
-                using (SqlCommand comm = new SqlCommand(cmdString, conn))
-                {
-                    comm.Parameters.AddWithValue("@ID", ID);
-                    try
-                    {
-                        conn.Open();
-                        using (SqlDataReader reader = comm.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                string pr = String.Format("{0}", reader["projCount"]);
-                                if (pr.Length < 1)
-                                {
-                                    pr = "-1";
-                                }
-                                int cnt = Convert.ToInt32(pr);
-                                if (cnt > 0)
-                                    ContinueButton.Visible = true;
-                            }
-                        }
-                    }
-                    catch (SqlException err)
-                    {
-
-                    }
-                }
-            }
 
             if (!IsPostBack)
             {
@@ -184,56 +149,58 @@ namespace WatersidePortal
                 {
                     using (SqlCommand comm = new SqlCommand(cmdString, conn))
                     {
-                        comm.Parameters.AddWithValue("@ID", ID);
+                        comm.Parameters.AddWithValue("@ID", customerId);
                         //comm.Parameters.AddWithValue("@pID", projID);
                         try
                         {
                             conn.Open();
+
+                            // TODO: PH: This is left here until I determine if it is needed for formatting.
                             //using (SqlDataReader reader = comm.ExecuteReader())
                             //{
-                            //while (reader.Read())
-                            //{
-                            //    gProj.sItems = String.Format("{0}", reader["Items"]);
-                            //    gProj.projectName = String.Format("{0}", reader["ProjectName"]);
-                            //    gProj.projectDescription = String.Format("{0}", reader["ProjectDescription"]);
-                            //    gProj.projectID = Convert.ToInt32(String.Format("{0}", reader["ProjectID"]));
-                            //    //Project_Name.Text = gProj.projectName;
-                            //    //Project_Desc.Text = gProj.projectDescription;
-                            //    string[] len = String.Format("{0}", reader["Length"]).Split('`');
-                            //    string[] wid = String.Format("{0}", reader["Width"]).Split('`');
-                            //    //if (len.Length == 2)
-                            //    //{
-                            //    //    LF.Text = len[0];
-                            //    //    LI.Text = len[1];
-                            //    //}
-                            //    //if (wid.Length == 2)
-                            //    //{
-                            //    //    WF.Text = wid[0];
-                            //    //    WI.Text = wid[1];
-                            //    //}
-                            //    //if (LF.Text.Length == 0)
-                            //    //    LF.Text = "0";
-                            //    //if (LI.Text.Length == 0)
-                            //    //    LI.Text = "0";
-                            //    //if (WF.Text.Length == 0)
-                            //    //    WF.Text = "0";
-                            //    //if (WI.Text.Length == 0)
-                            //    //    WI.Text = "0";
-                            //    //if (String.Format("{0}", reader["ProjectType"]) == "Genesis")
-                            //    //{
-                            //    //    basePrice = 51000;
-                            //    //    geninc.Visible = true;
-                            //    //    ezinc.Visible = false;
-                            //    //}
-                            //    //else if (String.Format("{0}", reader["ProjectType"]) == "EZ-Flow")
-                            //    //{
-                            //    //    geninc.Visible = false;
-                            //    //    ezinc.Visible = true;
-                            //    //    basePrice = 54500;
-                            //    //}
-                            //}
+                            //    while (reader.Read())
+                            //    {
+                            //        gProj.sItems = String.Format("{0}", reader["Items"]);
+                            //        gProj.projectName = String.Format("{0}", reader["ProjectName"]);
+                            //        gProj.projectDescription = String.Format("{0}", reader["ProjectDescription"]);
+                            //        gProj.projectID = Convert.ToInt32(String.Format("{0}", reader["ProjectID"]));
+                            //        //Project_Name.Text = gProj.projectName;
+                            //        //Project_Desc.Text = gProj.projectDescription;
+                            //        string[] len = String.Format("{0}", reader["Length"]).Split('`');
+                            //        string[] wid = String.Format("{0}", reader["Width"]).Split('`');
+                            //        //if (len.Length == 2)
+                            //        //{
+                            //        //    LF.Text = len[0];
+                            //        //    LI.Text = len[1];
+                            //        //}
+                            //        //if (wid.Length == 2)
+                            //        //{
+                            //        //    WF.Text = wid[0];
+                            //        //    WI.Text = wid[1];
+                            //        //}
+                            //        //if (LF.Text.Length == 0)
+                            //        //    LF.Text = "0";
+                            //        //if (LI.Text.Length == 0)
+                            //        //    LI.Text = "0";
+                            //        //if (WF.Text.Length == 0)
+                            //        //    WF.Text = "0";
+                            //        //if (WI.Text.Length == 0)
+                            //        //    WI.Text = "0";
+                            //        //if (String.Format("{0}", reader["ProjectType"]) == "Genesis")
+                            //        //{
+                            //        //    basePrice = 51000;
+                            //        //    geninc.Visible = true;
+                            //        //    ezinc.Visible = false;
+                            //        //}
+                            //        //else if (String.Format("{0}", reader["ProjectType"]) == "EZ-Flow")
+                            //        //{
+                            //        //    geninc.Visible = false;
+                            //        //    ezinc.Visible = true;
+                            //        //    basePrice = 54500;
+                            //        //}
+                            //    }
 
-                            DataTable myTable = new DataTable();
+                                DataTable myTable = new DataTable();
                             myTable.Load(comm.ExecuteReader());
 
                             GridView_Items.DataSource = myTable;
@@ -245,8 +212,6 @@ namespace WatersidePortal
 
                         }
                     }
-
-                    //CustomerFullName.Text = getCustomerFullName(ID);
                 }
 
                 RefreshFields();
@@ -1934,30 +1899,7 @@ namespace WatersidePortal
         #endregion
 
 
-        #region Support Methods
-
-        private string getCustomerFullName(string customerId)
-        {
-            var cmdString = "Select FullName From [dbo].[Customers] Where CustomerID=@customerId";
-            string connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
-            using (SqlConnection conn = new SqlConnection(connString))
-            {
-                using (SqlCommand comm = new SqlCommand(cmdString, conn))
-                {
-                    comm.Parameters.AddWithValue("@CustomerID", customerId);
-                    try
-                    {
-                        conn.Open();
-                        string customerFullName = (string)comm.ExecuteScalar();
-                        return customerFullName;
-                    }
-                    catch (SqlException ex)
-                    {
-                        return string.Empty;
-                    }
-                }
-            }
-        }
+        #region Page Methods
 
         protected void addMessage(string message, DateTime date, string emp)
         {
