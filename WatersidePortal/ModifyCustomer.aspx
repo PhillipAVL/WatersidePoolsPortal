@@ -80,11 +80,14 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <br />
-                    <h4 class="title">Customer Management for <asp:Label runat="server" ID="CustomerName" Font-Size="Large" /></h4>
+                    <h4 class="title">Customer Management for
+                        <asp:Label runat="server" ID="CustomerName" Font-Size="Large" /></h4>
                 </div>
 
                 <div class="panel-body">
                     <asp:Label runat="server" ID="name" Font-Bold="true" Font-Size="Large"></asp:Label>
+
+                    <asp:ValidationSummary runat="server" CssClass="text-danger" style="white-space: pre-line"/>
 
                     <%-- Tabs --%>
                     <div id="Tabs" role="tabpanel">
@@ -504,7 +507,10 @@
                                                     <asp:RadioButtonList runat="server" ID="Referral" RepeatDirection="Horizontal" RepeatLayout="Flow" AutoPostBack="true" OnSelectedIndexChanged="onChanged">
                                                         <asp:ListItem Value="Yes">Yes&nbsp;&nbsp;&nbsp;&nbsp;</asp:ListItem>
                                                         <asp:ListItem Value="No">No</asp:ListItem>
-                                                    </asp:RadioButtonList></td>
+                                                    </asp:RadioButtonList>
+                                                    <%--<asp:RequiredFieldValidator ID="rfvReferral" ControlToValidate="Referral"
+                                                        Display="Static" ErrorMessage="Selection required" runat="server" ForeColor="Red" />--%>
+                                                </td>
                                             </tr>
                                             <%-- Referral to be Paid Details --%>
                                             <asp:Panel runat="server" ID="Referral_Div" Style="margin-left: 30px" Visible="false">
@@ -612,10 +618,13 @@
                                                 <td>
                                                     <asp:Label runat="server">*New Home Construction Project: </asp:Label></td>
                                                 <td>
-                                                    <asp:RadioButtonList runat="server" ID="New_Home" RepeatDirection="Horizontal" RepeatLayout="Flow" AutoPostBack="true" OnSelectedIndexChanged="onChanged">
+                                                    <asp:RadioButtonList runat="server" ID="New_Home" Name="New_Home" RepeatDirection="Horizontal" RepeatLayout="Flow" AutoPostBack="true" OnSelectedIndexChanged="onChanged">
                                                         <asp:ListItem Value="Yes">Yes&nbsp;&nbsp;&nbsp;&nbsp;</asp:ListItem>
                                                         <asp:ListItem Value="No">No</asp:ListItem>
-                                                    </asp:RadioButtonList></td>
+                                                    </asp:RadioButtonList>
+                                                    <asp:RequiredFieldValidator ID="rfvNewHome" ControlToValidate="New_Home"
+                                                        Display="Static" ErrorMessage="Selection required" runat="server" ForeColor="Red" />
+                                                </td>
                                             </tr>
 
 
@@ -650,10 +659,12 @@
                                                     <asp:RadioButtonList runat="server" ID="Builder_Referral" RepeatDirection="Horizontal" RepeatLayout="Flow" AutoPostBack="true" OnSelectedIndexChanged="onChanged">
                                                         <asp:ListItem Value="Yes">Yes&nbsp;&nbsp;&nbsp;&nbsp;</asp:ListItem>
                                                         <asp:ListItem Value="No">No</asp:ListItem>
-                                                    </asp:RadioButtonList></td>
+                                                    </asp:RadioButtonList>
+                                                    <asp:RequiredFieldValidator ID="rfvBuilderReferral" ControlToValidate="Builder_Referral"
+                                                        Display="Static" ErrorMessage="Selection required" runat="server" ForeColor="Red" />
+                                                </td>
 
                                             </tr>
-
 
                                             <%-- Builder Referral Fee Details --%>
                                             <asp:Panel runat="server" ID="Builder_Panel" Style="margin-left: 30px" Visible="false">
@@ -693,7 +704,10 @@
                                                     <asp:RadioButtonList runat="server" ID="Permission_Letter" RepeatDirection="Horizontal" RepeatLayout="Flow" AutoPostBack="true" OnSelectedIndexChanged="onChanged">
                                                         <asp:ListItem Value="Yes">Yes&nbsp;&nbsp;&nbsp;&nbsp;</asp:ListItem>
                                                         <asp:ListItem Value="No">No</asp:ListItem>
-                                                    </asp:RadioButtonList></td>
+                                                    </asp:RadioButtonList>
+                                                     <asp:RequiredFieldValidator ID="rfvAccessLetter" ControlToValidate="Permission_Letter"
+                                                        Display="Static" ErrorMessage="Selection required" runat="server" ForeColor="Red" />
+                                                </td>
                                                 <asp:Button runat="server" Text="Print Access Letter" BackColor="#03a9f4" ForeColor="#FFFFFF" ID="Letter_Button" Visible="false" OnClick="PrintAccess" />
                                             </tr>
 
@@ -706,7 +720,10 @@
                                                     <asp:RadioButtonList runat="server" ID="Homeowner_Furnish" RepeatDirection="Horizontal" RepeatLayout="Flow" AutoPostBack="true" OnSelectedIndexChanged="onChanged">
                                                         <asp:ListItem Value="Yes">Yes&nbsp;&nbsp;&nbsp;&nbsp;</asp:ListItem>
                                                         <asp:ListItem Value="No">No</asp:ListItem>
-                                                    </asp:RadioButtonList></td>
+                                                    </asp:RadioButtonList>
+                                                     <asp:RequiredFieldValidator ID="rfvHomeownerFurnish" ControlToValidate="Homeowner_Furnish"
+                                                        Display="Static" ErrorMessage="Selection required" runat="server" ForeColor="Red" />
+                                                </td>
                                             </tr>
 
 
@@ -735,7 +752,10 @@
                                                     <asp:RadioButtonList runat="server" ID="Existing_Fence" RepeatDirection="Horizontal" RepeatLayout="Flow" AutoPostBack="true" OnSelectedIndexChanged="onChanged">
                                                         <asp:ListItem Value="Yes">Yes&nbsp;&nbsp;&nbsp;&nbsp;</asp:ListItem>
                                                         <asp:ListItem Value="No">No</asp:ListItem>
-                                                    </asp:RadioButtonList></td>
+                                                    </asp:RadioButtonList>
+                                                    <asp:RequiredFieldValidator ID="rfvExistingFence" ControlToValidate="Existing_Fence"
+                                                        Display="Static" ErrorMessage="Selection required" runat="server" ForeColor="Red" />
+                                                </td>
                                             </tr>
 
 
@@ -748,8 +768,12 @@
                                                     <asp:RadioButtonList runat="server" ID="Septic_Tank" RepeatDirection="Horizontal" RepeatLayout="Flow" AutoPostBack="true" OnSelectedIndexChanged="onChanged">
                                                         <asp:ListItem Value="Yes">Yes&nbsp;&nbsp;&nbsp;&nbsp;</asp:ListItem>
                                                         <asp:ListItem Value="No">No</asp:ListItem>
-                                                    </asp:RadioButtonList></td>
+                                                    </asp:RadioButtonList>
+                                                    <asp:RequiredFieldValidator ID="rfvSepticTank" ControlToValidate="Septic_Tank"
+                                                        Display="Static" ErrorMessage="Selection required" runat="server" ForeColor="Red" />
+                                                </td>
                                             </tr>
+
                                             <%-- Existing Septic Tank  Details--%>
                                             <asp:Panel runat="server" ID="Septic_Panel" Style="margin-left: 30px" Visible="false">
                                                 <tr>
@@ -832,7 +856,7 @@
                                                 <asp:CheckBox runat="server" CssClass="centered" />
                                             </ItemTemplate>
                                         </asp:TemplateField>
-                                       
+
                                         <asp:BoundField ControlStyle-CssClass="form-control" DataField="ProjectID" HeaderText="Id (Dev Only)" ItemStyle-Width="12%">
                                             <ControlStyle CssClass="form-control" />
                                         </asp:BoundField>
@@ -861,9 +885,9 @@
                                 </asp:SqlDataSource>--%>
                                 <br />
                                 <p>
-                                    <asp:Button runat="server" ID="btnRecall" Text="Recall Bid Proposal" class="btn btn-primary"  OnClick="RecallBid" CausesValidation="False" />
-                                    <asp:Button runat="server" ID="btnDuplicate" Text="Duplicate Bid Proposal Version" class="btn btn-primary"  OnClick="DuplicateBid" CausesValidation="False" />
-                                    <asp:Button runat="server" ID="btnSaveMaster" Text="Save As Custom Master Bid" class="btn btn-primary"  OnClick="SaveMaster" CausesValidation="False" />
+                                    <asp:Button runat="server" ID="btnRecall" Text="Recall Bid Proposal" class="btn btn-primary" OnClick="RecallBid" CausesValidation="False" />
+                                    <asp:Button runat="server" ID="btnDuplicate" Text="Duplicate Bid Proposal Version" class="btn btn-primary" OnClick="DuplicateBid" CausesValidation="False" />
+                                    <asp:Button runat="server" ID="btnSaveMaster" Text="Save As Custom Master Bid" class="btn btn-primary" OnClick="SaveMaster" CausesValidation="False" />
                                 </p>
                                 <p>
                                 </p>

@@ -12,8 +12,9 @@ using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using WatersidePortal.Models; 
+using WatersidePortal.Models;
 using WatersidePortal.Base;
+using System.Web.ModelBinding;
 
 namespace WatersidePortal
 {
@@ -200,7 +201,7 @@ namespace WatersidePortal
                             //        //}
                             //    }
 
-                                DataTable myTable = new DataTable();
+                            DataTable myTable = new DataTable();
                             myTable.Load(comm.ExecuteReader());
 
                             GridView_Items.DataSource = myTable;
@@ -217,6 +218,13 @@ namespace WatersidePortal
                 RefreshFields();
             }
             SearchFiles();
+            
+            if (!requiredUserInformationComplete())
+            {
+                string msg = "PLEASE NOTE" + Environment.NewLine + "There are required fields missing for the current selected user." + Environment.NewLine + "Please do not perform any other work until the following selections are corrected: " + Environment.NewLine;
+                ModelState.AddModelError(string.Empty, msg);
+                setUserInformationModelErrors();
+            }
         }
 
 
@@ -1958,6 +1966,75 @@ namespace WatersidePortal
                 con.Close();
             }
 
+        }
+
+        protected bool requiredUserInformationComplete()
+        {
+            bool userInfoIncomplete = true;
+            if (New_Home.SelectedValue == "")
+            {
+                userInfoIncomplete = false;
+            }
+
+            if (this.Referral.SelectedValue == "")
+            {
+                userInfoIncomplete = false;
+            }
+
+            if (Permission_Letter.SelectedValue == "")
+            {
+                userInfoIncomplete = false;
+            }
+
+            if (Homeowner_Furnish.SelectedValue == "")
+            {
+                userInfoIncomplete = false;
+            }
+
+            if (Existing_Fence.SelectedValue == "")
+            {
+                userInfoIncomplete = false;
+            }
+
+            if (Septic_Tank.SelectedValue == "")
+            {
+                userInfoIncomplete = false;
+            }
+
+            return userInfoIncomplete;
+        }
+
+        protected void setUserInformationModelErrors()
+        {
+            if (New_Home.SelectedIndex == -1)
+            {
+                ModelState.AddModelError(string.Empty, " - New Home Construction Project");
+            }
+
+            if (this.Referral.SelectedIndex == -1)
+            {
+                ModelState.AddModelError(string.Empty, " - Referral Fee To Be Paid");
+            }
+
+            if (Permission_Letter.SelectedIndex == -1)
+            {
+                ModelState.AddModelError(string.Empty, " - Access Permission Letter Required");
+            }
+
+            if (Homeowner_Furnish.SelectedIndex == -1)
+            {
+                ModelState.AddModelError(string.Empty, " - Homeowner to Furnish Surveys");
+            }
+
+            if (Existing_Fence.SelectedIndex == -1)
+            {
+                ModelState.AddModelError(string.Empty, " - Existing Fence");
+            }
+
+            if (Septic_Tank.SelectedIndex == -1)
+            {
+                ModelState.AddModelError(string.Empty, " - Existing Setptic Tank");
+            }
         }
 
 

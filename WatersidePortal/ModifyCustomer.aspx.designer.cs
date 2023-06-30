@@ -699,6 +699,15 @@ namespace WatersidePortal
         protected global::System.Web.UI.WebControls.RadioButtonList New_Home;
 
         /// <summary>
+        /// rfvNewHome control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvNewHome;
+
+        /// <summary>
         /// Home_Div control.
         /// </summary>
         /// <remarks>
@@ -742,6 +751,15 @@ namespace WatersidePortal
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RadioButtonList Builder_Referral;
+
+        /// <summary>
+        /// rfvBuilderReferral control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvBuilderReferral;
 
         /// <summary>
         /// Builder_Panel control.
@@ -798,6 +816,15 @@ namespace WatersidePortal
         protected global::System.Web.UI.WebControls.RadioButtonList Permission_Letter;
 
         /// <summary>
+        /// rfvAccessLetter control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvAccessLetter;
+
+        /// <summary>
         /// Letter_Button control.
         /// </summary>
         /// <remarks>
@@ -814,6 +841,15 @@ namespace WatersidePortal
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RadioButtonList Homeowner_Furnish;
+
+        /// <summary>
+        /// rfvHomeownerFurnish control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvHomeownerFurnish;
 
         /// <summary>
         /// Survey_Panel control.
@@ -843,6 +879,15 @@ namespace WatersidePortal
         protected global::System.Web.UI.WebControls.RadioButtonList Existing_Fence;
 
         /// <summary>
+        /// rfvExistingFence control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvExistingFence;
+
+        /// <summary>
         /// Septic_Tank control.
         /// </summary>
         /// <remarks>
@@ -850,6 +895,15 @@ namespace WatersidePortal
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RadioButtonList Septic_Tank;
+
+        /// <summary>
+        /// rfvSepticTank control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvSepticTank;
 
         /// <summary>
         /// Septic_Panel control.
