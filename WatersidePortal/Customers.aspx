@@ -49,11 +49,10 @@
                     <ul class="nav nav-tabs">
                         <li id="CreateTab">
                             <a href="#Create" data-toggle="tab" onclick="tab('Create');">Create Customer
-                                    </a>
+</a>
                         </li>
                         <li id="ModifyTab">
-                            <a href="#Modify" data-toggle="tab" onclick="tab('Modify');">Manage Customer
-                                    </a>
+                            <a href="#Modify" data-toggle="tab" onclick="tab('Modify');">Manage Customer</a>
                         </li>
                     </ul>
 
@@ -154,65 +153,69 @@
 
 
                         <%-- Manage Customers Grid --%>
-                        <div class="tab-pane fade in" id="Modify">
-                            <h4>Find Customer</h4>
-                            <asp:TextBox runat="server" TextMode="Search" placeholder="Enter any detail" ID="search" Width="30%" />
-                            <p>
-                                <asp:GridView OnSelectedIndexChanged="CustomersGridView_SelectedIndexChanged" ID="GridView1" CssClass="Grid" runat="server" AutoGenerateColumns="False" CellPadding="4" DataSourceID="SqlDataSource1" ForeColor="#333333" GridLines="Both" DataKeyNames="CustomerID" Width="100%">
-                                    <AlternatingRowStyle BackColor="White" />
-                                    <Columns>
-                                        <asp:CommandField ShowSelectButton="True" ItemStyle-ForeColor="#428BCA" HeaderText="" />
-                                        <asp:BoundField DataField="LastName" HeaderText="LastName" SortExpression="LastName" />
-                                        <asp:BoundField DataField="FirstName" HeaderText="FirstName" SortExpression="FirstName" />
-                                        <asp:BoundField DataField="Address" HeaderText="Address" SortExpression="Address" />
-                                        <asp:BoundField DataField="City" HeaderText="City" SortExpression="City" />
-                                        <asp:BoundField DataField="State" HeaderText="State" SortExpression="State" />
-                                        <asp:BoundField DataField="Telephone" HeaderText="Telephone" SortExpression="Telephone" />
-                                        <asp:BoundField DataField="Alternate" HeaderText="Alternate Telephone" SortExpression="Alternate" />
-                                        <asp:BoundField DataField="Email" HeaderText="Email" SortExpression="Email" />
-                                        <asp:BoundField DataField="CustomerID" InsertVisible="False" ReadOnly="True" SortExpression="CustomerID" ControlStyle-CssClass="custId" ItemStyle-CssClass="custId" HeaderStyle-CssClass="custId" />
-                                    </Columns>
-                                    <EditRowStyle BackColor="#2461BF" />
-                                    <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
-                                    <HeaderStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
-                                    <PagerStyle BackColor="#2461BF" ForeColor="White" />
-                                    <RowStyle BackColor="#EFF3FB" />
-                                    <SelectedRowStyle BackColor="#D1DDF1" Font-Bold="True" ForeColor="#333333" />
-                                    <SortedAscendingCellStyle BackColor="#F5F7FB" />
-                                    <SortedAscendingHeaderStyle BackColor="#6D95E1" />
-                                    <SortedDescendingCellStyle BackColor="#E9EBEF" />
-                                    <SortedDescendingHeaderStyle BackColor="#4870BE" />
-                                </asp:GridView>
-                                <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:WatersidePortal_dbConnectionString %>" SelectCommand="SELECT [FirstName], [LastName], [CustomerID], [Address], [City], [State], [Telephone], [Alternate], [Email] FROM [Customers] Order By [LastName], [FirstName]" DeleteCommand="DELETE FROM [Customers] WHERE [CustomerID] = @CustomerID" InsertCommand="INSERT INTO [Customers] ([FirstName], [LastName], [Address], [City], [State], [Telephone], [Alternate], [Email]) VALUES (@FirstName, @LastName, @Address, @City, @State, @Telephone, @Alternate, @Email)" UpdateCommand="UPDATE [Customers] SET [FirstName] = @FirstName, [LastName] = @LastName, [Address] = @Address, [City] = @City, [State] = @State, [Telephone] = @Telephone, [Alternate] = @Alternate, [Email] = @Email WHERE [CustomerID] = @CustomerID">
-                                    <DeleteParameters>
-                                        <asp:Parameter Name="CustomerID" Type="Int32" />
-                                    </DeleteParameters>
-                                    <InsertParameters>
-                                        <asp:Parameter Name="FirstName" Type="String" />
-                                        <asp:Parameter Name="LastName" Type="String" />
-                                        <asp:Parameter Name="Address" Type="String" />
-                                        <asp:Parameter Name="City" Type="String" />
-                                        <asp:Parameter Name="State" Type="String" />
-                                        <asp:Parameter Name="Telephone" Type="String" />
-                                        <asp:Parameter Name="Alternate" Type="String" />
-                                        <asp:Parameter Name="Email" Type="String" />
-                                    </InsertParameters>
-                                    <UpdateParameters>
-                                        <asp:Parameter Name="FirstName" Type="String" />
-                                        <asp:Parameter Name="LastName" Type="String" />
-                                        <asp:Parameter Name="Address" Type="String" />
-                                        <asp:Parameter Name="City" Type="String" />
-                                        <asp:Parameter Name="State" Type="String" />
-                                        <asp:Parameter Name="Telephone" Type="String" />
-                                        <asp:Parameter Name="CustomerID" Type="Int32" />
-                                        <asp:Parameter Name="Alternate" Type="String" />
-                                        <asp:Parameter Name="Email" Type="String" />
-                                    </UpdateParameters>
-                                </asp:SqlDataSource>
-                            </p>
-                        </div>
-                    </div>
+                        <asp:Panel ID="panSearch" runat="server" DefaultButton="btnFilterGrid" Width="100%" Visible="false">
+                            <div class="tab-pane fade in" id="Modify">
+                                <h4>Find Customer</h4>
+                                <asp:TextBox runat="server" TextMode="Search" placeholder="Enter any customer detail" ID="search" Width="30%" onFocus="this.select()" />
+                                <asp:Button ID="btnFilterGrid" runat="server" Text="Filter Customers" class="btn btn-primary" CausesValidation="false" OnClick="FilterGrid"/>
 
+                                <p>
+                                    <asp:GridView OnSelectedIndexChanged="CustomersGridView_SelectedIndexChanged" ID="GridView1" CssClass="Grid" runat="server" AutoGenerateColumns="False" CellPadding="4" DataSourceID="SqlDataSource1" ForeColor="#333333" GridLines="Both" DataKeyNames="CustomerID" Width="100%">
+                                        <AlternatingRowStyle BackColor="White" />
+                                        <Columns>
+                                            <asp:CommandField ShowSelectButton="True" ItemStyle-ForeColor="#428BCA" HeaderText="" />
+                                            <asp:BoundField DataField="LastName" HeaderText="LastName" SortExpression="LastName" />
+                                            <asp:BoundField DataField="FirstName" HeaderText="FirstName" SortExpression="FirstName" />
+                                            <asp:BoundField DataField="Address" HeaderText="Address" SortExpression="Address" />
+                                            <asp:BoundField DataField="City" HeaderText="City" SortExpression="City" />
+                                            <asp:BoundField DataField="State" HeaderText="State" SortExpression="State" />
+                                            <asp:BoundField DataField="Telephone" HeaderText="Telephone" SortExpression="Telephone" />
+                                            <asp:BoundField DataField="Alternate" HeaderText="Alternate Telephone" SortExpression="Alternate" />
+                                            <asp:BoundField DataField="Email" HeaderText="Email" SortExpression="Email" />
+                                            <asp:BoundField DataField="CustomerID" InsertVisible="False" ReadOnly="True" SortExpression="CustomerID" ControlStyle-CssClass="custId" ItemStyle-CssClass="custId" HeaderStyle-CssClass="custId" />
+                                        </Columns>
+                                        <EditRowStyle BackColor="#2461BF" />
+                                        <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
+                                        <HeaderStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
+                                        <PagerStyle BackColor="#2461BF" ForeColor="White" />
+                                        <RowStyle BackColor="#EFF3FB" />
+                                        <SelectedRowStyle BackColor="#D1DDF1" Font-Bold="True" ForeColor="#333333" />
+                                        <SortedAscendingCellStyle BackColor="#F5F7FB" />
+                                        <SortedAscendingHeaderStyle BackColor="#6D95E1" />
+                                        <SortedDescendingCellStyle BackColor="#E9EBEF" />
+                                        <SortedDescendingHeaderStyle BackColor="#4870BE" />
+                                    </asp:GridView>
+                                    <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:WatersidePortal_dbConnectionString %>" SelectCommand="SELECT [FirstName], [LastName], [CustomerID], [Address], [City], [State], [Telephone], [Alternate], [Email] FROM [Customers] Order By [LastName], [FirstName]" DeleteCommand="DELETE FROM [Customers] WHERE [CustomerID] = @CustomerID" InsertCommand="INSERT INTO [Customers] ([FirstName], [LastName], [Address], [City], [State], [Telephone], [Alternate], [Email]) VALUES (@FirstName, @LastName, @Address, @City, @State, @Telephone, @Alternate, @Email)" UpdateCommand="UPDATE [Customers] SET [FirstName] = @FirstName, [LastName] = @LastName, [Address] = @Address, [City] = @City, [State] = @State, [Telephone] = @Telephone, [Alternate] = @Alternate, [Email] = @Email WHERE [CustomerID] = @CustomerID">
+                                        <DeleteParameters>
+                                            <asp:Parameter Name="CustomerID" Type="Int32" />
+                                        </DeleteParameters>
+                                        <InsertParameters>
+                                            <asp:Parameter Name="FirstName" Type="String" />
+                                            <asp:Parameter Name="LastName" Type="String" />
+                                            <asp:Parameter Name="Address" Type="String" />
+                                            <asp:Parameter Name="City" Type="String" />
+                                            <asp:Parameter Name="State" Type="String" />
+                                            <asp:Parameter Name="Telephone" Type="String" />
+                                            <asp:Parameter Name="Alternate" Type="String" />
+                                            <asp:Parameter Name="Email" Type="String" />
+                                        </InsertParameters>
+                                        <UpdateParameters>
+                                            <asp:Parameter Name="FirstName" Type="String" />
+                                            <asp:Parameter Name="LastName" Type="String" />
+                                            <asp:Parameter Name="Address" Type="String" />
+                                            <asp:Parameter Name="City" Type="String" />
+                                            <asp:Parameter Name="State" Type="String" />
+                                            <asp:Parameter Name="Telephone" Type="String" />
+                                            <asp:Parameter Name="CustomerID" Type="Int32" />
+                                            <asp:Parameter Name="Alternate" Type="String" />
+                                            <asp:Parameter Name="Email" Type="String" />
+                                        </UpdateParameters>
+                                    </asp:SqlDataSource>
+                                </p>
+                            </div>
+                        </asp:Panel>
+
+                    </div>
                 </div>
             </div>
         </section>

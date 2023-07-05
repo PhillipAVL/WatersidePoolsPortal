@@ -2,6 +2,8 @@
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
 using System.Web.UI.WebControls;
 using WatersidePortal.Base;
 using WatersidePortal.Models;
@@ -12,6 +14,18 @@ namespace WatersidePortal
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            // Get the page action and show appropriately.
+            string[] arr = HttpContext.Current.Request.Url.Query.Split('&');
+            string pageAction = string.Empty;
+            if (arr.Length > 0 && arr[0].Split('?').Length > 1)
+            {
+                pageAction = arr[0].Split('?')[1];
+            }
+            if (pageAction == "Modify")
+            {
+                panSearch.Visible = true;
+            }
+
             Session.Clear();
 
             GridView1.SelectedIndexChanged += CustomersGridView_SelectedIndexChanged;
@@ -50,6 +64,10 @@ namespace WatersidePortal
             }
         }
 
+        protected void FilterGrid(object sender, EventArgs e)
+        {
+            this.search.Focus();
+        }
 
         #region Page Events
 

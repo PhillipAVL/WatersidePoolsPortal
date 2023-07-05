@@ -15,6 +15,9 @@ using System.Web.UI.WebControls;
 using WatersidePortal.Models;
 using WatersidePortal.Base;
 using System.Web.ModelBinding;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
+using iText.Layout.Properties;
+using Microsoft.Ajax.Utilities;
 
 namespace WatersidePortal
 {
@@ -64,7 +67,8 @@ namespace WatersidePortal
                 }
             }
 
-            cmdString = "SELECT [MessageText], [Date], [EmpModifying] FROM [CustomerHistory] WHERE [CustomerId] = @ID";
+            // Get Customer History.
+            cmdString = "SELECT [MessageText], [Date], [EmpModifying] FROM [CustomerHistory] WHERE [CustomerId] = @ID ORDER BY [Date] ASC";
             List<Tuple<DateTime, string, string>> histories = new List<Tuple<DateTime, string, string>>();
             using (SqlConnection conn = new SqlConnection(connString))
             {
@@ -206,6 +210,18 @@ namespace WatersidePortal
 
                             GridView_Items.DataSource = myTable;
                             GridView_Items.DataBind();
+
+                            if (myTable.Rows.Count < 1)
+                            {
+                                btnRecall.Enabled = false;
+                                btnRecall.CssClass = "btn btn-primary";
+
+                                btnDuplicate.Enabled = false;
+                                btnDuplicate.CssClass = "btn btn-primary";
+
+                                btnSaveMaster.Enabled = false;
+                                btnSaveMaster.CssClass = "btn btn-primary";
+                            }
                         }
                         //}
                         catch (SqlException err)
@@ -218,13 +234,16 @@ namespace WatersidePortal
                 RefreshFields();
             }
             SearchFiles();
-            
-            if (!requiredUserInformationComplete())
-            {
-                string msg = "PLEASE NOTE" + Environment.NewLine + "There are required fields missing for the current selected user." + Environment.NewLine + "Please do not perform any other work until the following selections are corrected: " + Environment.NewLine;
-                ModelState.AddModelError(string.Empty, msg);
-                setUserInformationModelErrors();
-            }
+
+            divSuccess.Visible = false;
+            divFailure.Visible = false;
+
+            //if (!requiredUserInformationComplete())
+            //{
+            //    string msg = "PLEASE NOTE" + Environment.NewLine + "There are required fields missing for the current selected user." + Environment.NewLine + "Please do not perform any other work until the following selections are corrected: " + Environment.NewLine;
+            //    ModelState.AddModelError(string.Empty, msg);
+            //    setUserInformationModelErrors();
+            //}
         }
 
 
@@ -495,6 +514,8 @@ namespace WatersidePortal
             {
                 return;
             }
+
+            // Get the builder names for the ddl.
             string cmdString = "SELECT [FullName] FROM [Builders]";
             string connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
             using (SqlConnection conn = new SqlConnection(connString))
@@ -1266,6 +1287,11 @@ namespace WatersidePortal
             Response.Redirect("/CPriceBook?" + ID + "&Select");
         }
 
+        /// <summary>
+        /// Save the changes to user information.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void Save(object sender, EventArgs e)
         {
             string[] arr = HttpContext.Current.Request.Url.Query.Split('&');
@@ -1277,6 +1303,15 @@ namespace WatersidePortal
             else
             {
                 return;
+            }
+
+            // Validate input fields.
+            if (!validateUserInformationInput())
+            {
+                divFailureMessage.InnerText = "User Info is not complete!  Please make sure all Required fields have been filled.";
+                divFailure.Visible = true;
+                divFailure.Style.Add("background-color", "Red");
+                divFailure.Style.Add("color", "White"); return;
             }
 
             string connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
@@ -1324,14 +1359,20 @@ namespace WatersidePortal
                     comm.Parameters.AddWithValue("@EF", Existing_Fence.SelectedValue);
                     comm.Parameters.AddWithValue("@ES", Septic_Tank.SelectedValue);
                     comm.Parameters.AddWithValue("@SepticSurvey", Septic_Buttons.SelectedValue);
+
                     try
                     {
                         conn.Open();
                         System.Diagnostics.Debug.WriteLine(comm.ExecuteNonQuery());
+                        divSuccessMessage.InnerText = "User Info Successfully Updated!";
+                        divSuccess.Visible = true;
                     }
                     catch (SqlException ex)
                     {
                         System.Diagnostics.Debug.WriteLine(ex.Message);
+                        divFailureMessage.InnerText = "User Info Update Failed";
+                        divFailure.Visible = true;
+
                     }
                 }
             }
@@ -1909,6 +1950,216 @@ namespace WatersidePortal
 
         #region Page Methods
 
+        /// <summary>
+        /// Validate that all user required information is properly entered.
+        /// </summary>
+        /// <returns></returns>
+        protected bool validateUserInformationInput()
+        {
+            bool userInfoComplete = true;
+
+            // CUSTOMER FIELDS.
+            // Ensure entered user info is complete.
+            if (TextBox_FirstName.Text == string.Empty)
+            {
+                userInfoComplete = false;
+            }
+
+            // Customer Last Name.
+            if (TextBox_LastName.Text == string.Empty)
+            {
+                userInfoComplete = false;
+            }
+
+            // Customer Address.
+            if (TextBox_Address.Text == string.Empty)
+            {
+                userInfoComplete = false;
+            }
+
+            // Customer City.
+            if (TextBox_City.Text == string.Empty)
+            {
+                userInfoComplete = false;
+            }
+
+            // Customer State
+            if (DropDownListState.SelectedValue == string.Empty || DropDownListState.SelectedValue == "Select")
+            {
+                userInfoComplete = false;
+            }
+
+            // Customer Zip Code.
+            if (TextBox_Zip.Text == string.Empty)
+            {
+                userInfoComplete = false;
+            }
+
+            // Customer Primary Phone
+            if (TextBox_Telephone.Text == string.Empty)
+            {
+                userInfoComplete = false;
+            }
+
+            //  Customer Email Address.
+            if (TextBox_Email_Address.Text == string.Empty)
+            {
+                userInfoComplete = false;
+            }
+
+            // JOB SECTION
+            // Job Address.
+            if (TextBox_Job_Address.Text == string.Empty)
+            {
+                userInfoComplete = false;
+            }
+
+            // Job City.
+            if (TextBox_Job_City.Text == string.Empty)
+            {
+                userInfoComplete = false;
+            }
+
+            // Permitting City/County.
+            if (Permit.SelectedValue == string.Empty || Permit.SelectedValue == "Select")
+            {
+                userInfoComplete = false;
+            }
+
+            // Zip Code.
+            if (TextBox_Job_Zip.Text == string.Empty)
+            {
+                userInfoComplete = false;
+            }
+
+            // ARB / HOA / Subdiv.
+            if (arb.SelectedValue == string.Empty || arb.SelectedValue == "Select")
+            {
+                userInfoComplete = false;
+            }
+
+            // Minimum Access Space (Feet & Inches)
+            if (Min_Access_F.Text == string.Empty)
+            {
+                userInfoComplete = false;
+            }
+            if (Min_Access_I.Text == string.Empty)
+            {
+                userInfoComplete = false;
+            }
+
+            // Jobsite Distance From HQ (mins):
+            if (drop_distance.SelectedValue == string.Empty || drop_distance.SelectedValue == "Select")
+            {
+                userInfoComplete = false;
+            }
+
+            // Referral To Be Paid and sub associated fields.
+            if (Referral.Text == string.Empty)
+            {
+                userInfoComplete = false;
+            }
+            else if (Referral.Text == "Yes")
+            {
+                if (Referral_Amount.Text == string.Empty)
+                {
+                    userInfoComplete = false;
+                }
+
+                if (Referral_Full.Text == string.Empty)
+                {
+                    userInfoComplete = false;
+                }
+                if (Referral_Address.Text == string.Empty)
+                {
+                    userInfoComplete = false;
+                }
+                if (Referral_City.Text == string.Empty)
+                {
+                    userInfoComplete = false;
+                }
+                if (Referral_State.Text == string.Empty)
+                {
+                    userInfoComplete = false;
+                }
+                if (Referral_Zip.Text == string.Empty)
+                {
+                    userInfoComplete = false;
+                }
+            }
+
+            // New Home Construction Project.
+            if (New_Home_Builder.Text == string.Empty)
+            {
+                userInfoComplete = false;
+            }
+            else if (New_Home_Builder.Text == "Yes")
+            {
+                if (Other_New_Builder.Text == string.Empty)
+                {
+                    userInfoComplete = false;
+                }
+            }
+
+            // Builder Referral Fee.
+            if (Builder_Referral.Text == string.Empty)
+            {
+                userInfoComplete = false;
+            }
+            else if (Builder_Referral.Text == "Yes")
+            {
+                if (Builder_Names.SelectedValue == string.Empty || Builder_Names.SelectedValue == "Select")
+                {
+                    userInfoComplete = false;
+                }
+            }
+
+            // Access Permission Letter Required.
+            if (Permission_Letter.SelectedValue == string.Empty || Permission_Letter.SelectedValue == "Select")
+            {
+                userInfoComplete = false;
+            }
+
+            // Homeowner To Furnish Surveys.
+            if (Homeowner_Furnish.Text == string.Empty)
+            {
+                userInfoComplete = false;
+            }
+            else if (Builder_Referral.Text == "Yes")
+            {
+                if (Surveys_Selection.SelectedValue == string.Empty || Surveys_Selection.SelectedValue == "Select")
+                {
+                    userInfoComplete = false;
+                }
+            }
+
+            // Existing Fence
+            if (Existing_Fence.Text == string.Empty)
+            {
+                userInfoComplete = false;
+            }
+
+            // Existing Septic Tank.
+            if (Septic_Tank.Text == string.Empty)
+            {
+                userInfoComplete = false;
+            }
+
+            // Waterfill Type.
+            if (DropDownList2.SelectedValue == string.Empty || DropDownList2.SelectedValue == "Select")
+            {
+                userInfoComplete = false;
+            }
+
+            return userInfoComplete;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="date"></param>
+        /// <param name="emp"></param>
         protected void addMessage(string message, DateTime date, string emp)
         {
             System.Web.UI.HtmlControls.HtmlGenericControl newdivs = new System.Web.UI.HtmlControls.HtmlGenericControl("DIV");
@@ -1926,9 +2177,12 @@ namespace WatersidePortal
             customer_history.Controls.Add(newdivs);
         }
 
+        /// <summary>
+        /// Add a new Customer Historical note.
+        /// </summary>
+        /// <param name="message"></param>
         protected void AddToHistory(string message)
         {
-
             string[] arr = HttpContext.Current.Request.Url.Query.Split('&');
             string ID = "1";
             if (arr.Length > 0 && arr[0].Split('?').Length > 1)
@@ -1967,76 +2221,6 @@ namespace WatersidePortal
             }
 
         }
-
-        protected bool requiredUserInformationComplete()
-        {
-            bool userInfoIncomplete = true;
-            if (New_Home.SelectedValue == "")
-            {
-                userInfoIncomplete = false;
-            }
-
-            if (this.Referral.SelectedValue == "")
-            {
-                userInfoIncomplete = false;
-            }
-
-            if (Permission_Letter.SelectedValue == "")
-            {
-                userInfoIncomplete = false;
-            }
-
-            if (Homeowner_Furnish.SelectedValue == "")
-            {
-                userInfoIncomplete = false;
-            }
-
-            if (Existing_Fence.SelectedValue == "")
-            {
-                userInfoIncomplete = false;
-            }
-
-            if (Septic_Tank.SelectedValue == "")
-            {
-                userInfoIncomplete = false;
-            }
-
-            return userInfoIncomplete;
-        }
-
-        protected void setUserInformationModelErrors()
-        {
-            if (New_Home.SelectedIndex == -1)
-            {
-                ModelState.AddModelError(string.Empty, " - New Home Construction Project");
-            }
-
-            if (this.Referral.SelectedIndex == -1)
-            {
-                ModelState.AddModelError(string.Empty, " - Referral Fee To Be Paid");
-            }
-
-            if (Permission_Letter.SelectedIndex == -1)
-            {
-                ModelState.AddModelError(string.Empty, " - Access Permission Letter Required");
-            }
-
-            if (Homeowner_Furnish.SelectedIndex == -1)
-            {
-                ModelState.AddModelError(string.Empty, " - Homeowner to Furnish Surveys");
-            }
-
-            if (Existing_Fence.SelectedIndex == -1)
-            {
-                ModelState.AddModelError(string.Empty, " - Existing Fence");
-            }
-
-            if (Septic_Tank.SelectedIndex == -1)
-            {
-                ModelState.AddModelError(string.Empty, " - Existing Setptic Tank");
-            }
-        }
-
 
         #endregion
 

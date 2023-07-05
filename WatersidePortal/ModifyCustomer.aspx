@@ -48,6 +48,11 @@
         textarea {
             resize: none;
         }
+
+        button {
+            margin: 0 auto;
+            display: block;
+        }
     </style>
 </asp:Content>
 
@@ -75,19 +80,32 @@
         }
     </script>
 
+    <asp:ScriptManager ID="asmTextOnly" runat="server" />
+
     <section id="main-content">
         <section class="wrapper site-min-height">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <br />
                     <h4 class="title">Customer Management for
-                        <asp:Label runat="server" ID="CustomerName" Font-Size="Large" /></h4>
+                        <asp:Label runat="server" ID="CustomerName" Font-Size="Large" />
+                    </h4>
                 </div>
 
                 <div class="panel-body">
                     <asp:Label runat="server" ID="name" Font-Bold="true" Font-Size="Large"></asp:Label>
 
-                    <asp:ValidationSummary runat="server" CssClass="text-danger" style="white-space: pre-line"/>
+                    <%-- User update success message --%>
+                    <div id="divSuccess" class="panel panel-success" runat="server" visible="false">
+                        <div id="divSuccessMessage" class="panel-heading" runat="server"></div>
+                    </div>
+
+                    <%-- User update failure message --%>
+                    <div id="divFailure" class="panel panel-error" runat="server" visible="false">
+                        <div id="divFailureMessage" class="panel-heading" runat="server"></div>
+                    </div>
+
+                    <%--<asp:ValidationSummary runat="server" CssClass="text-danger" style="white-space: pre-line"/>--%>
 
                     <%-- Tabs --%>
                     <div id="Tabs" role="tabpanel">
@@ -154,9 +172,10 @@
                                                 <td>
                                                     <asp:TextBox ID="TextBox_FirstName" runat="server"></asp:TextBox>
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidatorFirst" ControlToValidate="TextBox_FirstName"
-                                                        Display="Static" ErrorMessage="First Name is required" runat="server" ForeColor="Red" /></td>
+                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" /></td>
+                                                <ajaxToolkit:FilteredTextBoxExtender ID="ftbeFirstName" runat="server"
+                                                    TargetControlID="TextBox_FirstName" ValidChars="AaBbCcDdEdFeGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz" />
                                             </tr>
-
 
                                             <%-- Last Name --%>
                                             <tr>
@@ -165,7 +184,9 @@
                                                 <td style="border: none;">
                                                     <asp:TextBox ID="TextBox_LastName" runat="server"></asp:TextBox>
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator3" ControlToValidate="TextBox_LastName"
-                                                        Display="Static" ErrorMessage="Last Name is required" runat="server" ForeColor="Red" /></td>
+                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" /></td>
+                                                <ajaxToolkit:FilteredTextBoxExtender ID="ftbeLastName" runat="server"
+                                                    TargetControlID="TextBox_LastName" ValidChars="AaBbCcDdEdFeGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz" />
                                             </tr>
 
                                             <%-- Address --%>
@@ -176,20 +197,20 @@
                                                 <td style="border: none;">
                                                     <asp:TextBox ID="TextBox_Address" runat="server"></asp:TextBox>
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidatorAddress" ControlToValidate="TextBox_Address"
-                                                        Display="Static" ErrorMessage="Address is required" runat="server" ForeColor="Red" />
+                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" />
                                                 </td>
                                             </tr>
 
                                             <%-- City --%>
                                             <tr>
                                                 <td>
-                                                    <asp:Label ID="label3" AssociatedControlID="TextBox_City" Text="*City:" runat="server" /></td>
-
+                                                    <asp:Label ID="label3" AssociatedControlID="TextBox_City" Text="*City:" runat="server" />
+                                                </td>
                                                 <td>
                                                     <asp:TextBox ID="TextBox_City" runat="server"></asp:TextBox>
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidatorCity" ControlToValidate="TextBox_City"
-                                                        Display="Static" ErrorMessage="City is required" runat="server" ForeColor="Red" /></td>
-
+                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" />
+                                                </td>
                                             </tr>
 
                                             <%-- State --%>
@@ -198,6 +219,7 @@
                                                     <asp:Label ID="label4" AssociatedControlID="DropDownListState" Text="*State:" runat="server" /></td>
                                                 <td>
                                                     <asp:DropDownList ID="DropDownListState" runat="server">
+                                                        <asp:ListItem Value="Select">Select</asp:ListItem>
                                                         <asp:ListItem Value="FL">Florida</asp:ListItem>
                                                         <asp:ListItem Value="AL">Alabama</asp:ListItem>
                                                         <asp:ListItem Value="AK">Alaska</asp:ListItem>
@@ -250,7 +272,6 @@
                                                         <asp:ListItem Value="WI">Wisconsin</asp:ListItem>
                                                         <asp:ListItem Value="WY">Wyoming</asp:ListItem>
                                                     </asp:DropDownList></td>
-
                                             </tr>
 
                                             <%-- Zip --%>
@@ -260,7 +281,7 @@
                                                 <td>
                                                     <asp:TextBox ID="TextBox_Zip" runat="server"></asp:TextBox>
                                                     <asp:RequiredFieldValidator runat="server" ID="rfvZip" ControlToValidate="TextBox_Zip"
-                                                        Display="Dynamic" ErrorMessage="Zip Code is required" ForeColor="Red" />
+                                                        Display="Dynamic" ErrorMessage="*Required" ForeColor="Red" />
                                                     <asp:RegularExpressionValidator ID="regexpcontactZip" runat="server" ControlToValidate="TextBox_Zip"
                                                         ValidationGroup="contactValidation" Display="Dynamic" ForeColor="Red" ErrorMessage="Please enter a Zip Code formatted as (XXXXX) or 10 Digit (XXXXX-XXXX)"
                                                         ValidationExpression="^\d{5}(?:[-\s]\d{4})?$">
@@ -274,7 +295,7 @@
                                                 <td>
                                                     <asp:TextBox ID="TextBox_Telephone" runat="server"></asp:TextBox>
                                                     <asp:RequiredFieldValidator runat="server" ID="rfvPhone" ControlToValidate="TextBox_Telephone"
-                                                        Display="Dynamic" ErrorMessage="Primarty Phone is required" ForeColor="Red" />
+                                                        Display="Dynamic" ErrorMessage="*Required" ForeColor="Red" />
                                                     <asp:RegularExpressionValidator ID="regexpvalPhone" runat="server" ControlToValidate="TextBox_Telephone"
                                                         ValidationGroup="contactValidation" Display="Dynamic" ForeColor="Red" ErrorMessage="Please enter a phone number formatted as (XXX-XXX-XXXX)"
                                                         ValidationExpression="^(1-)?\d{3}-\d{3}-\d{4}$">
@@ -300,7 +321,7 @@
                                                 <td>
                                                     <asp:TextBox ID="TextBox_Email_Address" runat="server"></asp:TextBox>
                                                     <asp:RequiredFieldValidator runat="server" ID="rfvEmail" ControlToValidate="TextBox_Email_Address"
-                                                        Display="Dynamic" ErrorMessage="Email Address is required" ForeColor="Red" />
+                                                        Display="Dynamic" ErrorMessage="*Required" ForeColor="Red" />
                                                     <asp:RegularExpressionValidator ID="RegularExpressionValidator2" runat="server" ControlToValidate="TextBox_Email_Address"
                                                         ValidationGroup="contactValidation" Display="Dynamic" ForeColor="Red" ErrorMessage="Please enter a valid email address formatted as (name@domain.com)"
                                                         ValidationExpression="^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$">
@@ -333,25 +354,25 @@
                                                 <td>
                                                     <asp:TextBox ID="TextBox_Job_Address" runat="server"></asp:TextBox>
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator1" ControlToValidate="TextBox_Job_Address"
-                                                        Display="Static" ErrorMessage="Address is required" runat="server" ForeColor="Red" /></td>
+                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" /></td>
                                             </tr>
 
                                             <%-- Job Site City --%>
                                             <tr>
                                                 <td>
-                                                    <asp:Label ID="label11" AssociatedControlID="TextBox_Job_City" Text="City:" runat="server" /></td>
+                                                    <asp:Label ID="label11" AssociatedControlID="TextBox_Job_City" Text="*City:" runat="server" /></td>
                                                 <td>
                                                     <asp:TextBox ID="TextBox_Job_City" runat="server"></asp:TextBox>
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator2" ControlToValidate="TextBox_Job_City"
-                                                        Display="Static" ErrorMessage="City is required" runat="server" ForeColor="Red" /></td>
+                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" /></td>
                                             </tr>
 
-                                            <%-- Job Site City/County --%>
+                                            <%-- Job Site Permitting City/County --%>
                                             <tr>
                                                 <td>
                                                     <asp:Label ID="label12" AssociatedControlID="DropDownListState" Text="*Permitting City/County:" runat="server" /></td>
                                                 <td>
-                                                    <asp:DropDownList runat="server" ID="Permit">
+                                                    <asp:DropDownList runat="server" ID="Permit" Width="170">
                                                         <asp:ListItem Value="Select">Select</asp:ListItem>
                                                         <asp:ListItem Value="Palm">Palm Coast</asp:ListItem>
                                                         <asp:ListItem Value="CityAugustine">City of St. Augustine</asp:ListItem>
@@ -362,7 +383,11 @@
                                                         <asp:ListItem Value="John">St. Johns County</asp:ListItem>
                                                         <asp:ListItem Value="Volusia">Volusia County</asp:ListItem>
                                                         <asp:ListItem Value="Putnam">Punam</asp:ListItem>
-                                                    </asp:DropDownList></td>
+                                                    </asp:DropDownList>
+                                                    <asp:RequiredFieldValidator InitialValue="Select" ID="RequiredFieldValidator4" Display="Dynamic"
+                                                        runat="server" ControlToValidate="Permit" ForeColor="Red"
+                                                        Text="*Required" ErrorMessage="ErrorMessage"></asp:RequiredFieldValidator>
+                                                </td>
                                             </tr>
 
                                             <%-- Job Site Zip Code --%>
@@ -372,7 +397,7 @@
                                                 <td>
                                                     <asp:TextBox ID="TextBox_Job_Zip" runat="server"></asp:TextBox>
                                                     <asp:RequiredFieldValidator runat="server" ID="rfvZipCode" ControlToValidate="TextBox_Job_Zip"
-                                                        Display="Dynamic" ErrorMessage="Zip Code is required" ForeColor="Red" />
+                                                        Display="Dynamic" ErrorMessage="*Required" ForeColor="Red" />
                                                     <asp:RegularExpressionValidator ID="regexpcontactZipCode" runat="server" ControlToValidate="TextBox_Job_Zip"
                                                         ValidationGroup="contactValidation" Display="Dynamic" ForeColor="Red" ErrorMessage="Please enter a Zip Code formatted as (XXXXX) or 10 Digit (XXXXX-XXXX)"
                                                         ValidationExpression="^\d{5}(?:[-\s]\d{4})?$">
@@ -384,7 +409,7 @@
                                                 <td>
                                                     <asp:Label ID="label14" AssociatedControlID="arb" Text="*ARB / HOA / Subdiv:" runat="server" /></td>
                                                 <td>
-                                                    <asp:DropDownList runat="server" ID="arb">
+                                                    <asp:DropDownList runat="server" ID="arb" Width="170">
                                                         <asp:ListItem Value="Select">Select</asp:ListItem>
                                                         <asp:ListItem Value="Grand">Grand Haven</asp:ListItem>
                                                         <asp:ListItem Value="PalmCoast">Palm Coast Plantation</asp:ListItem>
@@ -398,7 +423,11 @@
                                                         <asp:ListItem Value="Island">Island Estates</asp:ListItem>
                                                         <asp:ListItem Value="Tuscana">Tuscana</asp:ListItem>
                                                         <asp:ListItem Value="Other">Other</asp:ListItem>
-                                                    </asp:DropDownList></td>
+                                                    </asp:DropDownList>
+                                                    <asp:RequiredFieldValidator InitialValue="Select" ID="Req_ID" Display="Dynamic"
+                                                        runat="server" ControlToValidate="arb" ForeColor="Red"
+                                                        Text="*Required" ErrorMessage="ErrorMessage"></asp:RequiredFieldValidator>
+                                                </td>
                                             </tr>
 
                                             <%-- Job Site Lot Number --%>
@@ -406,7 +435,8 @@
                                                 <td>
                                                     <asp:Label ID="label15" AssociatedControlID="TextBox_Lot" Text="Lot Number:" runat="server" /></td>
                                                 <td>
-                                                    <asp:TextBox ID="TextBox_Lot" runat="server"></asp:TextBox></td>
+                                                    <asp:TextBox ID="TextBox_Lot" runat="server"></asp:TextBox>
+                                                </td>
                                             </tr>
 
                                             <%-- Job Site Block --%>
@@ -478,10 +508,10 @@
                                                     in.
                                                 <br />
                                                     <asp:RequiredFieldValidator ID="rfvMinAccessFeet" ControlToValidate="Min_Access_F"
-                                                        Display="Static" ErrorMessage="Feet are required" runat="server" ForeColor="Red" />
+                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" />
                                                     <br />
                                                     <asp:RequiredFieldValidator ID="rfvMinAccessInches" ControlToValidate="Min_Access_I"
-                                                        Display="Static" ErrorMessage="Inches are required" runat="server" ForeColor="Red" />
+                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" />
                                                 </td>
                                             </tr>
 
@@ -508,8 +538,8 @@
                                                         <asp:ListItem Value="Yes">Yes&nbsp;&nbsp;&nbsp;&nbsp;</asp:ListItem>
                                                         <asp:ListItem Value="No">No</asp:ListItem>
                                                     </asp:RadioButtonList>
-                                                    <%--<asp:RequiredFieldValidator ID="rfvReferral" ControlToValidate="Referral"
-                                                        Display="Static" ErrorMessage="Selection required" runat="server" ForeColor="Red" />--%>
+                                                    <asp:RequiredFieldValidator ID="rfvReferral" ControlToValidate="Referral"
+                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" />
                                                 </td>
                                             </tr>
                                             <%-- Referral to be Paid Details --%>
@@ -518,30 +548,40 @@
                                                     <td>
                                                         <asp:Label runat="server">*Amount: </asp:Label></td>
                                                     <td>
-                                                        <asp:TextBox ID="Referral_Amount" TextMode="Number" runat="server"></asp:TextBox></td>
+                                                        <asp:TextBox ID="Referral_Amount" TextMode="Number" runat="server"></asp:TextBox>
+                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator7" ControlToValidate="Referral_Amount"
+                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" />
+                                                    </td>
                                                 </tr>
 
                                                 <tr>
                                                     <td>
                                                         <asp:Label runat="server">*Full Name: </asp:Label></td>
                                                     <td>
-                                                        <asp:TextBox ID="Referral_Full" runat="server"></asp:TextBox></td>
+                                                        <asp:TextBox ID="Referral_Full" runat="server"></asp:TextBox>
+                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator6" ControlToValidate="Referral_Full"
+                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" />
+                                                    </td>
                                                 </tr>
 
                                                 <tr>
                                                     <td>
                                                         <asp:Label runat="server">Address: </asp:Label></td>
-
                                                     <td>
-                                                        <asp:TextBox ID="Referral_Address" runat="server"></asp:TextBox></td>
+                                                        <asp:TextBox ID="Referral_Address" runat="server"></asp:TextBox>
+                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator8" ControlToValidate="Referral_Address"
+                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" />
+                                                    </td>
                                                 </tr>
 
                                                 <tr>
                                                     <td>
                                                         <asp:Label runat="server">City: </asp:Label></td>
-
                                                     <td>
-                                                        <asp:TextBox ID="Referral_City" runat="server"></asp:TextBox></td>
+                                                        <asp:TextBox ID="Referral_City" runat="server"></asp:TextBox>
+                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator9" ControlToValidate="Referral_City"
+                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" />
+                                                    </td>
                                                 </tr>
 
                                                 <tr>
@@ -549,6 +589,7 @@
                                                         <asp:Label runat="server">State: </asp:Label></td>
                                                     <td>
                                                         <asp:DropDownList ID="Referral_State" runat="server">
+                                                            <asp:ListItem Value="Select">Select</asp:ListItem>
                                                             <asp:ListItem Value="FL">Florida</asp:ListItem>
                                                             <asp:ListItem Value="AL">Alabama</asp:ListItem>
                                                             <asp:ListItem Value="AK">Alaska</asp:ListItem>
@@ -601,6 +642,9 @@
                                                             <asp:ListItem Value="WI">Wisconsin</asp:ListItem>
                                                             <asp:ListItem Value="WY">Wyoming</asp:ListItem>
                                                         </asp:DropDownList>
+                                                        <asp:RequiredFieldValidator InitialValue="Select" ID="RequiredFieldValidator5" Display="Dynamic"
+                                                            runat="server" ControlToValidate="Referral_State" ForeColor="Red"
+                                                            Text="*Required" ErrorMessage="ErrorMessage"></asp:RequiredFieldValidator>
                                                     </td>
                                                 </tr>
 
@@ -608,7 +652,10 @@
                                                     <td>
                                                         <asp:Label runat="server">Zip Code: </asp:Label></td>
                                                     <td>
-                                                        <asp:TextBox ID="Referral_Zip" runat="server"></asp:TextBox></td>
+                                                        <asp:TextBox ID="Referral_Zip" runat="server"></asp:TextBox>
+                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator10" ControlToValidate="Referral_Zip"
+                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" />
+                                                    </td>
                                                 </tr>
                                             </asp:Panel>
 
@@ -623,7 +670,7 @@
                                                         <asp:ListItem Value="No">No</asp:ListItem>
                                                     </asp:RadioButtonList>
                                                     <asp:RequiredFieldValidator ID="rfvNewHome" ControlToValidate="New_Home"
-                                                        Display="Static" ErrorMessage="Selection required" runat="server" ForeColor="Red" />
+                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" />
                                                 </td>
                                             </tr>
 
@@ -639,7 +686,7 @@
                                                             <asp:ListItem Value="Other">Other</asp:ListItem>
                                                         </asp:DropDownList></td>
                                                 </tr>
-
+                                                <%-- Builder Name--%>
                                                 <asp:Panel runat="server" ID="Other_New_Panel" Visible="false">
                                                     <tr>
                                                         <td>
@@ -654,31 +701,32 @@
                                             <tr>
                                                 <td>
                                                     <asp:Label runat="server">*Builder Referral Fee: </asp:Label></td>
-
                                                 <td>
                                                     <asp:RadioButtonList runat="server" ID="Builder_Referral" RepeatDirection="Horizontal" RepeatLayout="Flow" AutoPostBack="true" OnSelectedIndexChanged="onChanged">
                                                         <asp:ListItem Value="Yes">Yes&nbsp;&nbsp;&nbsp;&nbsp;</asp:ListItem>
                                                         <asp:ListItem Value="No">No</asp:ListItem>
                                                     </asp:RadioButtonList>
                                                     <asp:RequiredFieldValidator ID="rfvBuilderReferral" ControlToValidate="Builder_Referral"
-                                                        Display="Static" ErrorMessage="Selection required" runat="server" ForeColor="Red" />
+                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" />
                                                 </td>
 
                                             </tr>
-
                                             <%-- Builder Referral Fee Details --%>
                                             <asp:Panel runat="server" ID="Builder_Panel" Style="margin-left: 30px" Visible="false">
                                                 <tr>
                                                     <td>
                                                         <asp:Label runat="server">Builder Name: </asp:Label></td>
-
                                                     <td>
                                                         <asp:DropDownList runat="server" ID="Builder_Names" OnSelectedIndexChanged="onChanged" AutoPostBack="true">
                                                             <asp:ListItem Value="Select">Select</asp:ListItem>
                                                             <asp:ListItem Value="Other">Other</asp:ListItem>
-                                                        </asp:DropDownList></td>
+                                                        </asp:DropDownList>
+                                                        <asp:RequiredFieldValidator InitialValue="Select" ID="RequiredFieldValidator11" Display="Dynamic"
+                                                            runat="server" ControlToValidate="Builder_Names" ForeColor="Red"
+                                                            Text="*Required" ErrorMessage="ErrorMessage"></asp:RequiredFieldValidator>
+                                                    </td>
                                                 </tr>
-
+                                                <%--Not sure what this is--%>
                                                 <asp:Panel runat="server" ID="Other_Builder_Panel" Visible="false">
                                                     <td>
                                                         <asp:Label runat="server">Builder Names: </asp:Label></td>
@@ -686,12 +734,15 @@
                                                         <asp:TextBox runat="server" ID="Other_Builder" />
                                                     </tr>
                                                 </asp:Panel>
-
+                                                <%-- Fee Amount --%>
                                                 <tr>
                                                     <td>
                                                         <asp:Label runat="server">Fee Amount: </asp:Label></td>
                                                     <td>
-                                                        <asp:TextBox runat="server" TextMode="Number" ID="Builder_Amount"></asp:TextBox></td>
+                                                        <asp:TextBox runat="server" TextMode="Number" ID="Builder_Amount"></asp:TextBox>
+                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator12" ControlToValidate="Builder_Amount"
+                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" />
+                                                    </td>
                                                 </tr>
                                             </asp:Panel>
 
@@ -705,8 +756,8 @@
                                                         <asp:ListItem Value="Yes">Yes&nbsp;&nbsp;&nbsp;&nbsp;</asp:ListItem>
                                                         <asp:ListItem Value="No">No</asp:ListItem>
                                                     </asp:RadioButtonList>
-                                                     <asp:RequiredFieldValidator ID="rfvAccessLetter" ControlToValidate="Permission_Letter"
-                                                        Display="Static" ErrorMessage="Selection required" runat="server" ForeColor="Red" />
+                                                    <asp:RequiredFieldValidator ID="rfvAccessLetter" ControlToValidate="Permission_Letter"
+                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" />
                                                 </td>
                                                 <asp:Button runat="server" Text="Print Access Letter" BackColor="#03a9f4" ForeColor="#FFFFFF" ID="Letter_Button" Visible="false" OnClick="PrintAccess" />
                                             </tr>
@@ -721,12 +772,10 @@
                                                         <asp:ListItem Value="Yes">Yes&nbsp;&nbsp;&nbsp;&nbsp;</asp:ListItem>
                                                         <asp:ListItem Value="No">No</asp:ListItem>
                                                     </asp:RadioButtonList>
-                                                     <asp:RequiredFieldValidator ID="rfvHomeownerFurnish" ControlToValidate="Homeowner_Furnish"
-                                                        Display="Static" ErrorMessage="Selection required" runat="server" ForeColor="Red" />
+                                                    <asp:RequiredFieldValidator ID="rfvHomeownerFurnish" ControlToValidate="Homeowner_Furnish"
+                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" />
                                                 </td>
                                             </tr>
-
-
                                             <%-- Homeowner To Furnish Surveys Details--%>
                                             <asp:Panel runat="server" ID="Survey_Panel" Style="margin-left: 30px" Visible="false">
                                                 <tr>
@@ -738,7 +787,11 @@
                                                             <asp:ListItem Value="Initial">Initial</asp:ListItem>
                                                             <asp:ListItem Value="Final">Final</asp:ListItem>
                                                             <asp:ListItem Value="Both">Both</asp:ListItem>
-                                                        </asp:DropDownList></td>
+                                                        </asp:DropDownList>
+                                                         <asp:RequiredFieldValidator InitialValue="Select" ID="RequiredFieldValidator13" Display="Dynamic"
+                                                            runat="server" ControlToValidate="Surveys_Selection" ForeColor="Red"
+                                                            Text="*Required" ErrorMessage="ErrorMessage"></asp:RequiredFieldValidator>
+                                                    </td>
                                                 </tr>
                                             </asp:Panel>
 
@@ -754,7 +807,7 @@
                                                         <asp:ListItem Value="No">No</asp:ListItem>
                                                     </asp:RadioButtonList>
                                                     <asp:RequiredFieldValidator ID="rfvExistingFence" ControlToValidate="Existing_Fence"
-                                                        Display="Static" ErrorMessage="Selection required" runat="server" ForeColor="Red" />
+                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" />
                                                 </td>
                                             </tr>
 
@@ -770,7 +823,7 @@
                                                         <asp:ListItem Value="No">No</asp:ListItem>
                                                     </asp:RadioButtonList>
                                                     <asp:RequiredFieldValidator ID="rfvSepticTank" ControlToValidate="Septic_Tank"
-                                                        Display="Static" ErrorMessage="Selection required" runat="server" ForeColor="Red" />
+                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" />
                                                 </td>
                                             </tr>
 
@@ -779,12 +832,14 @@
                                                 <tr>
                                                     <td>
                                                         <asp:Label runat="server">Is The Septic On The Survey?: </asp:Label></td>
-
                                                     <td>
                                                         <asp:RadioButtonList runat="server" ID="Septic_Buttons" RepeatDirection="Horizontal" RepeatLayout="Flow" AutoPostBack="true" OnSelectedIndexChanged="onChanged">
                                                             <asp:ListItem Value="Yes">Yes&nbsp;&nbsp;&nbsp;&nbsp;</asp:ListItem>
                                                             <asp:ListItem Value="No">No</asp:ListItem>
-                                                        </asp:RadioButtonList></td>
+                                                        </asp:RadioButtonList>
+                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator14" ControlToValidate="Septic_Buttons"
+                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" />
+                                                    </td>
                                                 </tr>
                                             </asp:Panel>
 
@@ -800,14 +855,17 @@
                                                     </asp:DropDownList></td>
                                             </tr>
 
+                                            <tr>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                            </tr>
 
                                             <%-- Form Buttons --%>
                                             <tr>
-                                                <td>
-                                                    <%--<asp:Button ID="Button_CreateCustomer" runat="server" Text="Discard Changes" BackColor="#f44336" ForeColor="#FFFFFF" OnClick="Discard" />--%>
-                                                    <asp:Button ID="Button1" runat="server" Text="Save Changes" BackColor="#03a9f4" ForeColor="#FFFFFF" OnClick="Save" />
-                                                </td>
                                                 <td></td>
+                                                <td>
+                                                    <asp:Button ID="Button1" runat="server" Text="Save Changes" class="btn btn-primary" OnClick="Save" />
+                                                </td>
                                             </tr>
 
                                         </tbody>
@@ -924,79 +982,79 @@
                                 </div>
                                 <div class="panel-body" style="border: 1px solid #000; border-radius: 0px 0px 0px 5px;">
                                     <p>
-                                        <asp:Label Font-Bold="True" runat="server" ID="label_signed" ForeColor="Red">Signed Design</asp:Label>
+                                        <asp:Label Font-Bold="True" runat="server" ID="label_signed" ForeColor="Red">&nbsp;Signed Design</asp:Label>
                                         <asp:Image ID="warning_signed" runat="server" ImageUrl="../Content/Images/warning.png" Width="23px" CssClass="hidden-phone" Visible="False" />
                                     </p>
                                     <p>
-                                        <asp:Label Font-Bold="True" runat="server" ID="label_contract" ForeColor="Red">Signed Contract</asp:Label>
+                                        <asp:Label Font-Bold="True" runat="server" ID="label_contract" ForeColor="Red">&nbsp;Signed Contract</asp:Label>
                                         <asp:Image ID="warning_contract" runat="server" ImageUrl="../Content/Images/warning.png" Width="23px" CssClass="hidden-phone" Visible="False" />
                                     </p>
                                     <p>
-                                        <asp:Label Font-Bold="True" runat="server" ID="label_explanation" ForeColor="Red">Signed Customer Explanation</asp:Label>
+                                        <asp:Label Font-Bold="True" runat="server" ID="label_explanation" ForeColor="Red">&nbsp;Signed Customer Explanation</asp:Label>
                                         <asp:Image ID="warning_explanation" runat="server" ImageUrl="../Content/Images/warning.png" Width="23px" CssClass="hidden-phone" Visible="False" />
                                     </p>
                                     <p>
-                                        <asp:Label Font-Bold="True" runat="server" ID="label_sub" ForeColor="Red">Sub Copy Design</asp:Label>
+                                        <asp:Label Font-Bold="True" runat="server" ID="label_sub" ForeColor="Red">&nbsp;Sub Copy Design</asp:Label>
                                         <asp:Image ID="warning_sub" runat="server" ImageUrl="../Content/Images/warning.png" Width="23px" CssClass="hidden-phone" Visible="False" />
                                     </p>
                                     <p>
-                                        <asp:Label Font-Bold="True" runat="server" ID="label_survey" ForeColor="Red">Survey Without Pool</asp:Label>
+                                        <asp:Label Font-Bold="True" runat="server" ID="label_survey" ForeColor="Red">&nbsp;Survey Without Pool</asp:Label>
                                         <asp:Image ID="warning_survey" runat="server" ImageUrl="../Content/Images/warning.png" Width="23px" CssClass="hidden-phone" Visible="False" />
                                     </p>
                                     <p>
-                                        <asp:Label Font-Bold="True" runat="server" ID="label_mosaic" ForeColor="#9e9e9e" Visible="false">Mosaic Tile Disclaimer</asp:Label>
+                                        <asp:Label Font-Bold="True" runat="server" ID="label_mosaic" ForeColor="#9e9e9e" Visible="false">&nbsp;Mosaic Tile Disclaimer</asp:Label>
                                         <asp:Image ID="warning_mosaic" runat="server" ImageUrl="../Content/Images/warning.png" Width="23px" CssClass="hidden-phone" Visible="False" />
                                     </p>
                                     <p>
-                                        <asp:Label Font-Bold="True" runat="server" ID="label_contingency" ForeColor="#9e9e9e" Visible="false">Contingency</asp:Label>
+                                        <asp:Label Font-Bold="True" runat="server" ID="label_contingency" ForeColor="#9e9e9e" Visible="false">&nbsp;Contingency</asp:Label>
                                         <asp:Image ID="warning_contingency" runat="server" ImageUrl="../Content/Images/warning.png" Width="23px" CssClass="hidden-phone" Visible="False" />
                                     </p>
                                 </div>
                                 <div class="panel-body" style="border: 1px solid #000;">
                                     <p>
-                                        <asp:Label Font-Bold="True" runat="server" ID="label_project" ForeColor="Red">Project / Commission Breakdown</asp:Label>
+                                        <asp:Label Font-Bold="True" runat="server" ID="label_project" ForeColor="Red">&nbsp;Project / Commission Breakdown</asp:Label>
                                         <asp:Image ID="warning_project" runat="server" ImageUrl="../Content/Images/warning.png" Width="23px" CssClass="hidden-phone" Visible="False" />
                                     </p>
                                     <p>
-                                        <asp:Label Font-Bold="True" runat="server" ID="label_addendumcomm" ForeColor="#9e9e9e" Visible="false">Addendum Commissions</asp:Label>
+                                        <asp:Label Font-Bold="True" runat="server" ID="label_addendumcomm" ForeColor="#9e9e9e" Visible="false">&nbsp;Addendum Commissions</asp:Label>
                                         <asp:Image ID="warning_addendumcomm" runat="server" ImageUrl="../Content/Images/warning.png" Width="23px" CssClass="hidden-phone" Visible="False" />
                                     </p>
                                     <p>
-                                        <asp:Label Font-Bold="True" runat="server" ID="label_tiless" ForeColor="#9e9e9e" Visible="false">Tile Selection Sheet</asp:Label>
+                                        <asp:Label Font-Bold="True" runat="server" ID="label_tiless" ForeColor="#9e9e9e" Visible="false">&nbsp;Tile Selection Sheet</asp:Label>
                                         <asp:Image ID="warning_titless" runat="server" ImageUrl="../Content/Images/warning.png" Width="23px" CssClass="hidden-phone" Visible="False" />
                                     </p>
                                 </div>
                                 <div class="panel-body" style="border: 1px solid #000;">
                                     <p>
-                                        <asp:Label Font-Bold="True" runat="server" ID="label_tss" ForeColor="Red">Tile Selection Sheet</asp:Label>
+                                        <asp:Label Font-Bold="True" runat="server" ID="label_tss" ForeColor="Red">&nbsp;Tile Selection Sheet</asp:Label>
                                         <asp:Image ID="warning_tss" runat="server" ImageUrl="../Content/Images/warning.png" Width="23px" CssClass="hidden-phone" Visible="False" />
                                     </p>
                                     <p>
-                                        <asp:Label Font-Bold="True" runat="server" ID="label_access" ForeColor="Red">Access Permission Letter</asp:Label>
+                                        <asp:Label Font-Bold="True" runat="server" ID="label_access" ForeColor="Red">&nbsp;Access Permission Letter</asp:Label>
                                         <asp:Image ID="warning_access" runat="server" ImageUrl="../Content/Images/warning.png" Width="23px" CssClass="hidden-phone" Visible="False" />
                                     </p>
                                     <p>
-                                        <asp:Label Font-Bold="True" runat="server" ID="label_surveypool" ForeColor="Red">Survey With Pool</asp:Label>
+                                        <asp:Label Font-Bold="True" runat="server" ID="label_surveypool" ForeColor="Red">&nbsp;Survey With Pool</asp:Label>
                                         <asp:Image ID="warning_surveypool" runat="server" ImageUrl="../Content/Images/warning.png" Width="23px" CssClass="hidden-phone" Visible="False" />
                                     </p>
                                     <p>
-                                        <asp:Label Font-Bold="True" runat="server" ID="label_tdh" ForeColor="Red">Total Dynamic Head</asp:Label>
+                                        <asp:Label Font-Bold="True" runat="server" ID="label_tdh" ForeColor="Red">&nbsp;Total Dynamic Head</asp:Label>
                                         <asp:Image ID="warning_tdh" runat="server" ImageUrl="../Content/Images/warning.png" Width="23px" CssClass="hidden-phone" Visible="False" />
                                     </p>
                                     <p>
-                                        <asp:Label Font-Bold="True" runat="server" ID="label_warranty" ForeColor="Red">Warranty Deed</asp:Label>
+                                        <asp:Label Font-Bold="True" runat="server" ID="label_warranty" ForeColor="Red">&nbsp;Warranty Deed</asp:Label>
                                         <asp:Image ID="warning_warranty" runat="server" ImageUrl="../Content/Images/warning.png" Width="23px" CssClass="hidden-phone" Visible="False" />
                                     </p>
                                     <p>
-                                        <asp:Label Font-Bold="True" runat="server" ID="label_easement" ForeColor="#9e9e9e" Visible="false">Easement Encroachment Form</asp:Label>
+                                        <asp:Label Font-Bold="True" runat="server" ID="label_easement" ForeColor="#9e9e9e" Visible="false">&nbsp;Easement Encroachment Form</asp:Label>
                                         <asp:Image ID="warning_easement" runat="server" ImageUrl="../Content/Images/warning.png" Width="23px" CssClass="hidden-phone" Visible="False" />
                                     </p>
                                     <p>
-                                        <asp:Label Font-Bold="True" runat="server" ID="label_contingency_release" ForeColor="#9e9e9e" Visible="false">Contingency Release Letter</asp:Label>
+                                        <asp:Label Font-Bold="True" runat="server" ID="label_contingency_release" ForeColor="#9e9e9e" Visible="false">&nbsp;Contingency Release Letter</asp:Label>
                                         <asp:Image ID="warning_contingency_release" runat="server" ImageUrl="../Content/Images/warning.png" Width="23px" CssClass="hidden-phone" Visible="False" />
                                     </p>
                                     <p>
-                                        <asp:Label Font-Bold="True" runat="server" ID="label_arb" ForeColor="#9e9e9e" Visible="false">ARB Approval Letter</asp:Label>
+                                        <asp:Label Font-Bold="True" runat="server" ID="label_arb" ForeColor="#9e9e9e" Visible="false">&nbsp;ARB Approval Letter</asp:Label>
                                         <asp:Image ID="warning_arb" runat="server" ImageUrl="../Content/Images/warning.png" Width="23px" CssClass="hidden-phone" Visible="False" />
                                     </p>
                                 </div>
@@ -1359,16 +1417,33 @@
                         <%-- Tab: Customer History --%>
                         <div class="tab-pane fade in" id="History">
                             <div style="display: flex; flex-direction: row;">
-                                Add a Note:
-                               
-                                <asp:TextBox runat="server" TextMode="MultiLine" ID="historyNote" Height="70px" Width="85%"></asp:TextBox>
-                                <div style="margin: 0 auto; padding: 0; height: 70px; align-items: center;">
-                                    <asp:Button runat="server" ID="history_button" Text="Add Note" BackColor="#03a9f4" ForeColor="White" Height="40px" OnClick="addNote" />
-                                </div>
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <asp:Label runat="server" ID="Label20" Text="Add Note" Font-Size="Large" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <asp:TextBox runat="server" TextMode="MultiLine" ID="historyNote" Height="70px" Width="1200px"></asp:TextBox>
+                                        </td>
+                                        <td>&nbsp;&nbsp;</td>
+                                        <td>
+                                            <asp:Button runat="server" ID="history_button" Text="Add Note" BackColor="#03a9f4" ForeColor="White" Height="40px" OnClick="addNote"></asp:Button>
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
+                            <br />
+                            <br />
+
+                            <%-- Customer History Items --%>
+                            <asp:Label runat="server" ID="CustomerHistoryTitle" Text="Customer History Notes" Font-Size="Large" />
                             <asp:Panel runat="server" ID="customer_history">
                             </asp:Panel>
                         </div>
+
+
+                        <%-- Tab: Addendums --%>
                         <div class="tab-pane fade in" id="Addendums">
                             <asp:Button runat="server" Text="New Addendum" BackColor="#03a9f4" ForeColor="White" Height="40px" Width="25%" />
                             <br />
@@ -1402,76 +1477,76 @@
                         <div class="tab-pane fade in" id="Milestones">
                             <div>
                                 <asp:CheckBoxList runat="server" ID="Milestone_List" AutoPostBack="true" Font-Bold="true" Font-Size="Large" CellSpacing="1" CellPadding="1" OnSelectedIndexChanged="Stone">
-                                    <asp:ListItem>Signed Contract</asp:ListItem>
-                                    <asp:ListItem>Deposit Received $$$$$</asp:ListItem>
-                                    <asp:ListItem>Physical Folder</asp:ListItem>
-                                    <asp:ListItem>PPO Folder / Scans</asp:ListItem>
-                                    <asp:ListItem>Sub-Copy Plan</asp:ListItem>
-                                    <asp:ListItem>Tile Selections</asp:ListItem>
-                                    <asp:ListItem>Permit Applied</asp:ListItem>
-                                    <asp:ListItem>Permit Received</asp:ListItem>
-                                    <asp:ListItem>Pre Site Checklist</asp:ListItem>
-                                    <asp:ListItem>Install Permit Box & Bins</asp:ListItem>
-                                    <asp:ListItem>Remove Fence</asp:ListItem>
-                                    <asp:ListItem>Cut & Cap Sprinkler Lines</asp:ListItem>
-                                    <asp:ListItem>Strip Sod / Form Pool</asp:ListItem>
-                                    <asp:ListItem>Dig Wall Footer</asp:ListItem>
-                                    <asp:ListItem>Wall Footer Inspection</asp:ListItem>
-                                    <asp:ListItem>Pour Wall Footer</asp:ListItem>
-                                    <asp:ListItem>Install Block Retaining Wall</asp:ListItem>
-                                    <asp:ListItem>Block Wall Inspection</asp:ListItem>
-                                    <asp:ListItem>Pour Block Wall</asp:ListItem>
-                                    <asp:ListItem>Dig Date</asp:ListItem>
-                                    <asp:ListItem>Steel</asp:ListItem>
-                                    <asp:ListItem>Excavation Payment Due $$$$$</asp:ListItem>
-                                    <asp:ListItem>Excavation Payment Received $$$$$</asp:ListItem>
-                                    <asp:ListItem>Steel Inspection</asp:ListItem>
-                                    <asp:ListItem>Pre-Plumbing</asp:ListItem>
-                                    <asp:ListItem>Shoot Shell</asp:ListItem>
-                                    <asp:ListItem>Shell Payment Due $$$$$</asp:ListItem>
-                                    <asp:ListItem>Shell Payment Received $$$$$</asp:ListItem>
-                                    <asp:ListItem>Deck Grade</asp:ListItem>
-                                    <asp:ListItem>Plumbing</asp:ListItem>
-                                    <asp:ListItem>Set Skimmer / Auto Fill</asp:ListItem>
-                                    <asp:ListItem>Install Auto-fill</asp:ListItem>
-                                    <asp:ListItem>Drain Line / Chase Line</asp:ListItem>
-                                    <asp:ListItem>Tile</asp:ListItem>
-                                    <asp:ListItem>Remove Existing Lanai</asp:ListItem>
-                                    <asp:ListItem>Install Waterfall</asp:ListItem>
-                                    <asp:ListItem>Form Concrete Deck</asp:ListItem>
-                                    <asp:ListItem>Tamp / Water Pack</asp:ListItem>
-                                    <asp:ListItem>Form Paver Footer</asp:ListItem>
-                                    <asp:ListItem>Termite Treat</asp:ListItem>
-                                    <asp:ListItem>Deck Inspection</asp:ListItem>
-                                    <asp:ListItem>Pour Deck</asp:ListItem>
-                                    <asp:ListItem>Pour Paver Footer</asp:ListItem>
-                                    <asp:ListItem>Install Pavers</asp:ListItem>
-                                    <asp:ListItem>Schedule for Solar</asp:ListItem>
-                                    <asp:ListItem>Deck Payment Due $$$$$</asp:ListItem>
-                                    <asp:ListItem>Deck Payment Received $$$$$</asp:ListItem>
-                                    <asp:ListItem>Rock Work</asp:ListItem>
-                                    <asp:ListItem>Texture Deck / Paint</asp:ListItem>
-                                    <asp:ListItem>Screen Enclosure</asp:ListItem>
-                                    <asp:ListItem>Equipment Set / Set up Sod Install info w - Customer</asp:ListItem>
-                                    <asp:ListItem>Electric</asp:ListItem>
-                                    <asp:ListItem>Alarms</asp:ListItem>
-                                    <asp:ListItem>Baby Fence</asp:ListItem>
-                                    <asp:ListItem>Electric Inspection / Set up Sod Install Info w - Customer</asp:ListItem>
-                                    <asp:ListItem>Plaster Pool</asp:ListItem>
-                                    <asp:ListItem>Water Truck Fill - Up</asp:ListItem>
-                                    <asp:ListItem>Install Solar</asp:ListItem>
-                                    <asp:ListItem>Final Grade / Cleanup</asp:ListItem>
-                                    <asp:ListItem>Fire Up</asp:ListItem>
-                                    <asp:ListItem>Addendum Work Completed</asp:ListItem>
-                                    <asp:ListItem>Addendum Payments Due $$$$$</asp:ListItem>
-                                    <asp:ListItem>All Addendum Payments Received $$$$$</asp:ListItem>
-                                    <asp:ListItem>Fill Up Payment Due $$$$$</asp:ListItem>
-                                    <asp:ListItem>Fill Up Payment Received $$$$$</asp:ListItem>
-                                    <asp:ListItem>Replace Fence</asp:ListItem>
-                                    <asp:ListItem>Final Clean Pressure Wash</asp:ListItem>
-                                    <asp:ListItem>Final Paint After Sod</asp:ListItem>
-                                    <asp:ListItem>Walkthru / Punchlist</asp:ListItem>
-                                    <asp:ListItem>Punlist Items COMPLETED</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Signed Contract</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Deposit Received $$$$$</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Physical Folder</asp:ListItem>
+                                    <asp:ListItem>&nbsp;PPO Folder / Scans</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Sub-Copy Plan</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Tile Selections</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Permit Applied</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Permit Received</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Pre Site Checklist</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Install Permit Box & Bins</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Remove Fence</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Cut & Cap Sprinkler Lines</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Strip Sod / Form Pool</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Dig Wall Footer</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Wall Footer Inspection</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Pour Wall Footer</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Install Block Retaining Wall</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Block Wall Inspection</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Pour Block Wall</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Dig Date</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Steel</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Excavation Payment Due $$$$$</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Excavation Payment Received $$$$$</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Steel Inspection</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Pre-Plumbing</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Shoot Shell</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Shell Payment Due $$$$$</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Shell Payment Received $$$$$</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Deck Grade</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Plumbing</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Set Skimmer / Auto Fill</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Install Auto-fill</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Drain Line / Chase Line</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Tile</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Remove Existing Lanai</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Install Waterfall</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Form Concrete Deck</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Tamp / Water Pack</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Form Paver Footer</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Termite Treat</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Deck Inspection</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Pour Deck</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Pour Paver Footer</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Install Pavers</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Schedule for Solar</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Deck Payment Due $$$$$</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Deck Payment Received $$$$$</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Rock Work</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Texture Deck / Paint</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Screen Enclosure</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Equipment Set / Set up Sod Install info w - Customer</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Electric</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Alarms</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Baby Fence</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Electric Inspection / Set up Sod Install Info w - Customer</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Plaster Pool</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Water Truck Fill - Up</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Install Solar</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Final Grade / Cleanup</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Fire Up</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Addendum Work Completed</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Addendum Payments Due $$$$$</asp:ListItem>
+                                    <asp:ListItem>&nbsp;All Addendum Payments Received $$$$$</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Fill Up Payment Due $$$$$</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Fill Up Payment Received $$$$$</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Replace Fence</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Final Clean Pressure Wash</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Final Paint After Sod</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Walkthru / Punchlist</asp:ListItem>
+                                    <asp:ListItem>&nbsp;Punlist Items COMPLETED</asp:ListItem>
                                 </asp:CheckBoxList>
                             </div>
                         </div>
