@@ -42,7 +42,7 @@ namespace WatersidePortal
 
 
             // Customers Tab
-            string cmdString = "SELECT [FirstName], [LastName], [CustomerID], [Address], [City], [State], [Telephone], [Alternate], [Email] FROM [Customers] WHERE [CustomerID] = @ID ORDER BY [ID]";
+            string cmdString = "SELECT [FirstName], [LastName], [CustomerID], [Address], [City], [State], [Telephone], [Alternate], [Email], [WaterfillType] FROM [Customers] WHERE [CustomerID] = @ID ORDER BY [ID]";
             string connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
             using (SqlConnection conn = new SqlConnection(connString))
             {
@@ -541,6 +541,8 @@ namespace WatersidePortal
                 }
             }
 
+            // TODO: Refactor this (and other methods) into private methods for better code quality.
+            // Hydrate Customers form info from the reader.
             cmdString = "SELECT * FROM [Customers] WHERE [CustomerID] = @ID";
             connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
             using (SqlConnection conn = new SqlConnection(connString))
@@ -582,7 +584,7 @@ namespace WatersidePortal
                                 Builder_Names.SelectedValue = String.Format("{0}", reader["Builder"]);
                                 Other_Builder.Text = String.Format("{0}", reader["BuilderOther"]);
                                 New_Home_Builder.SelectedValue = String.Format("{0}", reader["NHBuilder"]);
-                                Other_New_Builder.Text = String.Format("{0}", reader["NHOther"]);
+                                //Other_New_Builder.Text = String.Format("{0}", reader["NHOther"]);
                                 New_Home.SelectedValue = String.Format("{0}", reader["NHSelection"]);
                                 if (New_Home.SelectedValue == "Yes")
                                 {
@@ -593,8 +595,8 @@ namespace WatersidePortal
                                 {
                                     Builder_Panel.Visible = true;
                                 }
-                                if (New_Home_Builder.SelectedValue == "Other")
-                                    Other_New_Panel.Visible = true;
+                                //if (New_Home_Builder.SelectedValue == "Other")
+                                //    Other_New_Panel.Visible = true;
                                 if (Builder_Names.SelectedValue == "Other")
                                     Other_Builder_Panel.Visible = true;
                                 Builder_Amount.Text = String.Format("{0}", reader["BuilderFee"]);
@@ -612,6 +614,8 @@ namespace WatersidePortal
                                     Septic_Panel.Visible = true;
                                 }
                                 Septic_Buttons.SelectedValue = String.Format("{0}", reader["SepticSurvey"]);
+                                DropDownList2.SelectedValue = String.Format("{0}", reader["WaterfillType"]);
+
                                 string[] referralArr = String.Format("{0}", reader["Referral"]).Split('`');
                                 if (referralArr.Length == 6)
                                 {
@@ -1032,6 +1036,11 @@ namespace WatersidePortal
             }
         }
 
+        /// <summary>
+        /// Add a new Warranty Item.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void AddWarranty(object sender, EventArgs e)
         {
             string[] arr = HttpContext.Current.Request.Url.Query.Split('&');
@@ -1044,6 +1053,16 @@ namespace WatersidePortal
             {
                 return;
             }
+            
+            // Validate the user entered info.
+            if (!validateWarrantiesInformationInput())
+            {
+                divFailureMessage.InnerText = "Warranties Info is not complete!  Please make sure all Required fields have been filled.";
+                divFailure.Visible = true;
+                divFailure.Style.Add("background-color", "Red");
+                divFailure.Style.Add("color", "White"); return;
+            }
+
             string cmdString = "INSERT INTO Warranties ([Company], [CustomerID], [ProductName], [ModelNumber], [PartNumber], [SerialNumber], [DateOfInstall], [FireUpDate], [WarrantyLength], [Installer]) VALUES (@company, @id, @product, @model, @part, @serial, @install, @fire, @length, @installer)";
             string connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
             using (SqlConnection conn = new SqlConnection(connString))
@@ -1162,6 +1181,11 @@ namespace WatersidePortal
             }
         }
 
+        /// <summary>
+        /// Display item associated fields when options are selected. 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void onChanged(object sender, EventArgs e)
         {
             if (New_Home.SelectedValue == "Yes")
@@ -1197,10 +1221,10 @@ namespace WatersidePortal
             else
                 Septic_Panel.Visible = false;
 
-            if (New_Home_Builder.SelectedValue == "Other")
-                Other_New_Panel.Visible = true;
-            else
-                Other_New_Panel.Visible = false;
+            //if (New_Home_Builder.SelectedValue == "Other")
+            //    Other_New_Panel.Visible = true;
+            //else
+            //    Other_New_Panel.Visible = false;
 
             if (Builder_Names.SelectedValue == "Other")
                 Other_Builder_Panel.Visible = true;
@@ -1305,7 +1329,7 @@ namespace WatersidePortal
                 return;
             }
 
-            // Validate input fields.
+            // Validate the user entered info.
             if (!validateUserInformationInput())
             {
                 divFailureMessage.InnerText = "User Info is not complete!  Please make sure all Required fields have been filled.";
@@ -1317,7 +1341,7 @@ namespace WatersidePortal
             string connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
             using (SqlConnection conn = new SqlConnection(connString))
             {
-                string cmdString = "UPDATE Customers SET SurveySelection = @SurveyS, SepticSurvey = @SepticSurvey, ExistingSeptic = @ES, ExistingFence = @EF, HTFS = @htfs, APLR = @aplr, BuilderFee = @BF, NHSelection = @NHS, BuilderSelection = @BS, NHBuilder = @NHB, NHOther = @NHO, Builder = @build, BuilderOther = @bo, MinAccessF = @MAF, MinAccessI = @MAI, Referral = @ref, Distance = @dist, FirstName = @first, LastName = @last, Address = @add, City = @city, State = @state, ZipCode = @zip, Telephone = @tele, Alternate = @alt, Email = @email, AlternateEmail = @altemail, JobAddress = @JAdd, JobCity = @JCity, JobPermit = @JPermit, JobARB = @JARB, JobZip = @JZip, JobLot = @JLot, JobBlock = @JBlock, JobSection = @JSection, JobPlat = @JPlat, JobPage = @JPage, Notes = @Notes WHERE CustomerID = @ID";
+                string cmdString = "UPDATE Customers SET WaterfillType = @WaterfillType, SurveySelection = @SurveyS, SepticSurvey = @SepticSurvey, ExistingSeptic = @ES, ExistingFence = @EF, HTFS = @htfs, APLR = @aplr, BuilderFee = @BF, NHSelection = @NHS, BuilderSelection = @BS, NHBuilder = @NHB, NHOther = @NHO, Builder = @build, BuilderOther = @bo, MinAccessF = @MAF, MinAccessI = @MAI, Referral = @ref, Distance = @dist, FirstName = @first, LastName = @last, Address = @add, City = @city, State = @state, ZipCode = @zip, Telephone = @tele, Alternate = @alt, Email = @email, AlternateEmail = @altemail, JobAddress = @JAdd, JobCity = @JCity, JobPermit = @JPermit, JobARB = @JARB, JobZip = @JZip, JobLot = @JLot, JobBlock = @JBlock, JobSection = @JSection, JobPlat = @JPlat, JobPage = @JPage, Notes = @Notes WHERE CustomerID = @ID";
                 using (SqlCommand comm = new SqlCommand(cmdString, conn))
                 {
                     comm.Parameters.AddWithValue("@first", TextBox_FirstName.Text);
@@ -1348,7 +1372,7 @@ namespace WatersidePortal
                     comm.Parameters.AddWithValue("@ref", Referral_Amount.Text.Replace("`", "") + "`" + Referral_Full.Text.Replace("`", "") + "`" + Referral_Address.Text.Replace("`", "") + "`" + Referral_City.Text.Replace("`", "") + "`" + Referral_State.SelectedValue + "`" + Referral_Zip.Text.Replace("`", ""));
                     comm.Parameters.AddWithValue("@NHB", New_Home_Builder.SelectedValue);
                     comm.Parameters.AddWithValue("@build", Builder_Names.SelectedValue);
-                    comm.Parameters.AddWithValue("@NHO", Other_New_Builder.Text);
+                    comm.Parameters.AddWithValue("@NHO", string.Empty); //Other_New_Builder.Text
                     comm.Parameters.AddWithValue("@bo", Other_Builder.Text);
                     comm.Parameters.AddWithValue("@NHS", New_Home.SelectedValue);
                     comm.Parameters.AddWithValue("@BS", Builder_Referral.SelectedValue);
@@ -1359,11 +1383,12 @@ namespace WatersidePortal
                     comm.Parameters.AddWithValue("@EF", Existing_Fence.SelectedValue);
                     comm.Parameters.AddWithValue("@ES", Septic_Tank.SelectedValue);
                     comm.Parameters.AddWithValue("@SepticSurvey", Septic_Buttons.SelectedValue);
+                    comm.Parameters.AddWithValue("@WaterfillType", DropDownList2.SelectedValue);
 
                     try
                     {
                         conn.Open();
-                        System.Diagnostics.Debug.WriteLine(comm.ExecuteNonQuery());
+                        comm.ExecuteNonQuery();
                         divSuccessMessage.InnerText = "User Info Successfully Updated!";
                         divSuccess.Visible = true;
                     }
@@ -1996,7 +2021,7 @@ namespace WatersidePortal
             }
 
             // Customer Primary Phone
-            if (TextBox_Telephone.Text == string.Empty)
+            if (TextBox_Telephone.Text.Contains("(") || TextBox_Telephone.Text.Contains(")"))
             {
                 userInfoComplete = false;
             }
@@ -2089,13 +2114,13 @@ namespace WatersidePortal
             }
 
             // New Home Construction Project.
-            if (New_Home_Builder.Text == string.Empty)
+            if (New_Home.SelectedValue == string.Empty || New_Home.SelectedValue == "Select")
             {
                 userInfoComplete = false;
             }
-            else if (New_Home_Builder.Text == "Yes")
+            else if (New_Home.Text == "Yes")
             {
-                if (Other_New_Builder.Text == string.Empty)
+                if (New_Home_Builder.Text == string.Empty || New_Home_Builder.SelectedValue == "Select")
                 {
                     userInfoComplete = false;
                 }
@@ -2153,6 +2178,63 @@ namespace WatersidePortal
 
             return userInfoComplete;
         }
+
+        /// <summary>
+        /// Validate that all user required information is properly entered.
+        /// </summary>
+        /// <returns></returns>
+        protected bool validateWarrantiesInformationInput()
+        {
+            bool userInfoComplete = true;
+
+            if (Company.Text == string.Empty)
+            {
+                userInfoComplete = false;
+            }
+
+            if (ProductName.Text == string.Empty)
+            {
+                userInfoComplete = false;
+            }
+
+            if (ModelNumber.Text == string.Empty)
+            {
+                userInfoComplete = false;
+            }
+
+            if (PartNumber.Text == string.Empty)
+            {
+                userInfoComplete = false;
+            }
+
+            if (SerialNumber.Text == string.Empty)
+            {
+                userInfoComplete = false;
+            }
+
+            if (DateOfInstall.Text == string.Empty)
+            {
+                userInfoComplete = false;
+            }
+
+            if (FireUpDate.Text == string.Empty)
+            {
+                userInfoComplete = false;
+            }
+
+            if (WarrantyLength.Text == string.Empty)
+            {
+                userInfoComplete = false;
+            }
+
+            if (Installer.Text == string.Empty)
+            {
+                userInfoComplete = false;
+            }
+
+            return userInfoComplete;
+        }
+
 
         /// <summary>
         /// 

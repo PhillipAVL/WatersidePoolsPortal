@@ -240,6 +240,15 @@ namespace WatersidePortal
         protected global::System.Web.UI.WebControls.DropDownList DropDownListState;
 
         /// <summary>
+        /// RequiredFieldValidator15 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator15;
+
+        /// <summary>
         /// label5 control.
         /// </summary>
         /// <remarks>
@@ -274,6 +283,15 @@ namespace WatersidePortal
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RegularExpressionValidator regexpcontactZip;
+
+        /// <summary>
+        /// FilteredTextBoxExtender1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.FilteredTextBoxExtender FilteredTextBoxExtender1;
 
         /// <summary>
         /// label6 control.
@@ -312,6 +330,15 @@ namespace WatersidePortal
         protected global::System.Web.UI.WebControls.RegularExpressionValidator regexpvalPhone;
 
         /// <summary>
+        /// FilteredTextBoxExtender2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.FilteredTextBoxExtender FilteredTextBoxExtender2;
+
+        /// <summary>
         /// label7 control.
         /// </summary>
         /// <remarks>
@@ -337,6 +364,15 @@ namespace WatersidePortal
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RegularExpressionValidator regexpvalAlternatePhone;
+
+        /// <summary>
+        /// FilteredTextBoxExtender3 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.FilteredTextBoxExtender FilteredTextBoxExtender3;
 
         /// <summary>
         /// label8 control.
@@ -519,6 +555,15 @@ namespace WatersidePortal
         protected global::System.Web.UI.WebControls.RegularExpressionValidator regexpcontactZipCode;
 
         /// <summary>
+        /// FilteredTextBoxExtender4 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.FilteredTextBoxExtender FilteredTextBoxExtender4;
+
+        /// <summary>
         /// label14 control.
         /// </summary>
         /// <remarks>
@@ -699,6 +744,15 @@ namespace WatersidePortal
         protected global::System.Web.UI.WebControls.DropDownList drop_distance;
 
         /// <summary>
+        /// rfvJobSiteDistanceFromHQ control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvJobSiteDistanceFromHQ;
+
+        /// <summary>
         /// Referral control.
         /// </summary>
         /// <remarks>
@@ -742,6 +796,15 @@ namespace WatersidePortal
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator7;
+
+        /// <summary>
+        /// FilteredTextBoxExtender6 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.FilteredTextBoxExtender FilteredTextBoxExtender6;
 
         /// <summary>
         /// Referral_Full control.
@@ -834,6 +897,15 @@ namespace WatersidePortal
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator10;
 
         /// <summary>
+        /// FilteredTextBoxExtender5 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.FilteredTextBoxExtender FilteredTextBoxExtender5;
+
+        /// <summary>
         /// New_Home control.
         /// </summary>
         /// <remarks>
@@ -870,22 +942,13 @@ namespace WatersidePortal
         protected global::System.Web.UI.WebControls.DropDownList New_Home_Builder;
 
         /// <summary>
-        /// Other_New_Panel control.
+        /// rfvBuilderName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel Other_New_Panel;
-
-        /// <summary>
-        /// Other_New_Builder control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox Other_New_Builder;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvBuilderName;
 
         /// <summary>
         /// Builder_Referral control.
@@ -1111,6 +1174,15 @@ namespace WatersidePortal
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropDownList2;
+
+        /// <summary>
+        /// rfvWaterfillType control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvWaterfillType;
 
         /// <summary>
         /// Button1 control.
@@ -2175,6 +2247,15 @@ namespace WatersidePortal
         protected global::System.Web.UI.WebControls.TextBox Company;
 
         /// <summary>
+        /// rfvWarrantyCompany control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvWarrantyCompany;
+
+        /// <summary>
         /// ProductName control.
         /// </summary>
         /// <remarks>
@@ -2182,6 +2263,15 @@ namespace WatersidePortal
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox ProductName;
+
+        /// <summary>
+        /// RequiredFieldValidator16 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator16;
 
         /// <summary>
         /// ModelNumber control.
@@ -2193,6 +2283,15 @@ namespace WatersidePortal
         protected global::System.Web.UI.WebControls.TextBox ModelNumber;
 
         /// <summary>
+        /// RequiredFieldValidator17 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator17;
+
+        /// <summary>
         /// PartNumber control.
         /// </summary>
         /// <remarks>
@@ -2200,6 +2299,15 @@ namespace WatersidePortal
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox PartNumber;
+
+        /// <summary>
+        /// RequiredFieldValidator18 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator18;
 
         /// <summary>
         /// SerialNumber control.
@@ -2211,6 +2319,15 @@ namespace WatersidePortal
         protected global::System.Web.UI.WebControls.TextBox SerialNumber;
 
         /// <summary>
+        /// RequiredFieldValidator19 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator19;
+
+        /// <summary>
         /// DateOfInstall control.
         /// </summary>
         /// <remarks>
@@ -2218,6 +2335,15 @@ namespace WatersidePortal
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox DateOfInstall;
+
+        /// <summary>
+        /// RequiredFieldValidator20 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator20;
 
         /// <summary>
         /// FireUpDate control.
@@ -2229,6 +2355,15 @@ namespace WatersidePortal
         protected global::System.Web.UI.WebControls.TextBox FireUpDate;
 
         /// <summary>
+        /// RequiredFieldValidator21 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator21;
+
+        /// <summary>
         /// WarrantyLength control.
         /// </summary>
         /// <remarks>
@@ -2238,6 +2373,15 @@ namespace WatersidePortal
         protected global::System.Web.UI.WebControls.TextBox WarrantyLength;
 
         /// <summary>
+        /// RequiredFieldValidator22 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator22;
+
+        /// <summary>
         /// Installer control.
         /// </summary>
         /// <remarks>
@@ -2245,5 +2389,14 @@ namespace WatersidePortal
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox Installer;
+
+        /// <summary>
+        /// RequiredFieldValidator23 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator23;
     }
 }

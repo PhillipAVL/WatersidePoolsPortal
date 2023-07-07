@@ -14,20 +14,6 @@
             margin: 5px;
         }
 
-        /* Fomratting form label-textbox layout */
-        /*input[type="textbox"] {
-            display: block;
-            float: left;
-            margin-right: 2px;
-            width: 150px;
-        }
-
-        label {*/
-        /*display: block;
-            float: left;*/
-        /*width: 150px;
-        }*/
-
         /* Borderless table form form input */
         .table-borderless > tbody > tr > td,
         .table-borderless > tbody > tr > th,
@@ -53,13 +39,18 @@
             margin: 0 auto;
             display: block;
         }
+
+        .warrantyInputPadding {
+            position: relative;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            width: 300px;
+        }
     </style>
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="ContentBody" runat="server">
     <asp:HiddenField ID="TabName" runat="server" />
-    <%-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>--%>
     <script type="text/javascript">
         /*$(function () {
             var tabName = $("[id*=TabName]").val() != "" ? $("[id*=TabName]").val() : "Info";
@@ -105,7 +96,14 @@
                         <div id="divFailureMessage" class="panel-heading" runat="server"></div>
                     </div>
 
-                    <%--<asp:ValidationSummary runat="server" CssClass="text-danger" style="white-space: pre-line"/>--%>
+                    <%--<asp:ValidationSummary runat="server" CssClass="text-danger" Style="white-space: pre-line" />--%>
+                    <%--<asp:validationsummary id="ValidationSummary1" runat="server" xmlns:asp="#unknown"
+                        showsummary="true"
+                        showmessagebox="true"
+                        headertext="Please fix the following fields:"
+                        enableclientscript="true"
+                        displaymode="List"> 
+                    </asp:validationsummary>--%>
 
                     <%-- Tabs --%>
                     <div id="Tabs" role="tabpanel">
@@ -172,7 +170,7 @@
                                                 <td>
                                                     <asp:TextBox ID="TextBox_FirstName" runat="server"></asp:TextBox>
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidatorFirst" ControlToValidate="TextBox_FirstName"
-                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" /></td>
+                                                        ValidationGroup="UserInfo" Display="Dynamic" ErrorMessage="*Required" runat="server" ForeColor="Red" /></td>
                                                 <ajaxToolkit:FilteredTextBoxExtender ID="ftbeFirstName" runat="server"
                                                     TargetControlID="TextBox_FirstName" ValidChars="AaBbCcDdEdFeGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz" />
                                             </tr>
@@ -184,7 +182,7 @@
                                                 <td style="border: none;">
                                                     <asp:TextBox ID="TextBox_LastName" runat="server"></asp:TextBox>
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator3" ControlToValidate="TextBox_LastName"
-                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" /></td>
+                                                        ValidationGroup="UserInfo" Display="Dynamic" ErrorMessage="*Required" runat="server" ForeColor="Red" /></td>
                                                 <ajaxToolkit:FilteredTextBoxExtender ID="ftbeLastName" runat="server"
                                                     TargetControlID="TextBox_LastName" ValidChars="AaBbCcDdEdFeGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz" />
                                             </tr>
@@ -197,7 +195,7 @@
                                                 <td style="border: none;">
                                                     <asp:TextBox ID="TextBox_Address" runat="server"></asp:TextBox>
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidatorAddress" ControlToValidate="TextBox_Address"
-                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" />
+                                                        ValidationGroup="UserInfo" Display="Dynamic" ErrorMessage="*Required" runat="server" ForeColor="Red" />
                                                 </td>
                                             </tr>
 
@@ -209,7 +207,7 @@
                                                 <td>
                                                     <asp:TextBox ID="TextBox_City" runat="server"></asp:TextBox>
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidatorCity" ControlToValidate="TextBox_City"
-                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" />
+                                                        ValidationGroup="UserInfo" Display="Dynamic" ErrorMessage="*Required" runat="server" ForeColor="Red" />
                                                 </td>
                                             </tr>
 
@@ -271,7 +269,11 @@
                                                         <asp:ListItem Value="WV">West Virginia</asp:ListItem>
                                                         <asp:ListItem Value="WI">Wisconsin</asp:ListItem>
                                                         <asp:ListItem Value="WY">Wyoming</asp:ListItem>
-                                                    </asp:DropDownList></td>
+                                                    </asp:DropDownList>
+                                                    <asp:RequiredFieldValidator InitialValue="Select" ID="RequiredFieldValidator15" Display="Dynamic"
+                                                        runat="server" ControlToValidate="DropDownListState" ForeColor="Red"
+                                                        ValidationGroup="UserInfo" ErrorMessage="*Required"></asp:RequiredFieldValidator>
+                                                </td>
                                             </tr>
 
                                             <%-- Zip --%>
@@ -279,13 +281,16 @@
                                                 <td>
                                                     <asp:Label ID="label5" AssociatedControlID="TextBox_Zip" Text="*Zip Code:" runat="server" /></td>
                                                 <td>
-                                                    <asp:TextBox ID="TextBox_Zip" runat="server"></asp:TextBox>
-                                                    <asp:RequiredFieldValidator runat="server" ID="rfvZip" ControlToValidate="TextBox_Zip"
-                                                        Display="Dynamic" ErrorMessage="*Required" ForeColor="Red" />
+                                                    <asp:TextBox ID="TextBox_Zip" runat="server" placeholder="00000-0000"></asp:TextBox>
+                                                    <asp:RequiredFieldValidator runat="server" ID="rfvZip" ControlToValidate="TextBox_Zip" Display="Dynamic"
+                                                        ValidationGroup="UserInfo" ErrorMessage="*Required" ForeColor="Red" />
                                                     <asp:RegularExpressionValidator ID="regexpcontactZip" runat="server" ControlToValidate="TextBox_Zip"
-                                                        ValidationGroup="contactValidation" Display="Dynamic" ForeColor="Red" ErrorMessage="Please enter a Zip Code formatted as (XXXXX) or 10 Digit (XXXXX-XXXX)"
+                                                        ValidationGroup="UserInfo" Display="Dynamic" ForeColor="Red" ErrorMessage="Please enter a Zip Code formatted as (XXXXX) or 10 Digit (XXXXX-XXXX)"
                                                         ValidationExpression="^\d{5}(?:[-\s]\d{4})?$">
-                                                    </asp:RegularExpressionValidator></td>
+                                                    </asp:RegularExpressionValidator>
+                                                    <ajaxToolkit:FilteredTextBoxExtender ID="FilteredTextBoxExtender1" runat="server"
+                                                        TargetControlID="TextBox_Zip" ValidChars="1234567890-" />
+                                                </td>
                                             </tr>
 
                                             <%-- Phone --%>
@@ -293,13 +298,16 @@
                                                 <td>
                                                     <asp:Label ID="label6" AssociatedControlID="TextBox_Telephone" Text="*Primary Phone:" runat="server" /></td>
                                                 <td>
-                                                    <asp:TextBox ID="TextBox_Telephone" runat="server"></asp:TextBox>
+                                                    <asp:TextBox ID="TextBox_Telephone" runat="server" placeholder="000-000-0000"></asp:TextBox>
                                                     <asp:RequiredFieldValidator runat="server" ID="rfvPhone" ControlToValidate="TextBox_Telephone"
                                                         Display="Dynamic" ErrorMessage="*Required" ForeColor="Red" />
                                                     <asp:RegularExpressionValidator ID="regexpvalPhone" runat="server" ControlToValidate="TextBox_Telephone"
-                                                        ValidationGroup="contactValidation" Display="Dynamic" ForeColor="Red" ErrorMessage="Please enter a phone number formatted as (XXX-XXX-XXXX)"
+                                                        ValidationGroup="UserInfo" Display="Dynamic" ForeColor="Red" ErrorMessage="Please format as XXX-XXX-XXXX"
                                                         ValidationExpression="^(1-)?\d{3}-\d{3}-\d{4}$">
-                                                    </asp:RegularExpressionValidator></td>
+                                                    </asp:RegularExpressionValidator>
+                                                    <ajaxToolkit:FilteredTextBoxExtender ID="FilteredTextBoxExtender2" runat="server"
+                                                        TargetControlID="TextBox_Telephone" ValidChars="1234567890()-" />
+                                                </td>
                                             </tr>
 
                                             <%-- Alt Phone --%>
@@ -307,11 +315,14 @@
                                                 <td>
                                                     <asp:Label ID="label7" AssociatedControlID="TextBox_Alternate_Telephone" Text="Alternate Telephone:" runat="server" /></td>
                                                 <td>
-                                                    <asp:TextBox ID="TextBox_Alternate_Telephone" runat="server"></asp:TextBox>
+                                                    <asp:TextBox ID="TextBox_Alternate_Telephone" runat="server" placeholder="000-000-0000"></asp:TextBox>
                                                     <asp:RegularExpressionValidator ID="regexpvalAlternatePhone" runat="server" ControlToValidate="TextBox_Alternate_Telephone"
-                                                        ValidationGroup="contactValidation" Display="Dynamic" ForeColor="Red" ErrorMessage="Please enter a phone number formatted as (XXX-XXX-XXXX)"
+                                                        Display="Dynamic" ForeColor="Red" ErrorMessage="Please enter a phone number formatted as (XXX-XXX-XXXX)"
                                                         ValidationExpression="^(1-)?\d{3}-\d{3}-\d{4}$">
-                                                    </asp:RegularExpressionValidator></td>
+                                                    </asp:RegularExpressionValidator>
+                                                    <ajaxToolkit:FilteredTextBoxExtender ID="FilteredTextBoxExtender3" runat="server"
+                                                        TargetControlID="TextBox_Alternate_Telephone" ValidChars="1234567890()-" />
+                                                </td>
                                             </tr>
 
                                             <%-- Email --%>
@@ -319,13 +330,14 @@
                                                 <td>
                                                     <asp:Label ID="label8" AssociatedControlID="TextBox_Email_Address" Text="*Email:" runat="server" /></td>
                                                 <td>
-                                                    <asp:TextBox ID="TextBox_Email_Address" runat="server"></asp:TextBox>
-                                                    <asp:RequiredFieldValidator runat="server" ID="rfvEmail" ControlToValidate="TextBox_Email_Address"
-                                                        Display="Dynamic" ErrorMessage="*Required" ForeColor="Red" />
+                                                    <asp:TextBox ID="TextBox_Email_Address" runat="server" placeholder="myemila@domain.com"></asp:TextBox>
+                                                    <asp:RequiredFieldValidator runat="server" ID="rfvEmail" ControlToValidate="TextBox_Email_Address" Display="Dynamic"
+                                                        ValidationGroup="UserInfo" ErrorMessage="*Required" ForeColor="Red" />
                                                     <asp:RegularExpressionValidator ID="RegularExpressionValidator2" runat="server" ControlToValidate="TextBox_Email_Address"
-                                                        ValidationGroup="contactValidation" Display="Dynamic" ForeColor="Red" ErrorMessage="Please enter a valid email address formatted as (name@domain.com)"
+                                                        ValidationGroup="UserInfo" Display="Dynamic" ForeColor="Red" ErrorMessage="Please enter a valid email address formatted as (name@domain.com)"
                                                         ValidationExpression="^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$">
-                                                    </asp:RegularExpressionValidator></td>
+                                                    </asp:RegularExpressionValidator>
+                                                </td>
                                             </tr>
 
                                             <%-- Alt Email --%>
@@ -333,7 +345,7 @@
                                                 <td>
                                                     <asp:Label ID="label9" AssociatedControlID="TextBox_Email_Address" Text="Alternate Email Address:" runat="server" /></td>
                                                 <td>
-                                                    <asp:TextBox ID="TextBox_Alternate_Email" runat="server"></asp:TextBox></td>
+                                                    <asp:TextBox ID="TextBox_Alternate_Email" runat="server" placeholder="myemail@domain.com"></asp:TextBox></td>
                                             </tr>
 
                                             <%-- Left: BUTTON - Copy Customer to Job Site Address --%>
@@ -353,8 +365,8 @@
                                                     <asp:Label ID="label10" AssociatedControlID="TextBox_Job_Address" Text="*Address:" runat="server" /></td>
                                                 <td>
                                                     <asp:TextBox ID="TextBox_Job_Address" runat="server"></asp:TextBox>
-                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator1" ControlToValidate="TextBox_Job_Address"
-                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" /></td>
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator1" ControlToValidate="TextBox_Job_Address" Display="Dynamic"
+                                                        ValidationGroup="UserInfo" ErrorMessage="*Required" runat="server" ForeColor="Red" /></td>
                                             </tr>
 
                                             <%-- Job Site City --%>
@@ -363,8 +375,8 @@
                                                     <asp:Label ID="label11" AssociatedControlID="TextBox_Job_City" Text="*City:" runat="server" /></td>
                                                 <td>
                                                     <asp:TextBox ID="TextBox_Job_City" runat="server"></asp:TextBox>
-                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator2" ControlToValidate="TextBox_Job_City"
-                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" /></td>
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator2" ControlToValidate="TextBox_Job_City" Display="Dynamic"
+                                                        ValidationGroup="UserInfo" ErrorMessage="*Required" runat="server" ForeColor="Red" /></td>
                                             </tr>
 
                                             <%-- Job Site Permitting City/County --%>
@@ -386,7 +398,7 @@
                                                     </asp:DropDownList>
                                                     <asp:RequiredFieldValidator InitialValue="Select" ID="RequiredFieldValidator4" Display="Dynamic"
                                                         runat="server" ControlToValidate="Permit" ForeColor="Red"
-                                                        Text="*Required" ErrorMessage="ErrorMessage"></asp:RequiredFieldValidator>
+                                                        ValidationGroup="UserInfo" ErrorMessage="*Required"></asp:RequiredFieldValidator>
                                                 </td>
                                             </tr>
 
@@ -395,13 +407,16 @@
                                                 <td>
                                                     <asp:Label ID="label13" AssociatedControlID="TextBox_Job_Zip" Text="*Zip Code:" runat="server" /></td>
                                                 <td>
-                                                    <asp:TextBox ID="TextBox_Job_Zip" runat="server"></asp:TextBox>
-                                                    <asp:RequiredFieldValidator runat="server" ID="rfvZipCode" ControlToValidate="TextBox_Job_Zip"
-                                                        Display="Dynamic" ErrorMessage="*Required" ForeColor="Red" />
+                                                    <asp:TextBox ID="TextBox_Job_Zip" runat="server" placeholder="00000-0000"></asp:TextBox>
+                                                    <asp:RequiredFieldValidator runat="server" ID="rfvZipCode" ControlToValidate="TextBox_Job_Zip" Display="Dynamic"
+                                                        ValidationGroup="UserInfo" ErrorMessage="*Required" ForeColor="Red" />
                                                     <asp:RegularExpressionValidator ID="regexpcontactZipCode" runat="server" ControlToValidate="TextBox_Job_Zip"
-                                                        ValidationGroup="contactValidation" Display="Dynamic" ForeColor="Red" ErrorMessage="Please enter a Zip Code formatted as (XXXXX) or 10 Digit (XXXXX-XXXX)"
+                                                        ValidationGroup="UserInfo" Display="Dynamic" ForeColor="Red" ErrorMessage="Please enter a Zip Code formatted as (XXXXX) or 10 Digit (XXXXX-XXXX)"
                                                         ValidationExpression="^\d{5}(?:[-\s]\d{4})?$">
-                                                    </asp:RegularExpressionValidator></td>
+                                                    </asp:RegularExpressionValidator>
+                                                    <ajaxToolkit:FilteredTextBoxExtender ID="FilteredTextBoxExtender4" runat="server"
+                                                        TargetControlID="TextBox_Job_Zip" ValidChars="1234567890()-" />
+                                                </td>
                                             </tr>
 
                                             <%-- Job Site ARB/HOA/Subdivision --%>
@@ -414,8 +429,8 @@
                                                         <asp:ListItem Value="Grand">Grand Haven</asp:ListItem>
                                                         <asp:ListItem Value="PalmCoast">Palm Coast Plantation</asp:ListItem>
                                                         <asp:ListItem Value="Plantation">Plantation Bay</asp:ListItem>
-                                                        <asp:ListItem Value="Ocean">Ocean Hammok</asp:ListItem>
-                                                        <asp:ListItem Value="Dunes">Hammok Dunes</asp:ListItem>
+                                                        <asp:ListItem Value="Ocean">Ocean Hammock</asp:ListItem>
+                                                        <asp:ListItem Value="Dunes">Hammock Dunes</asp:ListItem>
                                                         <asp:ListItem Value="Shores">The Shores</asp:ListItem>
                                                         <asp:ListItem Value="Hidden">Hidden Lakes</asp:ListItem>
                                                         <asp:ListItem Value="North">North Shore</asp:ListItem>
@@ -424,9 +439,9 @@
                                                         <asp:ListItem Value="Tuscana">Tuscana</asp:ListItem>
                                                         <asp:ListItem Value="Other">Other</asp:ListItem>
                                                     </asp:DropDownList>
-                                                    <asp:RequiredFieldValidator InitialValue="Select" ID="Req_ID" Display="Dynamic"
+                                                    <asp:RequiredFieldValidator InitialValue="Select" ID="Req_ID"
                                                         runat="server" ControlToValidate="arb" ForeColor="Red"
-                                                        Text="*Required" ErrorMessage="ErrorMessage"></asp:RequiredFieldValidator>
+                                                        Display="Dynamic" ValidationGroup="UserInfo" ErrorMessage="*Required"></asp:RequiredFieldValidator>
                                                 </td>
                                             </tr>
 
@@ -497,7 +512,6 @@
                                                 <td></td>
                                             </tr>
 
-
                                             <%-- Minimum Access Space --%>
                                             <tr>
                                                 <td>
@@ -508,13 +522,12 @@
                                                     in.
                                                 <br />
                                                     <asp:RequiredFieldValidator ID="rfvMinAccessFeet" ControlToValidate="Min_Access_F"
-                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" />
+                                                        Display="Dynamic" ValidationGroup="UserInfo" ErrorMessage="* Minimum Access Space Feet Required" runat="server" ForeColor="Red" />
                                                     <br />
-                                                    <asp:RequiredFieldValidator ID="rfvMinAccessInches" ControlToValidate="Min_Access_I"
-                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" />
+                                                    <asp:RequiredFieldValidator ID="rfvMinAccessInches" ControlToValidate="Min_Access_I" Display="Dynamic"
+                                                        ValidationGroup="UserInfo" ErrorMessage="* Minimum Access Space Inches Required" runat="server" ForeColor="Red" />
                                                 </td>
                                             </tr>
-
 
                                             <%-- Jobsite Distance from HQ --%>
                                             <tr>
@@ -522,12 +535,16 @@
                                                     <asp:Label runat="server">*Jobsite Distance From HQ (mins): </asp:Label></td>
                                                 <td>
                                                     <asp:DropDownList runat="server" ID="drop_distance">
+                                                        <asp:ListItem Value="Select">Select</asp:ListItem>
                                                         <asp:ListItem Value="34">0-34</asp:ListItem>
                                                         <asp:ListItem Value="45">35-45</asp:ListItem>
                                                         <asp:ListItem Value="60">46-60</asp:ListItem>
-                                                    </asp:DropDownList></td>
+                                                    </asp:DropDownList>
+                                                    <asp:RequiredFieldValidator InitialValue="Select" ID="rfvJobSiteDistanceFromHQ" Display="Dynamic"
+                                                        runat="server" ControlToValidate="drop_distance" ForeColor="Red"
+                                                        ValidationGroup="UserInfo" ErrorMessage="*Required"></asp:RequiredFieldValidator>
+                                                </td>
                                             </tr>
-
 
                                             <%-- Referral to be Paid --%>
                                             <tr>
@@ -539,54 +556,63 @@
                                                         <asp:ListItem Value="No">No</asp:ListItem>
                                                     </asp:RadioButtonList>
                                                     <asp:RequiredFieldValidator ID="rfvReferral" ControlToValidate="Referral"
-                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" />
+                                                        Display="Dynamic" ValidationGroup="UserInfo" ErrorMessage="*Required" runat="server" ForeColor="Red" />
                                                 </td>
                                             </tr>
+
                                             <%-- Referral to be Paid Details --%>
                                             <asp:Panel runat="server" ID="Referral_Div" Style="margin-left: 30px" Visible="false">
+
+                                                <%-- Amount --%>
                                                 <tr>
                                                     <td>
                                                         <asp:Label runat="server">*Amount: </asp:Label></td>
                                                     <td>
                                                         <asp:TextBox ID="Referral_Amount" TextMode="Number" runat="server"></asp:TextBox>
                                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator7" ControlToValidate="Referral_Amount"
-                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" />
+                                                            Display="Dynamic" ValidationGroup="UserInfo" ErrorMessage="*Required" runat="server" ForeColor="Red" />
+                                                        <ajaxToolkit:FilteredTextBoxExtender ID="FilteredTextBoxExtender6" runat="server"
+                                                            TargetControlID="Referral_Amount" ValidChars="1234567890" />
                                                     </td>
                                                 </tr>
 
+                                                <%-- Full Name --%>
                                                 <tr>
                                                     <td>
                                                         <asp:Label runat="server">*Full Name: </asp:Label></td>
                                                     <td>
                                                         <asp:TextBox ID="Referral_Full" runat="server"></asp:TextBox>
                                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator6" ControlToValidate="Referral_Full"
-                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" />
+                                                            Display="Dynamic" ValidationGroup="UserInfo" ErrorMessage="*Required" runat="server" ForeColor="Red" />
                                                     </td>
                                                 </tr>
 
+                                                <%-- Address --%>
                                                 <tr>
                                                     <td>
-                                                        <asp:Label runat="server">Address: </asp:Label></td>
+                                                        <asp:Label runat="server">*Address: </asp:Label></td>
                                                     <td>
                                                         <asp:TextBox ID="Referral_Address" runat="server"></asp:TextBox>
                                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator8" ControlToValidate="Referral_Address"
-                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" />
+                                                            Display="Dynamic" ValidationGroup="UserInfo" ErrorMessage="*Required" runat="server" ForeColor="Red" />
                                                     </td>
                                                 </tr>
 
+                                                <%-- City --%>
                                                 <tr>
                                                     <td>
-                                                        <asp:Label runat="server">City: </asp:Label></td>
+                                                        <asp:Label runat="server">*City: </asp:Label></td>
                                                     <td>
                                                         <asp:TextBox ID="Referral_City" runat="server"></asp:TextBox>
                                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator9" ControlToValidate="Referral_City"
-                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" />
+                                                            Display="Dynamic" ValidationGroup="UserInfo" ErrorMessage="*Required" runat="server" ForeColor="Red" />
                                                     </td>
                                                 </tr>
 
+                                                <%-- State--%>
                                                 <tr>
                                                     <td>
-                                                        <asp:Label runat="server">State: </asp:Label></td>
+                                                        <asp:Label runat="server">*State: </asp:Label></td>
                                                     <td>
                                                         <asp:DropDownList ID="Referral_State" runat="server">
                                                             <asp:ListItem Value="Select">Select</asp:ListItem>
@@ -644,17 +670,20 @@
                                                         </asp:DropDownList>
                                                         <asp:RequiredFieldValidator InitialValue="Select" ID="RequiredFieldValidator5" Display="Dynamic"
                                                             runat="server" ControlToValidate="Referral_State" ForeColor="Red"
-                                                            Text="*Required" ErrorMessage="ErrorMessage"></asp:RequiredFieldValidator>
+                                                            ValidationGroup="UserInfo" ErrorMessage="*Required"></asp:RequiredFieldValidator>
                                                     </td>
                                                 </tr>
 
+                                                <%-- Zip Code--%>
                                                 <tr>
                                                     <td>
-                                                        <asp:Label runat="server">Zip Code: </asp:Label></td>
+                                                        <asp:Label runat="server">*Zip Code: </asp:Label></td>
                                                     <td>
-                                                        <asp:TextBox ID="Referral_Zip" runat="server"></asp:TextBox>
+                                                        <asp:TextBox ID="Referral_Zip" runat="server" placeholder="00000-0000"></asp:TextBox>
                                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator10" ControlToValidate="Referral_Zip"
-                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" />
+                                                            Display="Dynamic" ValidationGroup="UserInfo" ErrorMessage="*Required" runat="server" ForeColor="Red" />
+                                                        <ajaxToolkit:FilteredTextBoxExtender ID="FilteredTextBoxExtender5" runat="server"
+                                                            TargetControlID="Referral_Zip" ValidChars="1234567890()-" />
                                                     </td>
                                                 </tr>
                                             </asp:Panel>
@@ -670,12 +699,10 @@
                                                         <asp:ListItem Value="No">No</asp:ListItem>
                                                     </asp:RadioButtonList>
                                                     <asp:RequiredFieldValidator ID="rfvNewHome" ControlToValidate="New_Home"
-                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" />
+                                                        Display="Dynamic" ValidationGroup="UserInfo" ErrorMessage="*Required" runat="server" ForeColor="Red" />
                                                 </td>
                                             </tr>
-
-
-                                            <%-- New Home Construction Project Details --%>
+                                            <%-- New Home Construction: Builder Name--%>
                                             <asp:Panel runat="server" ID="Home_Div" Style="margin-left: 30px" Visible="false">
                                                 <tr>
                                                     <td>
@@ -684,20 +711,15 @@
                                                         <asp:DropDownList runat="server" ID="New_Home_Builder" OnSelectedIndexChanged="onChanged" AutoPostBack="true">
                                                             <asp:ListItem Value="Select">Select</asp:ListItem>
                                                             <asp:ListItem Value="Other">Other</asp:ListItem>
-                                                        </asp:DropDownList></td>
+                                                        </asp:DropDownList>
+                                                        <asp:RequiredFieldValidator InitialValue="Select" ID="rfvBuilderName" Display="Dynamic"
+                                                            runat="server" ControlToValidate="New_Home_Builder" ForeColor="Red"
+                                                            ValidationGroup="UserInfo" ErrorMessage="*Required"></asp:RequiredFieldValidator>
+                                                    </td>
                                                 </tr>
-                                                <%-- Builder Name--%>
-                                                <asp:Panel runat="server" ID="Other_New_Panel" Visible="false">
-                                                    <tr>
-                                                        <td>
-                                                            <asp:Label runat="server">*Builder's Name: </asp:Label></td>
-                                                        <asp:TextBox runat="server" ID="Other_New_Builder" />
-                                                    </tr>
-                                                </asp:Panel>
                                             </asp:Panel>
 
-
-                                            <%-- Builder Referral Fee --%>
+                                            <%-- Builder Referral Fee: Toggle --%>
                                             <tr>
                                                 <td>
                                                     <asp:Label runat="server">*Builder Referral Fee: </asp:Label></td>
@@ -707,15 +729,14 @@
                                                         <asp:ListItem Value="No">No</asp:ListItem>
                                                     </asp:RadioButtonList>
                                                     <asp:RequiredFieldValidator ID="rfvBuilderReferral" ControlToValidate="Builder_Referral"
-                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" />
+                                                        Display="Dynamic" ValidationGroup="UserInfo" ErrorMessage="*Required" runat="server" ForeColor="Red" />
                                                 </td>
-
                                             </tr>
-                                            <%-- Builder Referral Fee Details --%>
+                                            <%-- Builder Referral Fee: Builder Name --%>
                                             <asp:Panel runat="server" ID="Builder_Panel" Style="margin-left: 30px" Visible="false">
                                                 <tr>
                                                     <td>
-                                                        <asp:Label runat="server">Builder Name: </asp:Label></td>
+                                                        <asp:Label runat="server">*Builder Name: </asp:Label></td>
                                                     <td>
                                                         <asp:DropDownList runat="server" ID="Builder_Names" OnSelectedIndexChanged="onChanged" AutoPostBack="true">
                                                             <asp:ListItem Value="Select">Select</asp:ListItem>
@@ -723,29 +744,29 @@
                                                         </asp:DropDownList>
                                                         <asp:RequiredFieldValidator InitialValue="Select" ID="RequiredFieldValidator11" Display="Dynamic"
                                                             runat="server" ControlToValidate="Builder_Names" ForeColor="Red"
-                                                            Text="*Required" ErrorMessage="ErrorMessage"></asp:RequiredFieldValidator>
+                                                            ValidationGroup="UserInfo" ErrorMessage="*Required"></asp:RequiredFieldValidator>
                                                     </td>
                                                 </tr>
-                                                <%--Not sure what this is--%>
+                                                <%-- TODO: PH: Is this field needed? --%>
+                                                <%-- Builder Referrral Fee: NOT VISIBLE--%>
                                                 <asp:Panel runat="server" ID="Other_Builder_Panel" Visible="false">
                                                     <td>
-                                                        <asp:Label runat="server">Builder Names: </asp:Label></td>
+                                                        <asp:Label runat="server">*Builder Names: </asp:Label></td>
                                                     <tr>
                                                         <asp:TextBox runat="server" ID="Other_Builder" />
                                                     </tr>
                                                 </asp:Panel>
-                                                <%-- Fee Amount --%>
+                                                <%-- Builder Referral Fee: Fee Amount --%>
                                                 <tr>
                                                     <td>
-                                                        <asp:Label runat="server">Fee Amount: </asp:Label></td>
+                                                        <asp:Label runat="server">*Fee Amount: </asp:Label></td>
                                                     <td>
                                                         <asp:TextBox runat="server" TextMode="Number" ID="Builder_Amount"></asp:TextBox>
                                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator12" ControlToValidate="Builder_Amount"
-                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" />
+                                                            Display="Dynamic" ValidationGroup="UserInfo" ErrorMessage="*Required" runat="server" ForeColor="Red" />
                                                     </td>
                                                 </tr>
                                             </asp:Panel>
-
 
                                             <%-- Access Letter Required --%>
                                             <tr>
@@ -757,11 +778,10 @@
                                                         <asp:ListItem Value="No">No</asp:ListItem>
                                                     </asp:RadioButtonList>
                                                     <asp:RequiredFieldValidator ID="rfvAccessLetter" ControlToValidate="Permission_Letter"
-                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" />
+                                                        Display="Dynamic" ValidationGroup="UserInfo" ErrorMessage="*Required" runat="server" ForeColor="Red" />
                                                 </td>
                                                 <asp:Button runat="server" Text="Print Access Letter" BackColor="#03a9f4" ForeColor="#FFFFFF" ID="Letter_Button" Visible="false" OnClick="PrintAccess" />
                                             </tr>
-
 
                                             <%-- Homeowner To Furnish Surveys --%>
                                             <tr>
@@ -773,14 +793,15 @@
                                                         <asp:ListItem Value="No">No</asp:ListItem>
                                                     </asp:RadioButtonList>
                                                     <asp:RequiredFieldValidator ID="rfvHomeownerFurnish" ControlToValidate="Homeowner_Furnish"
-                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" />
+                                                        Display="Dynamic" ValidationGroup="UserInfo" ErrorMessage="*Required" runat="server" ForeColor="Red" />
                                                 </td>
                                             </tr>
-                                            <%-- Homeowner To Furnish Surveys Details--%>
+
+                                            <%-- Homeowner To Furnish Surveys: Furnished Surveys --%>
                                             <asp:Panel runat="server" ID="Survey_Panel" Style="margin-left: 30px" Visible="false">
                                                 <tr>
                                                     <td>
-                                                        <asp:Label runat="server">Furnished Surveys: </asp:Label></td>
+                                                        <asp:Label runat="server">*Furnished Surveys: </asp:Label></td>
                                                     <td>
                                                         <asp:DropDownList runat="server" ID="Surveys_Selection">
                                                             <asp:ListItem Value="Select">Select</asp:ListItem>
@@ -788,13 +809,12 @@
                                                             <asp:ListItem Value="Final">Final</asp:ListItem>
                                                             <asp:ListItem Value="Both">Both</asp:ListItem>
                                                         </asp:DropDownList>
-                                                         <asp:RequiredFieldValidator InitialValue="Select" ID="RequiredFieldValidator13" Display="Dynamic"
+                                                        <asp:RequiredFieldValidator InitialValue="Select" ID="RequiredFieldValidator13"
                                                             runat="server" ControlToValidate="Surveys_Selection" ForeColor="Red"
-                                                            Text="*Required" ErrorMessage="ErrorMessage"></asp:RequiredFieldValidator>
+                                                            Display="Dynamic" ValidationGroup="UserInfo" ErrorMessage="*Required"></asp:RequiredFieldValidator>
                                                     </td>
                                                 </tr>
                                             </asp:Panel>
-
 
                                             <%-- Existing Fence --%>
                                             <tr>
@@ -807,10 +827,9 @@
                                                         <asp:ListItem Value="No">No</asp:ListItem>
                                                     </asp:RadioButtonList>
                                                     <asp:RequiredFieldValidator ID="rfvExistingFence" ControlToValidate="Existing_Fence"
-                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" />
+                                                        Display="Dynamic" ValidationGroup="UserInfo" ErrorMessage="*Required" runat="server" ForeColor="Red" />
                                                 </td>
                                             </tr>
-
 
                                             <%-- Existing Septic Tank --%>
                                             <tr>
@@ -823,38 +842,41 @@
                                                         <asp:ListItem Value="No">No</asp:ListItem>
                                                     </asp:RadioButtonList>
                                                     <asp:RequiredFieldValidator ID="rfvSepticTank" ControlToValidate="Septic_Tank"
-                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" />
+                                                        Display="Dynamic" ValidationGroup="UserInfo" ErrorMessage="*Required" runat="server" ForeColor="Red" />
                                                 </td>
                                             </tr>
 
-                                            <%-- Existing Septic Tank  Details--%>
+                                            <%-- Existing Septic Tank: Septic on Survey --%>
                                             <asp:Panel runat="server" ID="Septic_Panel" Style="margin-left: 30px" Visible="false">
                                                 <tr>
                                                     <td>
-                                                        <asp:Label runat="server">Is The Septic On The Survey?: </asp:Label></td>
+                                                        <asp:Label runat="server">*Septic On The Survey: </asp:Label></td>
                                                     <td>
                                                         <asp:RadioButtonList runat="server" ID="Septic_Buttons" RepeatDirection="Horizontal" RepeatLayout="Flow" AutoPostBack="true" OnSelectedIndexChanged="onChanged">
                                                             <asp:ListItem Value="Yes">Yes&nbsp;&nbsp;&nbsp;&nbsp;</asp:ListItem>
                                                             <asp:ListItem Value="No">No</asp:ListItem>
                                                         </asp:RadioButtonList>
                                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator14" ControlToValidate="Septic_Buttons"
-                                                        Display="Static" ErrorMessage="*Required" runat="server" ForeColor="Red" />
+                                                            Display="Dynamic" ValidationGroup="UserInfo" ErrorMessage="*Required" runat="server" ForeColor="Red" />
                                                     </td>
                                                 </tr>
                                             </asp:Panel>
 
-
                                             <%-- Waterfill Type --%>
                                             <tr>
                                                 <td>
-                                                    <asp:Label runat="server">Waterfill type: </asp:Label></td>
+                                                    <asp:Label runat="server">*Waterfill type: </asp:Label></td>
                                                 <td>
                                                     <asp:DropDownList runat="server" ID="DropDownList2">
-                                                        <asp:ListItem Value="City Water">City Water</asp:ListItem>
-                                                        <asp:ListItem Value="Well Water">Well Water</asp:ListItem>
-                                                    </asp:DropDownList></td>
+                                                        <asp:ListItem Value="Select">Select</asp:ListItem>
+                                                        <asp:ListItem Value="CityWater">City Water</asp:ListItem>
+                                                        <asp:ListItem Value="WellWater">Well Water</asp:ListItem>
+                                                    </asp:DropDownList>
+                                                    <asp:RequiredFieldValidator InitialValue="Select" ID="rfvWaterfillType" Display="Dynamic"
+                                                        runat="server" ControlToValidate="DropDownList2" ForeColor="Red"
+                                                        ValidationGroup="UserInfo" ErrorMessage="*Required"></asp:RequiredFieldValidator>
+                                                </td>
                                             </tr>
-
                                             <tr>
                                                 <td>&nbsp;</td>
                                                 <td>&nbsp;</td>
@@ -864,7 +886,7 @@
                                             <tr>
                                                 <td></td>
                                                 <td>
-                                                    <asp:Button ID="Button1" runat="server" Text="Save Changes" class="btn btn-primary" OnClick="Save" />
+                                                    <asp:Button ID="Button1" runat="server" Text="Save Changes" class="btn btn-primary" OnClick="Save" CausesValidation="true" ValidationGroup="UserInfo" />
                                                 </td>
                                             </tr>
 
@@ -1553,6 +1575,7 @@
 
 
                         <%-- Tab: Warranties --%>
+                        <%-- Warranties Grid --%>
                         <div class="tab-pane fade in" id="Warranties">
                             <asp:GridView ID="GridWarranties" runat="server" CssClass="Grid" AllowSorting="True" ForeColor="#333333" GridLines="Both" AutoGenerateColumns="False" DataSourceID="SqlDataSource2">
                                 <AlternatingRowStyle BackColor="White" />
@@ -1600,54 +1623,106 @@
                             <br />
                             <br />
                             <br />
-                            <p>
-                                Company:
-                               
-                                <asp:TextBox runat="server" Width="20%" ID="Company" />
-                            </p>
-                            <p>
-                                Product Name:
-                               
-                                <asp:TextBox runat="server" Width="20%" ID="ProductName" />
-                            </p>
-                            <p>
-                                Model Number:
-                               
-                                <asp:TextBox runat="server" Width="20%" ID="ModelNumber" />
-                            </p>
-                            <p>
-                                Part Number:
-                               
-                                <asp:TextBox runat="server" Width="20%" ID="PartNumber" />
-                            </p>
-                            <p>
-                                Serial Number:
-                               
-                                <asp:TextBox runat="server" Width="20%" ID="SerialNumber" />
-                            </p>
-                            <p>
-                                Date of Install:
-                               
-                                <asp:TextBox TextMode="Date" runat="server" ID="DateOfInstall" />
-                            </p>
-                            <p>
-                                Fire Up Date:
-                               
-                                <asp:TextBox TextMode="Date" runat="server" ID="FireUpDate" />
-                            </p>
-                            <p>
-                                Warranty Length:
-                               
-                                <asp:TextBox runat="server" Width="20%" ID="WarrantyLength" />
-                            </p>
-                            <p>
-                                Installer:
-                               
-                                <asp:TextBox runat="server" Width="20%" ID="Installer" />
-                            </p>
+
+                            <%-- Warranties Form --%>
+                            <div class="col-md-12">
+                                <div class="form-horizontal">
+
+                                    <div class="row">
+                                        <label for="Company" class="col-sm-2 control-label">*Company</label>
+                                        <div class="col-sm-10">
+                                            <asp:TextBox runat="server" ID="Company" CssClass="warrantyInputPadding" />
+                                            <asp:RequiredFieldValidator runat="server" ID="rfvWarrantyCompany" ControlToValidate="Company"
+                                                ValidationGroup="Warranties" Display="Dynamic" ErrorMessage="*Required" ForeColor="Red" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <label for="ProductName" class="col-sm-2 control-label">*Product Name: </label>
+                                        <div class="col-sm-10">
+                                            <asp:TextBox runat="server" ID="ProductName" CssClass="warrantyInputPadding" />
+                                            <asp:RequiredFieldValidator runat="server" ID="RequiredFieldValidator16" ControlToValidate="ProductName"
+                                                ValidationGroup="Warranties" Display="Dynamic" ErrorMessage="*Required" ForeColor="Red" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <label for="ModelNumber" class="col-sm-2 control-label">*Model Number: </label>
+                                        <div class="col-sm-10">
+                                            <asp:TextBox runat="server" ID="ModelNumber" CssClass="warrantyInputPadding" />
+                                            <asp:RequiredFieldValidator runat="server" ID="RequiredFieldValidator17" ControlToValidate="Company"
+                                                ValidationGroup="Warranties" Display="Dynamic" ErrorMessage="*Required" ForeColor="Red" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <label for="PartNumber" class="col-sm-2 control-label">*Part Number: </label>
+                                        <div class="col-sm-10">
+                                            <asp:TextBox runat="server" ID="PartNumber" CssClass="warrantyInputPadding" />
+                                            <asp:RequiredFieldValidator runat="server" ID="RequiredFieldValidator18" ControlToValidate="PartNumber"
+                                                ValidationGroup="Warranties" Display="Dynamic" ErrorMessage="*Required" ForeColor="Red" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <label for="SerialNumber" class="col-sm-2 control-label">*Serial Number: </label>
+                                        <div class="col-sm-10">
+                                            <asp:TextBox runat="server" ID="SerialNumber" CssClass="warrantyInputPadding" />
+                                            <asp:RequiredFieldValidator runat="server" ID="RequiredFieldValidator19" ControlToValidate="SerialNumber"
+                                                ValidationGroup="Warranties" Display="Dynamic" ErrorMessage="*Required" ForeColor="Red" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <label for="DateOfInstall" class="col-sm-2 control-label">*Date of Install: </label>
+                                        <div class="col-sm-10">
+                                            <asp:TextBox runat="server" TextMode="Date" ID="DateOfInstall" CssClass="warrantyInputPadding" />
+                                            <asp:RequiredFieldValidator runat="server" ID="RequiredFieldValidator20" ControlToValidate="DateOfInstall"
+                                                ValidationGroup="Warranties" Display="Dynamic" ErrorMessage="*Required" ForeColor="Red" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <label for="FireUpDate" class="col-sm-2 control-label">*Fire Up Date: </label>
+                                        <div class="col-sm-10">
+                                            <asp:TextBox runat="server" TextMode="Date" ID="FireUpDate" CssClass="warrantyInputPadding" />
+                                            <asp:RequiredFieldValidator runat="server" ID="RequiredFieldValidator21" ControlToValidate="FireUpDate"
+                                                ValidationGroup="Warranties" Display="Dynamic" ErrorMessage="*Required" ForeColor="Red" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <label for="WarrantyLength" class="col-sm-2 control-label">*Warranty Length: </label>
+                                        <div class="col-sm-10">
+                                            <asp:TextBox runat="server" ID="WarrantyLength" CssClass="warrantyInputPadding" />
+                                            <asp:RequiredFieldValidator runat="server" ID="RequiredFieldValidator22" ControlToValidate="WarrantyLength"
+                                                ValidationGroup="Warranties" Display="Dynamic" ErrorMessage="*Required" ForeColor="Red" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <label for="Installer" class="col-sm-2 control-label">*Installer: </label>
+                                        <div class="col-sm-10">
+                                            <asp:TextBox runat="server" ID="Installer" CssClass="warrantyInputPadding" />
+                                            <asp:RequiredFieldValidator runat="server" ID="RequiredFieldValidator23" ControlToValidate="Installer"
+                                                ValidationGroup="Warranties" Display="Dynamic" ErrorMessage="*Required" ForeColor="Red" />
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <br />
+
+                                    <%-- Add Warranty - ValidationGroup: Warranties --%>
+                                    <div class="row">
+                                        <asp:Button runat="server" Text="Add Warranty" class="col-sm-2 btn btn-primary" OnClick="AddWarranty" CausesValidation="true" ValidationGroup="Warranties" />
+                                        <div class="col-sm-10">
+                                            &nbsp;
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
                             <br />
                             <br />
-                            <asp:Button runat="server" Text="Add Warranty" BackColor="#03a9f4" ForeColor="#FFFFFF" OnClick="AddWarranty" />
                         </div>
                     </div>
 
