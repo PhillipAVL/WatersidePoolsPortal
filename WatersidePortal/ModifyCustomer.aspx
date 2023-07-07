@@ -284,12 +284,9 @@
                                                     <asp:TextBox ID="TextBox_Zip" runat="server" placeholder="00000-0000"></asp:TextBox>
                                                     <asp:RequiredFieldValidator runat="server" ID="rfvZip" ControlToValidate="TextBox_Zip" Display="Dynamic"
                                                         ValidationGroup="UserInfo" ErrorMessage="*Required" ForeColor="Red" />
-                                                    <asp:RegularExpressionValidator ID="regexpcontactZip" runat="server" ControlToValidate="TextBox_Zip"
-                                                        ValidationGroup="UserInfo" Display="Dynamic" ForeColor="Red" ErrorMessage="Please enter a Zip Code formatted as (XXXXX) or 10 Digit (XXXXX-XXXX)"
-                                                        ValidationExpression="^\d{5}(?:[-\s]\d{4})?$">
-                                                    </asp:RegularExpressionValidator>
-                                                    <ajaxToolkit:FilteredTextBoxExtender ID="FilteredTextBoxExtender1" runat="server"
-                                                        TargetControlID="TextBox_Zip" ValidChars="1234567890-" />
+                                                    <ajaxToolkit:MaskedEditExtender ID="MaskedEditExtender3" runat="server" TargetControlID="TextBox_Zip"
+                                                        MaskType="Number" Mask="99999-9999" MessageValidatorTip="true"
+                                                        ClearMaskOnLostFocus="False"></ajaxToolkit:MaskedEditExtender>
                                                 </td>
                                             </tr>
 
@@ -301,12 +298,9 @@
                                                     <asp:TextBox ID="TextBox_Telephone" runat="server" placeholder="000-000-0000"></asp:TextBox>
                                                     <asp:RequiredFieldValidator runat="server" ID="rfvPhone" ControlToValidate="TextBox_Telephone"
                                                         Display="Dynamic" ErrorMessage="*Required" ForeColor="Red" />
-                                                    <asp:RegularExpressionValidator ID="regexpvalPhone" runat="server" ControlToValidate="TextBox_Telephone"
-                                                        ValidationGroup="UserInfo" Display="Dynamic" ForeColor="Red" ErrorMessage="Please format as XXX-XXX-XXXX"
-                                                        ValidationExpression="^(1-)?\d{3}-\d{3}-\d{4}$">
-                                                    </asp:RegularExpressionValidator>
-                                                    <ajaxToolkit:FilteredTextBoxExtender ID="FilteredTextBoxExtender2" runat="server"
-                                                        TargetControlID="TextBox_Telephone" ValidChars="1234567890()-" />
+                                                    <ajaxToolkit:MaskedEditExtender ID="MaskedEditExtender1" runat="server" TargetControlID="TextBox_Telephone"
+                                                        MaskType="Number" Mask="999-999-9999" MessageValidatorTip="true"
+                                                        ClearMaskOnLostFocus="False"></ajaxToolkit:MaskedEditExtender>
                                                 </td>
                                             </tr>
 
@@ -316,12 +310,9 @@
                                                     <asp:Label ID="label7" AssociatedControlID="TextBox_Alternate_Telephone" Text="Alternate Telephone:" runat="server" /></td>
                                                 <td>
                                                     <asp:TextBox ID="TextBox_Alternate_Telephone" runat="server" placeholder="000-000-0000"></asp:TextBox>
-                                                    <asp:RegularExpressionValidator ID="regexpvalAlternatePhone" runat="server" ControlToValidate="TextBox_Alternate_Telephone"
-                                                        Display="Dynamic" ForeColor="Red" ErrorMessage="Please enter a phone number formatted as (XXX-XXX-XXXX)"
-                                                        ValidationExpression="^(1-)?\d{3}-\d{3}-\d{4}$">
-                                                    </asp:RegularExpressionValidator>
-                                                    <ajaxToolkit:FilteredTextBoxExtender ID="FilteredTextBoxExtender3" runat="server"
-                                                        TargetControlID="TextBox_Alternate_Telephone" ValidChars="1234567890()-" />
+                                                    <ajaxToolkit:MaskedEditExtender ID="MaskedEditExtender2" runat="server" TargetControlID="TextBox_Alternate_Telephone"
+                                                        MaskType="Number" Mask="999-999-9999" MessageValidatorTip="true"
+                                                        ClearMaskOnLostFocus="False"></ajaxToolkit:MaskedEditExtender>
                                                 </td>
                                             </tr>
 
@@ -761,9 +752,14 @@
                                                     <td>
                                                         <asp:Label runat="server">*Fee Amount: </asp:Label></td>
                                                     <td>
-                                                        <asp:TextBox runat="server" TextMode="Number" ID="Builder_Amount"></asp:TextBox>
+                                                        <asp:TextBox runat="server" ID="Builder_Amount" placeholder="000-000-0000"></asp:TextBox>
                                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator12" ControlToValidate="Builder_Amount"
                                                             Display="Dynamic" ValidationGroup="UserInfo" ErrorMessage="*Required" runat="server" ForeColor="Red" />
+                                                        <ajaxToolkit:MaskedEditExtender ID="MaskedEditExtender4" runat="server" TargetControlID="Builder_Amount"
+                                                            MaskType="Number" Mask="9,999.99" MessageValidatorTip="true"
+                                                            ClearMaskOnLostFocus="False" InputDirection="RightToLeft"
+                                                            AcceptNegative="Left"
+                                                            DisplayMoney="Left"></ajaxToolkit:MaskedEditExtender>
                                                     </td>
                                                 </tr>
                                             </asp:Panel>

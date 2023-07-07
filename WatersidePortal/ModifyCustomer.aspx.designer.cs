@@ -276,22 +276,13 @@ namespace WatersidePortal
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvZip;
 
         /// <summary>
-        /// regexpcontactZip control.
+        /// MaskedEditExtender3 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RegularExpressionValidator regexpcontactZip;
-
-        /// <summary>
-        /// FilteredTextBoxExtender1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::AjaxControlToolkit.FilteredTextBoxExtender FilteredTextBoxExtender1;
+        protected global::AjaxControlToolkit.MaskedEditExtender MaskedEditExtender3;
 
         /// <summary>
         /// label6 control.
@@ -321,22 +312,13 @@ namespace WatersidePortal
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvPhone;
 
         /// <summary>
-        /// regexpvalPhone control.
+        /// MaskedEditExtender1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RegularExpressionValidator regexpvalPhone;
-
-        /// <summary>
-        /// FilteredTextBoxExtender2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::AjaxControlToolkit.FilteredTextBoxExtender FilteredTextBoxExtender2;
+        protected global::AjaxControlToolkit.MaskedEditExtender MaskedEditExtender1;
 
         /// <summary>
         /// label7 control.
@@ -357,22 +339,13 @@ namespace WatersidePortal
         protected global::System.Web.UI.WebControls.TextBox TextBox_Alternate_Telephone;
 
         /// <summary>
-        /// regexpvalAlternatePhone control.
+        /// MaskedEditExtender2 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RegularExpressionValidator regexpvalAlternatePhone;
-
-        /// <summary>
-        /// FilteredTextBoxExtender3 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::AjaxControlToolkit.FilteredTextBoxExtender FilteredTextBoxExtender3;
+        protected global::AjaxControlToolkit.MaskedEditExtender MaskedEditExtender2;
 
         /// <summary>
         /// label8 control.
@@ -1030,6 +1003,15 @@ namespace WatersidePortal
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator12;
+
+        /// <summary>
+        /// MaskedEditExtender4 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.MaskedEditExtender MaskedEditExtender4;
 
         /// <summary>
         /// Permission_Letter control.
