@@ -530,7 +530,7 @@ namespace WatersidePortal
                             while (reader.Read())
                             {
                                 New_Home_Builder.Items.Add(new ListItem(String.Format("{0}", reader["FullName"])));
-                                Builder_Names.Items.Add(new ListItem(String.Format("{0}", reader["FullName"])));
+                                //Builder_Names.Items.Add(new ListItem(String.Format("{0}", reader["FullName"])));
                             }
                         }
                     }
@@ -581,25 +581,36 @@ namespace WatersidePortal
                                 Min_Access_F.Text = String.Format("{0}", reader["MinAccessF"]);
                                 Min_Access_I.Text = String.Format("{0}", reader["MinAccessI"]);
                                 drop_distance.SelectedValue = String.Format("{0}", reader["Distance"]);
-                                Builder_Names.SelectedValue = String.Format("{0}", reader["Builder"]);
-                                Other_Builder.Text = String.Format("{0}", reader["BuilderOther"]);
-                                New_Home_Builder.SelectedValue = String.Format("{0}", reader["NHBuilder"]);
-                                //Other_New_Builder.Text = String.Format("{0}", reader["NHOther"]);
+
+
+                                // Builder Referral Info
+                                // New Home Construction Project RB
                                 New_Home.SelectedValue = String.Format("{0}", reader["NHSelection"]);
                                 if (New_Home.SelectedValue == "Yes")
                                 {
                                     Home_Div.Visible = true;
                                 }
-                                Builder_Referral.SelectedValue = String.Format("{0}", reader["BuilderSelection"]);
-                                if (Builder_Referral.SelectedValue == "Yes")
-                                {
-                                    Builder_Panel.Visible = true;
-                                }
+
+                                // Builder Select
+                                New_Home_Builder.SelectedValue = String.Format("{0}", reader["NHBuilder"]);
+
+                                //Builder_Names.SelectedValue = String.Format("{0}", reader["Builder"]);
+                                //Other_Builder.Text = String.Format("{0}", reader["BuilderOther"]);
+
+                                //Other_New_Builder.Text = String.Format("{0}", reader["NHOther"]);
+
+                                //Builder_Referral.SelectedValue = String.Format("{0}", reader["BuilderSelection"]);
+                                //if (Builder_Referral.SelectedValue == "Yes")
+                                //{
+                                //    Builder_Panel.Visible = true;
+                                //}
                                 //if (New_Home_Builder.SelectedValue == "Other")
                                 //    Other_New_Panel.Visible = true;
-                                if (Builder_Names.SelectedValue == "Other")
-                                    Other_Builder_Panel.Visible = true;
-                                Builder_Amount.Text = String.Format("{0}", reader["BuilderFee"]);
+                                //if (Builder_Names.SelectedValue == "Other")
+                                //    //Other_Builder_Panel.Visible = true;
+                                //Builder_Amount.Text = String.Format("{0}", reader["BuilderFee"]);
+
+
                                 Permission_Letter.SelectedValue = String.Format("{0}", reader["APLR"]);
                                 if (Permission_Letter.SelectedValue == "Yes")
                                     Letter_Button.Visible = true;
@@ -1053,7 +1064,7 @@ namespace WatersidePortal
             {
                 return;
             }
-            
+
             // Validate the user entered info.
             if (!validateWarrantiesInformationInput())
             {
@@ -1201,10 +1212,10 @@ namespace WatersidePortal
                 Referral_Div.Visible = false;
             }
 
-            if (Builder_Referral.SelectedValue == "Yes")
-                Builder_Panel.Visible = true;
-            else
-                Builder_Panel.Visible = false;
+            //if (Builder_Referral.SelectedValue == "Yes")
+            //    Builder_Panel.Visible = true;
+            //else
+            //    Builder_Panel.Visible = false;
 
             if (Permission_Letter.SelectedValue == "Yes")
                 Letter_Button.Visible = true;
@@ -1226,10 +1237,10 @@ namespace WatersidePortal
             //else
             //    Other_New_Panel.Visible = false;
 
-            if (Builder_Names.SelectedValue == "Other")
-                Other_Builder_Panel.Visible = true;
-            else
-                Other_Builder_Panel.Visible = false;
+            //if (Builder_Names.SelectedValue == "Other")
+            //    Other_Builder_Panel.Visible = true;
+            //else
+            //    Other_Builder_Panel.Visible = false;
         }
 
         protected void popup(object sender, EventArgs e)
@@ -1341,9 +1352,20 @@ namespace WatersidePortal
             string connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
             using (SqlConnection conn = new SqlConnection(connString))
             {
-                string cmdString = "UPDATE Customers SET WaterfillType = @WaterfillType, SurveySelection = @SurveyS, SepticSurvey = @SepticSurvey, ExistingSeptic = @ES, ExistingFence = @EF, HTFS = @htfs, APLR = @aplr, BuilderFee = @BF, NHSelection = @NHS, BuilderSelection = @BS, NHBuilder = @NHB, NHOther = @NHO, Builder = @build, BuilderOther = @bo, MinAccessF = @MAF, MinAccessI = @MAI, Referral = @ref, Distance = @dist, FirstName = @first, LastName = @last, Address = @add, City = @city, State = @state, ZipCode = @zip, Telephone = @tele, Alternate = @alt, Email = @email, AlternateEmail = @altemail, JobAddress = @JAdd, JobCity = @JCity, JobPermit = @JPermit, JobARB = @JARB, JobZip = @JZip, JobLot = @JLot, JobBlock = @JBlock, JobSection = @JSection, JobPlat = @JPlat, JobPage = @JPage, Notes = @Notes WHERE CustomerID = @ID";
+                // Set UPDATE sql and parms.
+                string cmdString = "UPDATE Customers SET HomeownerFee = @HomeownerFee, WaterfillType = @WaterfillType, SurveySelection = @SurveySelection, " +
+                                    "SepticSurvey = @SepticSurvey, ExistingSeptic = @ExistingSepticTank, ExistingFence = @ExistingFenceSelection, HTFS = @HomeownerToFurnishSurveys, APLR = @aplr, BuilderFee = @BuilderFee, " +
+                                    "NHSelection = @NHSelection, NHBuilder = @NHBuilder, " +
+                                    "MinAccessF = @MinimumAccessFeet, MinAccessI = @MinimumAccessInches, Referral = @ReferralToBePaid, Distance = @DistanceFromHQ, " +
+                                    "FirstName = @first, LastName = @last, Address = @add, City = @city, State = @state, ZipCode = @zip, " +
+                                    "Telephone = @tele, Alternate = @alt, Email = @email, AlternateEmail = @altemail, " +
+                                    "JobAddress = @JAdd, JobCity = @JCity, JobPermit = @JPermit, JobARB = @JARB, JobZip = @JZip, JobLot = @JLot, JobBlock = @JBlock, JobSection = @JSection, JobPlat = @JPlat, JobPage = @JPage, " +
+                                    "Notes = @Notes WHERE CustomerID = @ID";
                 using (SqlCommand comm = new SqlCommand(cmdString, conn))
                 {
+                    comm.Parameters.AddWithValue("@ID", ID);
+
+                    // Customer Demographics Info.
                     comm.Parameters.AddWithValue("@first", TextBox_FirstName.Text);
                     comm.Parameters.AddWithValue("@last", TextBox_LastName.Text);
                     comm.Parameters.AddWithValue("@add", TextBox_Address.Text);
@@ -1354,6 +1376,8 @@ namespace WatersidePortal
                     comm.Parameters.AddWithValue("@alt", TextBox_Alternate_Telephone.Text);
                     comm.Parameters.AddWithValue("@email", TextBox_Email_Address.Text);
                     comm.Parameters.AddWithValue("@altemail", TextBox_Alternate_Email.Text);
+
+                    // Jobsite Info.
                     comm.Parameters.AddWithValue("@JAdd", TextBox_Job_Address.Text);
                     comm.Parameters.AddWithValue("@JCity", TextBox_Job_City.Text);
                     comm.Parameters.AddWithValue("@JPermit", Permit.SelectedValue);
@@ -1364,25 +1388,41 @@ namespace WatersidePortal
                     comm.Parameters.AddWithValue("@JSection", TextBox_Section.Text);
                     comm.Parameters.AddWithValue("@JPlat", TextBox_Plat.Text);
                     comm.Parameters.AddWithValue("@JPage", TextBox_Pages.Text);
+
+                    // Notes
                     comm.Parameters.AddWithValue("@Notes", Notes.Text);
-                    comm.Parameters.AddWithValue("@ID", ID);
-                    comm.Parameters.AddWithValue("@MAF", Convert.ToInt32(Min_Access_F.Text));
-                    comm.Parameters.AddWithValue("@MAI", Convert.ToInt32(Min_Access_I.Text));
-                    comm.Parameters.AddWithValue("@dist", drop_distance.SelectedValue);
-                    comm.Parameters.AddWithValue("@ref", Referral_Amount.Text.Replace("`", "") + "`" + Referral_Full.Text.Replace("`", "") + "`" + Referral_Address.Text.Replace("`", "") + "`" + Referral_City.Text.Replace("`", "") + "`" + Referral_State.SelectedValue + "`" + Referral_Zip.Text.Replace("`", ""));
-                    comm.Parameters.AddWithValue("@NHB", New_Home_Builder.SelectedValue);
-                    comm.Parameters.AddWithValue("@build", Builder_Names.SelectedValue);
-                    comm.Parameters.AddWithValue("@NHO", string.Empty); //Other_New_Builder.Text
-                    comm.Parameters.AddWithValue("@bo", Other_Builder.Text);
-                    comm.Parameters.AddWithValue("@NHS", New_Home.SelectedValue);
-                    comm.Parameters.AddWithValue("@BS", Builder_Referral.SelectedValue);
-                    comm.Parameters.AddWithValue("@BF", Builder_Amount.Text);
+
+                    // Access Height, Feet and Inches.
+                    comm.Parameters.AddWithValue("@MinimumAccessFeet", Convert.ToInt32(Min_Access_F.Text));
+                    comm.Parameters.AddWithValue("@MinimumAccessInches", Convert.ToInt32(Min_Access_I.Text));
+
+                    // Distance from HQ.
+                    comm.Parameters.AddWithValue("@DistanceFromHQ", drop_distance.SelectedValue);
+
+                    // Referral to be Paid. THis is saved in a single column as a string.
+                    comm.Parameters.AddWithValue("@ReferralToBePaid", Referral_Amount.Text.Replace("`", "") + "`" + Referral_Full.Text.Replace("`", "") + "`" + Referral_Address.Text.Replace("`", "") + "`" + Referral_City.Text.Replace("`", "") + "`" + Referral_State.SelectedValue + "`" + Referral_Zip.Text.Replace("`", ""));
+
+                    // New Home Construction Project
+                    comm.Parameters.AddWithValue("@NHSelection", New_Home.SelectedValue);
+                    comm.Parameters.AddWithValue("@NHBuilder", New_Home_Builder.SelectedValue);
+                    comm.Parameters.AddWithValue("@BuilderFee", Builder_Amount.Text);
+                    comm.Parameters.AddWithValue("@HomeownerFee", Homeowner_Amount.Text);
+
+                    // Permission Letter.
                     comm.Parameters.AddWithValue("@aplr", Permission_Letter.SelectedValue);
-                    comm.Parameters.AddWithValue("@htfs", Homeowner_Furnish.SelectedValue);
-                    comm.Parameters.AddWithValue("@SurveyS", Surveys_Selection.SelectedValue);
-                    comm.Parameters.AddWithValue("@EF", Existing_Fence.SelectedValue);
-                    comm.Parameters.AddWithValue("@ES", Septic_Tank.SelectedValue);
+
+                    // Homeonwer to Furnish Surveys and Survey Type.
+                    comm.Parameters.AddWithValue("@HomeownerToFurnishSurveys", Homeowner_Furnish.SelectedValue);
+                    comm.Parameters.AddWithValue("@SurveySelection", Surveys_Selection.SelectedValue);
+
+                    // Existing Fence.
+                    comm.Parameters.AddWithValue("@ExistingFenceSelection", Existing_Fence.SelectedValue);
+
+                    // Existing Septic Tank and Septic Tank on Survey.
+                    comm.Parameters.AddWithValue("@ExistingSepticTank", Septic_Tank.SelectedValue);
                     comm.Parameters.AddWithValue("@SepticSurvey", Septic_Buttons.SelectedValue);
+
+                    // Waterfill Type.
                     comm.Parameters.AddWithValue("@WaterfillType", DropDownList2.SelectedValue);
 
                     try
@@ -2124,21 +2164,16 @@ namespace WatersidePortal
                 {
                     userInfoComplete = false;
                 }
-            }
-
-            // Builder Referral Fee.
-            if (Builder_Referral.Text == string.Empty)
-            {
-                userInfoComplete = false;
-            }
-            else if (Builder_Referral.Text == "Yes")
-            {
-                if (Builder_Names.SelectedValue == string.Empty || Builder_Names.SelectedValue == "Select")
+                if (Builder_Amount.Text == "$  _,___.__")
+                {
+                    userInfoComplete = false;
+                }
+                if (Homeowner_Amount.Text == "$  _,___.__")
                 {
                     userInfoComplete = false;
                 }
             }
-
+            
             // Access Permission Letter Required.
             if (Permission_Letter.SelectedValue == string.Empty || Permission_Letter.SelectedValue == "Select")
             {
@@ -2150,13 +2185,13 @@ namespace WatersidePortal
             {
                 userInfoComplete = false;
             }
-            else if (Builder_Referral.Text == "Yes")
-            {
-                if (Surveys_Selection.SelectedValue == string.Empty || Surveys_Selection.SelectedValue == "Select")
-                {
-                    userInfoComplete = false;
-                }
-            }
+            //else if (Builder_Referral.Text == "Yes")
+            //{
+            //    if (Surveys_Selection.SelectedValue == string.Empty || Surveys_Selection.SelectedValue == "Select")
+            //    {
+            //        userInfoComplete = false;
+            //    }
+            //}
 
             // Existing Fence
             if (Existing_Fence.Text == string.Empty)

@@ -680,7 +680,7 @@
                                             </asp:Panel>
 
 
-                                            <%-- New Home Construction Project--%>
+                                            <%-- New Home Construction Project: RB Toggle --%>
                                             <tr>
                                                 <td>
                                                     <asp:Label runat="server">*New Home Construction Project: </asp:Label></td>
@@ -708,49 +708,10 @@
                                                             ValidationGroup="UserInfo" ErrorMessage="*Required"></asp:RequiredFieldValidator>
                                                     </td>
                                                 </tr>
-                                            </asp:Panel>
-
-                                            <%-- Builder Referral Fee: Toggle --%>
-                                            <tr>
-                                                <td>
-                                                    <asp:Label runat="server">*Builder Referral Fee: </asp:Label></td>
-                                                <td>
-                                                    <asp:RadioButtonList runat="server" ID="Builder_Referral" RepeatDirection="Horizontal" RepeatLayout="Flow" AutoPostBack="true" OnSelectedIndexChanged="onChanged">
-                                                        <asp:ListItem Value="Yes">Yes&nbsp;&nbsp;&nbsp;&nbsp;</asp:ListItem>
-                                                        <asp:ListItem Value="No">No</asp:ListItem>
-                                                    </asp:RadioButtonList>
-                                                    <asp:RequiredFieldValidator ID="rfvBuilderReferral" ControlToValidate="Builder_Referral"
-                                                        Display="Dynamic" ValidationGroup="UserInfo" ErrorMessage="*Required" runat="server" ForeColor="Red" />
-                                                </td>
-                                            </tr>
-                                            <%-- Builder Referral Fee: Builder Name --%>
-                                            <asp:Panel runat="server" ID="Builder_Panel" Style="margin-left: 30px" Visible="false">
+                                                <%-- New Home Construction Project: Builder Referral Fee: Fee Amount --%>
                                                 <tr>
                                                     <td>
-                                                        <asp:Label runat="server">*Builder Name: </asp:Label></td>
-                                                    <td>
-                                                        <asp:DropDownList runat="server" ID="Builder_Names" OnSelectedIndexChanged="onChanged" AutoPostBack="true">
-                                                            <asp:ListItem Value="Select">Select</asp:ListItem>
-                                                            <asp:ListItem Value="Other">Other</asp:ListItem>
-                                                        </asp:DropDownList>
-                                                        <asp:RequiredFieldValidator InitialValue="Select" ID="RequiredFieldValidator11" Display="Dynamic"
-                                                            runat="server" ControlToValidate="Builder_Names" ForeColor="Red"
-                                                            ValidationGroup="UserInfo" ErrorMessage="*Required"></asp:RequiredFieldValidator>
-                                                    </td>
-                                                </tr>
-                                                <%-- TODO: PH: Is this field needed? --%>
-                                                <%-- Builder Referrral Fee: NOT VISIBLE--%>
-                                                <asp:Panel runat="server" ID="Other_Builder_Panel" Visible="false">
-                                                    <td>
-                                                        <asp:Label runat="server">*Builder Names: </asp:Label></td>
-                                                    <tr>
-                                                        <asp:TextBox runat="server" ID="Other_Builder" />
-                                                    </tr>
-                                                </asp:Panel>
-                                                <%-- Builder Referral Fee: Fee Amount --%>
-                                                <tr>
-                                                    <td>
-                                                        <asp:Label runat="server">*Fee Amount: </asp:Label></td>
+                                                        <asp:Label runat="server">*Builder Referral Fee Amount: </asp:Label></td>
                                                     <td>
                                                         <asp:TextBox runat="server" ID="Builder_Amount" placeholder="000-000-0000"></asp:TextBox>
                                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator12" ControlToValidate="Builder_Amount"
@@ -762,7 +723,23 @@
                                                             DisplayMoney="Left"></ajaxToolkit:MaskedEditExtender>
                                                     </td>
                                                 </tr>
+                                                <%-- New Home Construction Project: Homeowner Fee Amount --%>
+                                                <tr>
+                                                    <td>
+                                                        <asp:Label runat="server">*Homeowner Fee Amount: </asp:Label></td>
+                                                    <td>
+                                                        <asp:TextBox runat="server" ID="Homeowner_Amount" placeholder="000-000-0000"></asp:TextBox>
+                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator11" ControlToValidate="Homeowner_Amount"
+                                                            Display="Dynamic" ValidationGroup="UserInfo" ErrorMessage="*Required" runat="server" ForeColor="Red" />
+                                                        <ajaxToolkit:MaskedEditExtender ID="MaskedEditExtender5" runat="server" TargetControlID="Homeowner_Amount"
+                                                            MaskType="Number" Mask="9,999.99" MessageValidatorTip="true"
+                                                            ClearMaskOnLostFocus="False" InputDirection="RightToLeft"
+                                                            AcceptNegative="Left"
+                                                            DisplayMoney="Left"></ajaxToolkit:MaskedEditExtender>
+                                                    </td>
+                                                </tr>
                                             </asp:Panel>
+
 
                                             <%-- Access Letter Required --%>
                                             <tr>
@@ -792,7 +769,6 @@
                                                         Display="Dynamic" ValidationGroup="UserInfo" ErrorMessage="*Required" runat="server" ForeColor="Red" />
                                                 </td>
                                             </tr>
-
                                             <%-- Homeowner To Furnish Surveys: Furnished Surveys --%>
                                             <asp:Panel runat="server" ID="Survey_Panel" Style="margin-left: 30px" Visible="false">
                                                 <tr>
