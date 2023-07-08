@@ -713,7 +713,7 @@
                                                     <td>
                                                         <asp:Label runat="server">*Builder Referral Fee Amount: </asp:Label></td>
                                                     <td>
-                                                        <asp:TextBox runat="server" ID="Builder_Amount" placeholder="000-000-0000"></asp:TextBox>
+                                                        <asp:TextBox runat="server" ID="Builder_Amount" Width="125"></asp:TextBox>
                                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator12" ControlToValidate="Builder_Amount"
                                                             Display="Dynamic" ValidationGroup="UserInfo" ErrorMessage="*Required" runat="server" ForeColor="Red" />
                                                         <ajaxToolkit:MaskedEditExtender ID="MaskedEditExtender4" runat="server" TargetControlID="Builder_Amount"
@@ -728,7 +728,7 @@
                                                     <td>
                                                         <asp:Label runat="server">*Homeowner Fee Amount: </asp:Label></td>
                                                     <td>
-                                                        <asp:TextBox runat="server" ID="Homeowner_Amount" placeholder="000-000-0000"></asp:TextBox>
+                                                        <asp:TextBox runat="server" ID="Homeowner_Amount"  Width="125"></asp:TextBox>
                                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator11" ControlToValidate="Homeowner_Amount"
                                                             Display="Dynamic" ValidationGroup="UserInfo" ErrorMessage="*Required" runat="server" ForeColor="Red" />
                                                         <ajaxToolkit:MaskedEditExtender ID="MaskedEditExtender5" runat="server" TargetControlID="Homeowner_Amount"
