@@ -1622,7 +1622,7 @@
                                         <label for="ModelNumber" class="col-sm-2 control-label">*Model Number: </label>
                                         <div class="col-sm-10">
                                             <asp:TextBox runat="server" ID="ModelNumber" CssClass="warrantyInputPadding" />
-                                            <asp:RequiredFieldValidator runat="server" ID="RequiredFieldValidator17" ControlToValidate="Company"
+                                            <asp:RequiredFieldValidator runat="server" ID="RequiredFieldValidator17" ControlToValidate="ModelNumber"
                                                 ValidationGroup="Warranties" Display="Dynamic" ErrorMessage="*Required" ForeColor="Red" />
                                         </div>
                                     </div>
