@@ -33,12 +33,16 @@ namespace WatersidePortal
                 }
                 if (arr.Length > 2)
                 {
+                    CustomerId.Value = arr[0];
+                    this.Session["CurrentProjectId"] = CustomerId.Value;
+
                     CustomerName.Value = GetCustomerFullName(ID);
+                    CustomerFullName.Text = CustomerName.Value;
                     this.Session["CurrentCustomerName"] = CustomerName.Value;
+
                     ProjectId.Value = arr[2];
                     this.Session["CurrentProjectId"] = ProjectId.Value;
                 }
-                CustomerFullName.Text = GetCustomerFullName(ID);
             }
 
             if (!Page.IsPostBack)
@@ -48,16 +52,33 @@ namespace WatersidePortal
                     return;
 
                 string[] queryParms = HttpContext.Current.Request.Url.AbsoluteUri.Split('?')[1].Split('&');
-                CustomerId.Value = queryParms[0];
-                this.Session["CurrentCustomerId"] = CustomerId.Value;
+                if (Session["CurrentCustomerId"] == null)
+                {
+                    Session["CurrentCustomerId"] = CustomerId.Value;
+                }
+                else
+                {
+                    CustomerId.Value = queryParms[0];
+                }
 
-                ProjectId.Value = queryParms[2];
-                this.Session["CurrentProjectId"] = ProjectId.Value;
+                if (Session["CurrentProjectId"] == null)
+                {
+                    Session["CurrentProjectId"] = queryParms[2];
+                    ProjectId.Value = queryParms[2];
+                }
+                else if (queryParms.ElementAtOrDefault(2) != null)
+                {
+                    Session["CurrentProjectId"] = queryParms[2];
+                    ProjectId.Value = Session["CurrentProjectId"].ToString();
+                }
+                else
+                {
+                    Session["CurrentProjectId"] = Session["CurrentProjectId"];
+                    ProjectId.Value = Session["CurrentProjectId"].ToString();
+                }
 
                 CustomerName.Value = GetCustomerFullName(CustomerId.Value);
-                CustomerFullName.Text = CustomerName.Value;
                 this.Session["CurrentCustomerName"] = CustomerName.Value;
-
 
                 // Get project detail.
                 Models.Project gProj = new Models.Project();

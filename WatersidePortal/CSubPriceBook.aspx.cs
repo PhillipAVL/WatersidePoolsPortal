@@ -20,27 +20,27 @@ namespace WatersidePortal
         {
             CSubPriceBook frm = (CSubPriceBook)sender;
 
-            var pid = HttpContext.Current.Session["CurrentProjectId"];
+            var projectId = HttpContext.Current.Session["CurrentProjectId"];
             var customerId = HttpContext.Current.Session["CurrentCustomerId"];
             var customerName = HttpContext.Current.Session["CurrentCustomerName"];
 
             if (HttpContext.Current.Request.Url.Query.Length == 0)
                 return;
             string[] arr = HttpContext.Current.Request.Url.Query.Remove(0, 1).Split('&');
-            string filter = "1";
+            string category = "1";
             if (arr.Length > 1)
             {
-                filter = arr[0];
-                hdr.Text = CItemPriceBook.convertURL(filter);
+                category = arr[0];
+                hdr.Text = CItemPriceBook.convertURL(category);
             }
             else
             {
                 return;
             }
             SqlDataSource1.SelectCommand = "SELECT [Subcategory], STRING_AGG(nullif([Subsubcategory],''), ', ') WITHIN GROUP (ORDER BY [Subsubcategory]) AS Subsub FROM (select distinct [Subsubcategory], [Subcategory] FROM [PriceBook] WHERE [dbo].[PriceBook].[Category] = @fil AND Datalength([Subcategory]) > 0) x GROUP BY [Subcategory]";
-            SqlDataSource1.SelectParameters.Add("fil", CItemPriceBook.convertURL(filter));
+            SqlDataSource1.SelectParameters.Add("fil", CItemPriceBook.convertURL(category));
             SqlDataSource2.SelectCommand = "SELECT [Item], [Description], [CustomerPrice], [Unit], [ItemID] FROM [PriceBook] WHERE [dbo].[PriceBook].[Category] = @fil AND ([dbo].[PriceBook].[Subcategory] is null or [dbo].[PriceBook].[Subcategory] = '')";
-            SqlDataSource2.SelectParameters.Add("fil", CItemPriceBook.convertURL(filter));
+            SqlDataSource2.SelectParameters.Add("fil", CItemPriceBook.convertURL(category));
             SqlDataSource1.DataBind();
             SqlDataSource2.DataBind();
             if (GridView_Items.Rows.Count == 0)

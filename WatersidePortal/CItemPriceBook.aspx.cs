@@ -21,23 +21,31 @@ namespace WatersidePortal
         
         protected void Page_Load(object sender, EventArgs e)
         {
+            var projectId = HttpContext.Current.Session["CurrentProjectId"];
+            var customerId = HttpContext.Current.Session["CurrentCustomerId"];
+            var customerName = HttpContext.Current.Session["CurrentCustomerName"];
+
             if (HttpContext.Current.Request.Url.Query.Length == 0)
                 return;
             string[] arr = HttpContext.Current.Request.Url.Query.Remove(0, 1).Split('&');
             string filter = "DECKING";
             string filter2 = "TRAVERTINE";
             string filter3 = "Alaskan Silver (Travertine - Tumbled)";
+            //string customerId = string.Empty;
             if (arr.Length > 2)
             {
                 filter = arr[0];
                 filter2 = arr[1];
                 filter3 = arr[2];
+                customerId = arr[3];
                 hdr.Text = CItemPriceBook.convertURL(filter) + " - " + CItemPriceBook.convertURL(filter2) + "-" + CItemPriceBook.convertURL(filter3);
             }
             else
             {
                 return;
             }
+
+            // Build item grid for Bid Proposal.
             SqlDataSource2.SelectCommand = "SELECT [Item], [Description], [CustomerPrice], [Unit], [ItemID] FROM [PriceBook] WHERE [dbo].[PriceBook].[Category] = @fil AND [dbo].[PriceBook].[Subcategory] = @fil2 AND [dbo].[PriceBook].[Subsubcategory] = @fil3";
             SqlDataSource2.SelectParameters.Add("fil", CItemPriceBook.convertURL(filter));
             SqlDataSource2.SelectParameters.Add("fil2", CItemPriceBook.convertURL(filter2));
@@ -64,19 +72,42 @@ namespace WatersidePortal
         
         protected void Submit(object sender, EventArgs e)
         {
+            string customerId = string.Empty;
+            string itemCategory = string.Empty;
+            string itemSubCategory = string.Empty;
+            string itemSubSubCategory = string.Empty;
+            int proj = -1;
+
+            //if (HttpContext.Current.Request.Url.Query.Length == 0)
+            //    return;
+            //string[] arr = HttpContext.Current.Request.Url.Query.Remove(0, 1).Split('&');
+            //if (arr.Length < 4)
+            //    return;
+
+
             if (HttpContext.Current.Request.Url.Query.Length == 0)
                 return;
             string[] arr = HttpContext.Current.Request.Url.Query.Remove(0, 1).Split('&');
-            if (arr.Length < 4)
+            if (arr.Length > 3)
+            {
+                itemCategory = arr[0];
+                itemSubCategory = arr[1];
+                itemSubSubCategory = arr[2];
+                customerId = arr[3];
+            }
+            else
+            {
                 return;
-            int proj = -1;
+            }
+
+            // Get selected Customer Bid Proposal (Project).
             string cmdString = "SELECT [CurrentProject] FROM [Customers] WHERE [CustomerID] = @ID";
             string connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
             using (SqlConnection conn = new SqlConnection(connString))
             {
                 using (SqlCommand comm = new SqlCommand(cmdString, conn))
                 {
-                    comm.Parameters.AddWithValue("@ID", arr[3]);
+                    comm.Parameters.AddWithValue("@ID", customerId);
                     try
                     {
                         conn.Open();
@@ -99,7 +130,7 @@ namespace WatersidePortal
                     }
                 }
             }
-            string built = "";
+            string built = string.Empty;
             for (int i = 0; i < GridView1.Rows.Count; i++)
             {
                 TextBox txt2 = (TextBox)GridView1.Rows[i].Cells[0].Controls[1];

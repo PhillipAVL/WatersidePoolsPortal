@@ -9,13 +9,21 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using WatersidePortal.Base;
 
 namespace WatersidePortal
 {
-    public partial class CSubsubPriceBook : System.Web.UI.Page
+    public partial class CSubsubPriceBook : WebFormBase
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            string projectId = HttpContext.Current.Session["CurrentProjectId"].ToString();
+            ProjectId.Value = projectId;
+            string customerId = HttpContext.Current.Session["CurrentCustomerId"].ToString(); ;
+            CustomerId.Value = customerId;
+            string customerName = HttpContext.Current.Session["CurrentCustomerName"].ToString(); ;
+            CustomerName.Value = GetCustomerFullName(customerId);
+
             if (HttpContext.Current.Request.Url.Query.Length == 0)
                 return;
 

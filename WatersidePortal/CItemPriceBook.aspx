@@ -83,6 +83,18 @@
                                     <div class="btn-toolbar" role="group" aria-label="Basic example">
                                         <asp:Button ID="Button1" runat="server" Text="Add All Item Quantities And Return To Catalog" CssClass="btn btn-success wrap" BackColor="#2196f3" ForeColor="White" Height="40px" OnClick="Submit" />
                                         <asp:Button Text="Click To Cancel And Return To Catalog" runat="server" CssClass="btn btn-success wrap" BackColor="#e34a3f" ForeColor="White" Height="40px" OnClick="Back" />
+                                                
+                                        <%--<asp:Button ID="Button1" runat="server" Text="Add All Item Quantities And Return To Catalog" CssClass="btn btn-primary wrap" Height="40px" OnClick="Submit"><span class="glyphicon glyphicon-circle-arrow-left"></span></asp:Button>--%>
+                                        <button runat="server" class="btn btn-primary wrap" onclick="Submit">
+                                            <span aria-hidden="true" class="glyphicon glyphicon glyphicon-plus"></span>&nbsp;Add All Item Quantities And Return To Catalog 
+                                        </button>
+                                        
+                                        <%--<asp:Button Text="Click To Cancel And Return To Catalog" runat="server" CssClass="btn btn-primary wrap" Height="40px" OnClick="Back" />--%>
+                                        <button runat="server" class="btn btn-primary wrap" onclick="Back">
+                                            <span aria-hidden="true" class="glyphicon glyphicon glyphicon-arrow-left"></span>&nbsp;Cancel And Return To Catalog 
+                                        </button>
+                                    </div>
+                                    <br />
                                     </div>
                                     <br />
 
