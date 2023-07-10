@@ -140,6 +140,7 @@ namespace WatersidePortal
                 AddToHistory("Customer Profile Created.");
             }
 
+            // Warranties data source.
             SqlDataSource2.SelectCommand = "SELECT * from [Warranties] where [CustomerID] = @ID ORDER BY [WarrantyID] ASC";
             SqlDataSource2.SelectParameters.Add("ID", customerId);
             SqlDataSource2.DataBind();
@@ -581,6 +582,8 @@ namespace WatersidePortal
                                 Min_Access_F.Text = String.Format("{0}", reader["MinAccessF"]);
                                 Min_Access_I.Text = String.Format("{0}", reader["MinAccessI"]);
                                 drop_distance.SelectedValue = String.Format("{0}", reader["Distance"]);
+                                Builder_Amount.Text = String.Format("{0}", reader["BuilderFee"]); ;
+                                Homeowner_Amount.Text = String.Format("{0}", reader["HomeownerFee"]); ;
 
 
                                 // Builder Referral Info
@@ -2164,11 +2167,11 @@ namespace WatersidePortal
                 {
                     userInfoComplete = false;
                 }
-                if (Builder_Amount.Text == "$  _,___.__")
+                if (Builder_Amount.Text == string.Empty)
                 {
                     userInfoComplete = false;
                 }
-                if (Homeowner_Amount.Text == "$  _,___.__")
+                if (Homeowner_Amount.Text == string.Empty)
                 {
                     userInfoComplete = false;
                 }

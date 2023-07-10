@@ -3,7 +3,6 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server"></asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="StyleSheetPage" runat="server">
-
     <style type="text/css">
         .Grid, .Grid th, .Grid td {
             border: 1px solid #e0e0e0;
@@ -96,14 +95,6 @@
                         <div id="divFailureMessage" class="panel-heading" runat="server"></div>
                     </div>
 
-                    <%--<asp:ValidationSummary runat="server" CssClass="text-danger" Style="white-space: pre-line" />--%>
-                    <%--<asp:validationsummary id="ValidationSummary1" runat="server" xmlns:asp="#unknown"
-                        showsummary="true"
-                        showmessagebox="true"
-                        headertext="Please fix the following fields:"
-                        enableclientscript="true"
-                        displaymode="List"> 
-                    </asp:validationsummary>--%>
 
                     <%-- Tabs --%>
                     <div id="Tabs" role="tabpanel">
@@ -401,12 +392,9 @@
                                                     <asp:TextBox ID="TextBox_Job_Zip" runat="server" placeholder="00000-0000"></asp:TextBox>
                                                     <asp:RequiredFieldValidator runat="server" ID="rfvZipCode" ControlToValidate="TextBox_Job_Zip" Display="Dynamic"
                                                         ValidationGroup="UserInfo" ErrorMessage="*Required" ForeColor="Red" />
-                                                    <asp:RegularExpressionValidator ID="regexpcontactZipCode" runat="server" ControlToValidate="TextBox_Job_Zip"
-                                                        ValidationGroup="UserInfo" Display="Dynamic" ForeColor="Red" ErrorMessage="Please enter a Zip Code formatted as (XXXXX) or 10 Digit (XXXXX-XXXX)"
-                                                        ValidationExpression="^\d{5}(?:[-\s]\d{4})?$">
-                                                    </asp:RegularExpressionValidator>
-                                                    <ajaxToolkit:FilteredTextBoxExtender ID="FilteredTextBoxExtender4" runat="server"
-                                                        TargetControlID="TextBox_Job_Zip" ValidChars="1234567890()-" />
+                                                    <ajaxToolkit:MaskedEditExtender ID="MaskedEditExtender6" runat="server" TargetControlID="TextBox_Job_Zip"
+                                                        MaskType="Number" Mask="99999-9999" MessageValidatorTip="true"
+                                                        ClearMaskOnLostFocus="False"></ajaxToolkit:MaskedEditExtender>
                                                 </td>
                                             </tr>
 
@@ -550,7 +538,6 @@
                                                         Display="Dynamic" ValidationGroup="UserInfo" ErrorMessage="*Required" runat="server" ForeColor="Red" />
                                                 </td>
                                             </tr>
-
                                             <%-- Referral to be Paid Details --%>
                                             <asp:Panel runat="server" ID="Referral_Div" Style="margin-left: 30px" Visible="false">
 
@@ -679,7 +666,6 @@
                                                 </tr>
                                             </asp:Panel>
 
-
                                             <%-- New Home Construction Project: RB Toggle --%>
                                             <tr>
                                                 <td>
@@ -717,8 +703,8 @@
                                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator12" ControlToValidate="Builder_Amount"
                                                             Display="Dynamic" ValidationGroup="UserInfo" ErrorMessage="*Required" runat="server" ForeColor="Red" />
                                                         <ajaxToolkit:MaskedEditExtender ID="MaskedEditExtender4" runat="server" TargetControlID="Builder_Amount"
-                                                            MaskType="Number" Mask="9,999.99" MessageValidatorTip="true"
-                                                            ClearMaskOnLostFocus="False" InputDirection="RightToLeft"
+                                                            MaskType="Number" Mask="9,999.99"
+                                                            ClearMaskOnLostFocus="True" InputDirection="RightToLeft"
                                                             AcceptNegative="Left"
                                                             DisplayMoney="Left"></ajaxToolkit:MaskedEditExtender>
                                                     </td>
@@ -728,12 +714,12 @@
                                                     <td>
                                                         <asp:Label runat="server">*Homeowner Fee Amount: </asp:Label></td>
                                                     <td>
-                                                        <asp:TextBox runat="server" ID="Homeowner_Amount"  Width="125"></asp:TextBox>
+                                                        <asp:TextBox runat="server" ID="Homeowner_Amount" Width="125"></asp:TextBox>
                                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator11" ControlToValidate="Homeowner_Amount"
                                                             Display="Dynamic" ValidationGroup="UserInfo" ErrorMessage="*Required" runat="server" ForeColor="Red" />
                                                         <ajaxToolkit:MaskedEditExtender ID="MaskedEditExtender5" runat="server" TargetControlID="Homeowner_Amount"
-                                                            MaskType="Number" Mask="9,999.99" MessageValidatorTip="true"
-                                                            ClearMaskOnLostFocus="False" InputDirection="RightToLeft"
+                                                            MaskType="Number" Mask="9,999.99"
+                                                            ClearMaskOnLostFocus="True" InputDirection="RightToLeft"
                                                             AcceptNegative="Left"
                                                             DisplayMoney="Left"></ajaxToolkit:MaskedEditExtender>
                                                     </td>
@@ -769,6 +755,7 @@
                                                         Display="Dynamic" ValidationGroup="UserInfo" ErrorMessage="*Required" runat="server" ForeColor="Red" />
                                                 </td>
                                             </tr>
+
                                             <%-- Homeowner To Furnish Surveys: Furnished Surveys --%>
                                             <asp:Panel runat="server" ID="Survey_Panel" Style="margin-left: 30px" Visible="false">
                                                 <tr>
@@ -930,12 +917,9 @@
                                         </asp:BoundField>
                                     </Columns>
                                 </asp:GridView>
-                                <%--<asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:WatersidePortal_dbConnectionString %>" SelectCommand="SELECT [ProjectType], [ProjectName], [ProjectDescription] from [Projects] WHERE [CustomerID] = @CustomerId">
-                                    <SelectParameters>
-                                        <asp:ControlParameter Name="CustomerId" PropertyName="CustomerId" ControlID="SqlDataSource1" DbType="String" />
-                                    </SelectParameters>
-                                </asp:SqlDataSource>--%>
                                 <br />
+
+                                <%-- Recall Bid Proposal Form Buttons --%>
                                 <p>
                                     <asp:Button runat="server" ID="btnRecall" Text="Recall Bid Proposal" class="btn btn-primary" OnClick="RecallBid" CausesValidation="False" />
                                     <asp:Button runat="server" ID="btnDuplicate" Text="Duplicate Bid Proposal Version" class="btn btn-primary" OnClick="DuplicateBid" CausesValidation="False" />
