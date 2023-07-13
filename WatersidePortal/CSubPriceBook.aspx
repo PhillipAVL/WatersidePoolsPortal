@@ -29,6 +29,8 @@
                 <asp:HiddenField ID="CustomerId" runat="server" />
                 <asp:HiddenField ID="CustomerName" runat="server" />
                 <asp:HiddenField ID="ProjectId" runat="server" />
+                <asp:HiddenField ID="BidItemDeleted" runat="server" Value="null"/>
+                <asp:HiddenField ID="BidItemAdded" runat="server" Value="null"/>
 
                 <div class="tab-content">
                     <div class="tab-pane fade in active" id="EditDelete">
@@ -115,12 +117,9 @@
                 </div>
 
             </div>
-
-
-
-
         </section>
     </section>
+
     <script type="text/javascript">
         if (window.location.href.split('?').length > 1) {
             document.getElementById(window.location.href.split('?')[1]).classList.add('active');

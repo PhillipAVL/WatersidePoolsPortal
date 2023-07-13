@@ -62,10 +62,12 @@ namespace WatersidePortal
         {
 
         }
+
         protected void GridView_Items_SelectedIndexChanging(object sender, GridViewSelectEventArgs e)
         {
             System.Diagnostics.Debug.WriteLine("testing");
         }
+
         protected void Selected(object sender, EventArgs e)
         {
             string[] arr = HttpContext.Current.Request.Url.Query.Remove(0, 1).Split('&');
@@ -84,6 +86,7 @@ namespace WatersidePortal
             }
             Response.Redirect("/CItemPriceBook.aspx?" + filter + "&" + filter2 + "&" + GridView_Items.SelectedRow.Cells[1].Text.Replace("#", "numpound").Replace("&", "andamp") + "&" + ID);
         }
+
         protected void Back(object sender, EventArgs e)
         {
             if (HttpContext.Current.Request.Url.Query.Length == 0)

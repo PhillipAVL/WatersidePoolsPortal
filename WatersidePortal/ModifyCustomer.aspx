@@ -83,6 +83,8 @@
                 </div>
 
                 <div class="panel-body">
+                    <asp:HiddenField ID="CustomerId" runat="server" />
+
                     <asp:Label runat="server" ID="name" Font-Bold="true" Font-Size="Large"></asp:Label>
 
                     <%-- User update success message --%>
@@ -884,7 +886,7 @@
 
 
                         <%-- Tab: Manage Bid Proposals --%>
-                        <asp:HiddenField ID="CustomerId" runat="server" />
+                        
                         <div class="tab-pane fade in" id="Manage">
                             <h4>Bid Proposals</h4>
                             <p>

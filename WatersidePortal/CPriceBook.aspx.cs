@@ -11,74 +11,77 @@ using Xceed.Words.NET;
 using Paragraph = Xceed.Document.NET.Paragraph;
 using WatersidePortal.Models;
 using WatersidePortal.Base;
+using Microsoft.Ajax.Utilities;
+using DevExpress.Xpo.DB.Helpers;
 
 namespace WatersidePortal
 {
+
     public partial class CPriceBook : WebFormBase
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            var customerId = string.Empty;
+            var projectId = string.Empty;
+            var pageAction = string.Empty;
+            var bidProposalAction = string.Empty;
+            var bidProposalStatus = string.Empty;
+            var bidProposald = string.Empty;
+
             if (Page.IsPostBack)
             {
-                string ID = "1";
                 if (HttpContext.Current.Request.Url.AbsoluteUri.Split('?').Length < 2)
                 {
                     return;
                 }
-                string[] arr = HttpContext.Current.Request.Url.AbsoluteUri.Split('?')[1].Split('&');
-                if (arr.Length > 1)
-                {
-                    ID = arr[0];
-                    CustomerId.Value = ID;
-                }
-                if (arr.Length > 2)
-                {
-                    CustomerId.Value = arr[0];
-                    this.Session["CurrentProjectId"] = CustomerId.Value;
 
-                    CustomerName.Value = GetCustomerFullName(ID);
-                    CustomerFullName.Text = CustomerName.Value;
-                    this.Session["CurrentCustomerName"] = CustomerName.Value;
-
-                    ProjectId.Value = arr[2];
-                    this.Session["CurrentProjectId"] = ProjectId.Value;
-                }
+                var queryParms = HttpUtility.ParseQueryString(HttpContext.Current.Request.Url.AbsoluteUri);
+                CustomerId.Value = Session["CurrentCustomerId"].ToString();
+                ProjectId.Value = Session["CurrentProjectId"].ToString();
+                CustomerName.Value = GetCustomerFullName(CustomerId.Value);
+                CustomerFullName.Text = Session["CurrentCustomerName"].ToString();
+                CustomerName.Value = Session["CurrentCustomerName"].ToString();
             }
 
+            // Show attempted Delete status.
             if (!Page.IsPostBack)
             {
                 // Get page vars from the query string.
                 if (HttpContext.Current.Request.Url.AbsoluteUri.Split('?').Length < 2)
                     return;
 
-                string[] queryParms = HttpContext.Current.Request.Url.AbsoluteUri.Split('?')[1].Split('&');
-                if (Session["CurrentCustomerId"] == null)
+                var queryParms = HttpUtility.ParseQueryString(HttpContext.Current.Request.Url.AbsoluteUri);
+
+                // From ModifyCustomer
+                if (queryParms.Keys.Count >= 3 && queryParms[1] == "ModifyCustomer")
                 {
-                    Session["CurrentCustomerId"] = CustomerId.Value;
-                }
-                else
-                {
+                    Session["CurrentCustomerId"] = queryParms[0];
                     CustomerId.Value = queryParms[0];
+                    Session["BidProposalId"] = queryParms[2];
+                    Session["PageAction"] = "ProposalItemDelete";
                 }
 
-                if (Session["CurrentProjectId"] == null)
+                // From Manage Bid Proposal
+                if (queryParms.Keys.Count >= 3 && queryParms[1] == "RecallBid" || queryParms[1] == "Update") // ManageBidProposal
                 {
-                    Session["CurrentProjectId"] = queryParms[2];
-                    ProjectId.Value = queryParms[2];
-                }
-                else if (queryParms.ElementAtOrDefault(2) != null)
-                {
-                    Session["CurrentProjectId"] = queryParms[2];
-                    ProjectId.Value = Session["CurrentProjectId"].ToString();
-                }
-                else
-                {
-                    Session["CurrentProjectId"] = Session["CurrentProjectId"];
-                    ProjectId.Value = Session["CurrentProjectId"].ToString();
+                    //Session["CurrentCustomerId"] = queryParms[0];
+                    CustomerId.Value = Session["CurrentCustomerId"].ToString();
+                    //Session["CurrentProjectId"] = queryParms[2];
+                    ProjectId.Value = Session["BidProposalId"].ToString();
+                    Session["PageAction"] = queryParms[1].ToString();
+                    Session["BidProposalAction"] = queryParms[2];
                 }
 
-                CustomerName.Value = GetCustomerFullName(CustomerId.Value);
-                this.Session["CurrentCustomerName"] = CustomerName.Value;
+                if (Session["PageAction"].ToString() == "AddBidProposalItem")
+                {
+                    customerId = queryParms[0];
+                    CustomerId.Value = Session["CurrentCustomerId"].ToString();
+                    projectId = Session["BidProposalId"].ToString();
+                    ProjectId.Value = Session["BidProposalId"].ToString();
+                    pageAction = Session["PageAction"].ToString();
+                    bidProposalAction = queryParms[2];
+                    bidProposalStatus = queryParms[3];
+                }
 
                 // Get project detail.
                 Models.Project gProj = new Models.Project();
@@ -366,6 +369,7 @@ namespace WatersidePortal
                     optional.Visible = true;
                 }
 
+                // Sort the Grid.
                 try
                 {
                     GridView1.Sort("Item", SortDirection.Ascending);
@@ -376,6 +380,18 @@ namespace WatersidePortal
                     GridView2.Sort("Item", SortDirection.Ascending);
                 }
                 catch (Exception err) { }
+
+                // Show Add / Delete user message.
+                if (pageAction == "AddBidProposalItem")
+                {
+                    divSuccessMessage.InnerText = "The Proposal Item has beeb successfully Added";
+                    divSuccess.Visible = true;
+                }
+                else if (Session["BidProposalAction"].ToString() == "Delete")
+                {
+                    divSuccessMessage.InnerText = "The Bid Proposal Item has been successfully Deleted";
+                    divSuccess.Visible = true;
+                }
             }
         }
 
@@ -389,18 +405,6 @@ namespace WatersidePortal
 
         private void Save()
         {
-            //if (Project_Name_Box.Text.Length > 0)
-            //{
-            //    Project_Name.Text = Project_Name_Box.Text + ":";
-            //    Project_Name_Box.Text = "";
-            //}
-            //if (Description_Box.Text.Length > 0)
-            //{
-            //    Project_Desc.Text = Description_Box.Text + ":";
-            //    Description_Box.Text = "";
-            //}
-
-
             if (HttpContext.Current.Request.Url.AbsoluteUri.Split('?').Length < 2)
             {
                 return;
@@ -582,7 +586,7 @@ namespace WatersidePortal
             }
             rebuilt = rebuilt.Substring(0, rebuilt.Length - 1);
 
-            // Overall save algo
+            // Update the Project changes.
             cmdString = "Update [dbo].[Projects] Set ProjectName = @name, ProjectDescription = @desc, Length = @length, Width = @width, Items = @items Where ProjectID = @ID";
             connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
             using (SqlConnection conn = new SqlConnection(connString))
@@ -598,11 +602,12 @@ namespace WatersidePortal
                     try
                     {
                         conn.Open();
+                        BidItemAdded.Value = "true";
                         comm.ExecuteNonQuery();
                     }
                     catch (SqlException err)
                     {
-
+                        BidItemAdded.Value = "false";
                     }
                 }
             }
@@ -628,9 +633,10 @@ namespace WatersidePortal
             //    return;
             //}
 
-            string customerId = HttpContext.Current.Session["CurrentCustomerId"].ToString();
-            string projectId = HttpContext.Current.Session["CurrentProjectId"].ToString();
-            CustomerName.Value = HttpContext.Current.Session["CurrentCustomerName"].ToString();
+            string customerId = Session["CurrentCustomerId"].ToString();
+            string projectId = Session["BidProposalId"].ToString();
+            ProjectId.Value = Session["BidProposalId"].ToString();
+            CustomerName.Value = Session["CurrentCustomerName"].ToString();
 
             // Get the current Project Items.
             string items = "";
@@ -684,14 +690,19 @@ namespace WatersidePortal
                     {
                         conn.Open();
                         comm.ExecuteNonQuery();
+                        BidItemDeleted.Value = "true";
                     }
                     catch (SqlException err)
                     {
-
+                        BidItemDeleted.Value = "false";
                     }
                 }
             }
-            Response.Redirect(Request.Url.AbsoluteUri);
+
+            // Build the return URL.
+            var queryString = "CustomerId=" + customerId + "&PageAction=Update&BidItemAction=Delete&BidItemAdded=" + BidItemAdded.Value;
+            string returnUrl = "/CPriceBook.aspx?" + queryString;
+            Response.Redirect(returnUrl);
         }
 
 
@@ -3132,7 +3143,6 @@ namespace WatersidePortal
             AddToHistory("Bid Proposal Finalized.");
             doc.SaveAs(HttpRuntime.AppDomainAppPath + "Documents\\Genesis Bid1.docx");
         }
-
 
         protected void DuplicateBid(object sender, EventArgs e)
         {

@@ -67,21 +67,18 @@
                                         <asp:Label runat="server" AssociatedControlID="RememberMe">Remember me?</asp:Label>
                                     </span>
                                 </div>
+                                
+                                <%-- Form Action Button --%>
                                 <div class="form-group">
-
                                     <asp:Button runat="server" OnClick="LogIn" Text="Log in" CssClass="btn btn-theme btn-block" />
-
                                 </div>
 
-                                <hr />
-                                <div class="registration">
+                                <%-- Currently Not Used --%>
+                                <%--<div class="registration">
                                     Forgot your password?
-                                       
                                     <br />
                                     <asp:HyperLink runat="server" ID="ForgotPasswordHyperLink" ViewStateMode="Disabled">Request a reset.</asp:HyperLink>
-                                </div>
-                                <p>
-                                </p>
+                                </div>--%>
 
                             </div>
                         </section>

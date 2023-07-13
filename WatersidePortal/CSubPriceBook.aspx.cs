@@ -18,14 +18,20 @@ namespace WatersidePortal
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Page.IsPostBack)
+            {
+                return;
+            }
             CSubPriceBook frm = (CSubPriceBook)sender;
 
-            var projectId = HttpContext.Current.Session["CurrentProjectId"];
+            var projectId = HttpContext.Current.Session["BidProposalId"];
             var customerId = HttpContext.Current.Session["CurrentCustomerId"];
             var customerName = HttpContext.Current.Session["CurrentCustomerName"];
 
             if (HttpContext.Current.Request.Url.Query.Length == 0)
                 return;
+           
+            // Get Category.
             string[] arr = HttpContext.Current.Request.Url.Query.Remove(0, 1).Split('&');
             string category = "1";
             if (arr.Length > 1)
@@ -58,16 +64,17 @@ namespace WatersidePortal
         protected void Submit(object sender, EventArgs e)
         {
             // Get session vars.
-            ProjectId.Value = HttpContext.Current.Session["CurrentProjectId"].ToString();
+            ProjectId.Value = HttpContext.Current.Session["BidProposalId"].ToString();
             CustomerId.Value = HttpContext.Current.Session["CurrentCustomerId"].ToString();
             CustomerName.Value = HttpContext.Current.Session["CurrentCustomerName"].ToString();
+            Session["PageAction"] = "AddBidProposalItem";
 
-            if (HttpContext.Current.Request.Url.Query.Length == 0)
-                return;
-            string[] arr = HttpContext.Current.Request.Url.Query.Remove(0, 1).Split('&');
-            if (arr.Length < 2)
-                return;
-            int proj = -1;
+            //if (HttpContext.Current.Request.Url.Query.Length == 0)
+            //    return;
+            //string[] arr = HttpContext.Current.Request.Url.Query.Remove(0, 1).Split('&');
+            //if (arr.Length < 2)
+            //    return;
+            //int proj = -1;
 
             string cmdString = string.Empty;
             string connString = ConfigurationManager.ConnectionStrings["WatersidePortal_dbConnectionString"].ConnectionString;
@@ -167,16 +174,19 @@ namespace WatersidePortal
                         {
                             conn.Open();
                             comm.ExecuteNonQuery();
+                            Session["BidProposalAction"] = "Add";
                         }
-                        catch (SqlException f)
+                        catch (SqlException ex)
                         {
-                            System.Diagnostics.Debug.WriteLine(f.Message);
+                            System.Diagnostics.Debug.WriteLine(ex.Message);
+                            BidItemAdded.Value = "false";
                         }
                     }
                 }
             }
-
-            Response.Redirect("/CPriceBook.aspx?" + arr[1] + "&Select");
+            // Pass URL, CustomerId, PageAction, BidItemAction, BidItemAdded.
+            var queryString = "CustomerId=" + CustomerId.Value + "&PageAction=" + Session["PageAction"] + "&Update&BidItemAction=Add&BidItemAdded=" + BidItemAdded.Value + "&ProjectId=" + ProjectId.Value;
+            Response.Redirect("/CPriceBook.aspx?" + queryString);
         }
 
         protected void Back(object sender, EventArgs e)

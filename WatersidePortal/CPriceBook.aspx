@@ -46,10 +46,14 @@
                 <asp:HiddenField ID="CustomerId" runat="server" />
                 <asp:HiddenField ID="CustomerName" runat="server" />
                 <asp:HiddenField ID="ProjectId" runat="server" />
+                <asp:HiddenField ID="BidProposalId" runat="server" Value="null"/>
+
+                <asp:HiddenField ID="BidItemDeleted" runat="server" Value="null"/>
+                <asp:HiddenField ID="BidItemAdded" runat="server" Value="null"/>
 
                 <% 
                     var hCustomerId = CustomerId.Value;
-                   // var selectSpecsTabNav = "Select&" + hCustomerId;
+                    // var selectSpecsTabNav = "Select&" + hCustomerId;
                 %>
 
                 <div class="tab-content">
@@ -57,19 +61,28 @@
 
                         <asp:Panel ID="Panel_Items" runat="server" CssClass="panel panel-default">
                             <div class="panel-heading">
-                                <h4 class="title">Manage Bid Proposal: <asp:Label runat="server" ID="CustomerFullName" Value=""/></h4>
+                                <h4 class="title">Manage Bid Proposal:
+                                    <asp:Label runat="server" ID="CustomerFullName" Value="" /></h4>
                             </div>
-                           
+
+                            <%-- User update success message --%>
+                            <div id="divSuccess" class="panel panel-success" runat="server" visible="false">
+                                <div id="divSuccessMessage" class="panel-heading" runat="server"></div>
+                            </div>
+
+                            <%-- User update failure message --%>
+                            <div id="divFailure" class="panel panel-error" runat="server" visible="false">
+                                <div id="divFailureMessage" class="panel-heading" runat="server"></div>
+                            </div>
+
                             <%-- Tabs --%>
                             <div class="panel-body">
                                 <ul class="nav nav-tabs">
                                     <li id="SelectTab">
-                                        <a href="#Select" data-toggle="tab"">Select Specs
-                                            </a>
+                                        <a href="#Select" data-toggle="tab">Select Specs</a>
                                     </li>
                                     <li id="ShoppingTab">
-                                        <a href="#Shopping" data-toggle="tab"">Bid Proposal
-                                            </a>
+                                        <a href="#Shopping" data-toggle="tab">Bid Proposal</a>
                                     </li>
                                 </ul>
 
@@ -91,13 +104,13 @@
                                                     </asp:BoundField>
                                                 </Columns>
                                             </asp:GridView>
-                                            <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
-                                                ConnectionString="<%$ ConnectionStrings:WatersidePortal_dbConnectionString %>" 
+                                            <asp:SqlDataSource ID="SqlDataSource1" runat="server"
+                                                ConnectionString="<%$ ConnectionStrings:WatersidePortal_dbConnectionString %>"
                                                 SelectCommand="SELECT [Category], STRING_AGG(nullif([Subcategory],''), ', ') WITHIN GROUP (ORDER BY [Subcategory]) AS Subcategories FROM (select distinct [Subcategory], [Category] FROM [PriceBook]) x GROUP BY [Category]"></asp:SqlDataSource>
                                         </div>
                                     </div>
 
-                                    <%-- Shopping Tab Content --%>
+                                    <%-- Bid Proposal (Shopping) Tab Content --%>
                                     <div class="tab-pane fade in" id="Shopping">
                                         <br />
 
@@ -402,7 +415,7 @@
                                                     </Columns>
                                                 </asp:GridView>
                                             </div>
-                                            
+
                                             <%-- Grid Totals Section --%>
                                             <div style="text-align: right; margin: 0px; border: 0px; padding: 0px;">
                                                 <p style="text-align: right; margin: 0px; border: 0px; padding: 0px;">

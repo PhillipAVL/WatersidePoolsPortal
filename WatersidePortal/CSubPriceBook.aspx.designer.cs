@@ -42,6 +42,24 @@ namespace WatersidePortal
         protected global::System.Web.UI.WebControls.HiddenField ProjectId;
 
         /// <summary>
+        /// BidItemDeleted control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField BidItemDeleted;
+
+        /// <summary>
+        /// BidItemAdded control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField BidItemAdded;
+
+        /// <summary>
         /// Panel_Items control.
         /// </summary>
         /// <remarks>

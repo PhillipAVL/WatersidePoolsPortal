@@ -17,6 +17,11 @@ namespace WatersidePortal
 
         }
 
+        /// <summary>
+        /// Login using ASP.NET Identity.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void LogIn(object sender, EventArgs e)
         {
             if (IsValid)

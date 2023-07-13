@@ -18,6 +18,8 @@ using System.Web.ModelBinding;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 using iText.Layout.Properties;
 using Microsoft.Ajax.Utilities;
+using WatersidePortal.Admin;
+using Microsoft.Owin.Security.Provider;
 
 namespace WatersidePortal
 {
@@ -27,19 +29,27 @@ namespace WatersidePortal
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            string customerId = string.Empty;
             if (HttpContext.Current.Request.Url.Query.Length == 0)
                 return;
 
-            string customerId = string.Empty;
+            // This is the start of several processes. Set the customer info.
+            Session["CurrentCustomerId"] = string.Empty;
+            Session["CurrentProjectId"] = string.Empty;
+            Session["CurrentProjectName"] = string.Empty;
+            Session["BidProposalId"] = string.Empty;
+            Session["PageAction"] = string.Empty;
+            Session["BidProposalItemDeleted"] = string.Empty;
+
+            // Get the Customer Id & Name.
             string[] arr = HttpContext.Current.Request.Url.Query.Split('&');
             if (arr.Length > 0 && arr[0].Split('?').Length > 1)
             {
                 customerId = arr[0].Split('?')[1];
-                HttpContext.Current.Session["CurrentCustomerId"] = customerId;
+                Session["CurrentCustomerId"] = customerId;
             }
-            CustomerName.Text = GetCustomerFullName(customerId);
-            HttpContext.Current.Session["CurrentCustomerName"] = CustomerName.Text;
-
+            Session["CurrentCustomerName"] = GetCustomerFullName(customerId);
+            CustomerName.Text = Session["CurrentCustomerName"].ToString();
 
             // Customers Tab
             string cmdString = "SELECT [FirstName], [LastName], [CustomerID], [Address], [City], [State], [Telephone], [Alternate], [Email], [WaterfillType] FROM [Customers] WHERE [CustomerID] = @ID ORDER BY [ID]";
@@ -256,28 +266,24 @@ namespace WatersidePortal
             {
                 return;
             }
-            string[] arr = HttpContext.Current.Request.Url.AbsoluteUri.Split('?')[1].Split('&');
-            string ID = "1";
-            if (arr.Length > 1)
-            {
-                ID = arr[0];
-            }
-            else
-            {
-                return;
-            }
+            string customerId = Session["CurrentCustomerId"].ToString();
 
-            var projectId = string.Empty;
+            var bidProposalId = string.Empty;
             for (int i = 0; i < GridView_Items.Rows.Count; i++)
             {
                 CheckBox box = (CheckBox)GridView_Items.Rows[i].Cells[0].Controls[1];
                 if (box.Checked)
                 {
-                    projectId = GridView_Items.Rows[i].Cells[1].Text;
+                    bidProposalId = GridView_Items.Rows[i].Cells[1].Text;
+                    Session["BidProposalId"] = bidProposalId;
                     break;
                 }
             }
-            Response.Redirect("/CPriceBook?" + ID + "&Shopping&" + projectId);
+
+            // Redirect with parms.
+            var queryString = "CustomerId=" + customerId + "&PageAction=RecallBid&BidProposalId=" + bidProposalId;
+            Response.Redirect("/CPriceBook.aspx?" + queryString);
+
 
         }
 
@@ -2176,7 +2182,7 @@ namespace WatersidePortal
                     userInfoComplete = false;
                 }
             }
-            
+
             // Access Permission Letter Required.
             if (Permission_Letter.SelectedValue == string.Empty || Permission_Letter.SelectedValue == "Select")
             {
